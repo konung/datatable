@@ -1,2 +1,2 @@
-require 'datatable'
+require 'datatable/datatable'
 require 'datatable/version'

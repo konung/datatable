@@ -1,2 +1,2 @@
-class Datatable
-end
+require 'datatable'
+require 'datatable/version'

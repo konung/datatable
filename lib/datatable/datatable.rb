@@ -34,27 +34,24 @@ module Datatable
       @view_stuff[index] = hash
     end
 
-    # :name - attribute of the model
-    #
-    #    what if we wrote the name as association.field that should mean we can do
-    #    a away with the extractor we're passing in?
-    #
-    # :fetcher - this calls the :name method on each object to get it's contents
-    #            when the array is being built for display
     #
     #
     def column(name, extractor=nil, fetcher=nil, type=nil)
-      @columns << [
-        name,
-        extractor ? extractor : "#{@table}.#{name}",
-        fetcher ? fetcher : lambda{|o| o.send(name) || "" },
-        type ? fetcher : :integer
-      ]
+      result = []
+      result << name
+      if @model.column_names.include?(name.to_s)
+          result << (extractor ? extractor : "#{@table}.#{name}")
+      else
+        result << nil
+      end
+      result << (fetcher ? fetcher : lambda{|o| o.send(name) || "" })
+      result << (type ? fetcher : :integer)
+      @columns << result
     end
 
     def script
       <<-RESULT.gsub(/^\s{8}/,"")
-        <script type='text/javascript'>
+        <script type="text/javascript">
           $(document).ready(function() {
             $('.datatable').dataTable({
               sDom: '<"H"lr>t<"F"ip>',
@@ -105,7 +102,7 @@ module Datatable
     end
 
     def render
-      (html + "\n" + script).html_safe
+      (html + script).html_safe
     end
 
     def array_of(data)
@@ -139,8 +136,10 @@ module Datatable
         cur_sort_col = "iSortCol_#{count - 1}".to_sym
         cur_sort_dir = "sSortDir_#{count - 1}".to_sym
         col_name = @columns[params[cur_sort_col].to_i][1]
-        col_direction  = params[cur_sort_dir].upcase
-        result << "#{col_name} #{col_direction}"
+        if col_name
+            col_direction  = params[cur_sort_dir].upcase
+          result << "#{col_name} #{col_direction}"
+        end
       end
       result.join(", ")
     end

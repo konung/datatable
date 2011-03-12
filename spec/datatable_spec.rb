@@ -4,10 +4,11 @@ describe Datatable do
   describe 'correctly orders' do
 
     before(:each) do
-      @datatable = Datatable::Datatable.build(stub(Object, :table_name => 'table')) do |table|
+      @datatable = Datatable::Datatable.build(stub(Object, :table_name => 'table', :column_names => ['col1','col2','col3'])) do |table|
         table.column :col1
         table.column :col2
         table.column :col3
+        table.column :col4  # exists in the table but not in the database
       end
     end
 
@@ -55,9 +56,9 @@ describe Datatable do
     it "column 1 descending, column 3 ascending" do
       @datatable.order({:iSortingCols => 2, :iSortCol_0 => 0, :sSortDir_0 => 'desc', :iSortCol_1 => 2, :sSortDir_1 => 'asc' }).should == 'table.col1 DESC, table.col3 ASC'
     end
-    
-    it "column 2 ascending, column 1 ascending" do
-      @datatable.order({:iSortingCols => 2, :iSortCol_0 => 1, :sSortDir_0 => 'asc', :iSortCol_1 => 0, :sSortDir_1 => 'asc' }).should == 'table.col2 ASC, table.col1 ASC'
+
+    it "only orders by columns in the datatabase" do
+      @datatable.order({:iSortingCols => 2, :iSortCol_0 => 0, :sSortDir_0 => 'asc', :iSortCol_1 => 3, :sSortDir_1 => 'asc' }).should == 'table.col1 ASC'
     end
 
   end

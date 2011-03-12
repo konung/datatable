@@ -1,8 +1,12 @@
+#require 'active_support/core_ext'
+
+# Boat.reflect_on_all_associations.first.klass
+
 module Datatable
 
   class Datatable
     attr_reader :controller, :action
-    attr_accessor :table
+    attr_accessor :table, :include
 
     def self.build(model_class)
       table = new(model_class)
@@ -13,6 +17,7 @@ module Datatable
     def initialize(model_class)
       @model = model_class
       @table = model_class.table_name
+      @include = []
       @columns = []
       @view_stuff = []
       @option = {
@@ -35,16 +40,44 @@ module Datatable
     end
 
     #
+    # column[0] = name
+    # column[1] = fetcher    <-- a call back to render the content
+    # column[2] = extractor  <-- what to use as the select in the order by
+    # column[3] = type       <-- data table
     #
-    def column(name, extractor=nil, fetcher=nil, type=nil)
+    def column(name, fetcher=nil, extractor=nil,  type=nil)
+      
       result = []
+
       result << name
-      if @model.column_names.include?(name.to_s)
-          result << (extractor ? extractor : "#{@table}.#{name}")
+
+      if extractor
+        # a user supplied extractor was provided
+        if extractor =~ /(\w+)\.(\w+)/
+          table = $1
+          column = $2
+          unless $1 == @table
+            @include << $1
+          end
+          result << extractor
+        else
+          result << extractor
+        end
       else
-        result << nil
+        # determine the extractor from the name
+        if @model.column_names.include?(name.to_s)
+            result << (extractor ? extractor : "#{@table}.#{name}")
+        else
+          result << nil
+        end
       end
-      result << (fetcher ? fetcher : lambda{|o| o.send(name) || "" })
+
+#      attribute_name = name.to_s
+#      if attribute_name =~ /(\w+)\.*/
+#        attribute_name = attribute_name.sub(@table + ".","")
+#      end
+      result << (fetcher ? fetcher : lambda{|o| o.send(name.to_s) || "" })
+      
       result << (type ? fetcher : :integer)
       @columns << result
     end
@@ -104,7 +137,7 @@ module Datatable
               <tr>
       CONTENT
       @columns.each do |column|
-        result << "        <th>#{column[0]}</th>\n"
+        result << "        <th>#{column[0].to_s.titleize}</th>\n"
       end
       result << <<-CONTENT.gsub(/^\s{8}/,"")
               </tr>
@@ -133,9 +166,6 @@ module Datatable
       ""
     end
 
-    def count(params)
-      @model.count
-    end
 
     def page(params)
       (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
@@ -160,11 +190,17 @@ module Datatable
       result.join(", ")
     end
 
+    def count(params)
+      @model.count(:include => @include)
+    end
+
     def paginate(params)
       @model.paginate(
         :page => page(params),
         :order => order(params),
-        :per_page => params[:iDisplayLength] )
+        :per_page => params[:iDisplayLength],
+        :include => @include
+      )
     end
 
     def json(params)

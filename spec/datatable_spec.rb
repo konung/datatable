@@ -1,8 +1,42 @@
 require 'datatable'
 
 describe Datatable do
-  describe 'correctly orders' do
 
+#  describe 'column' do
+#    before(:each) do
+#      @datatable = Datatable::Datatable.new(stub(Object, :table_name => 'table', :column_names => ['col1', 'col2']))
+#    end
+#
+#    it "column count is 0 when no columns have been added" do
+#      @datatable.column_count.should == 0
+#    end
+#
+#    it "column count is 1 when a single column has been added" do
+#      @datatable.column :col1
+#      @datatable.column_count.should == 1
+#    end
+#
+#    it "column name gets added correction" do
+#      @datatable.column :col1
+#      @datatable[0][0].should == :col1
+#    end
+#
+#    it "column extractor gets added correction" do
+#      @datatable.column :col1
+#      @datatable[0][1].should == "table.col1"
+#    end
+#
+#    it "column fetcher gets added correction" do
+#      @datatable.column :col1
+#      @datatable[0][1].should == "table.col1"
+#    end
+#
+#
+#  end
+
+
+
+  describe 'correctly orders' do
     before(:each) do
       @datatable = Datatable::Datatable.build(stub(Object, :table_name => 'table', :column_names => ['col1','col2','col3'])) do |table|
         table.column :col1

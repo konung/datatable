@@ -4,6 +4,14 @@
 
 module Datatable
 
+  # name    - is this a label? a symbol to reference the column?
+  # select  - what to use as the select in the order by
+  # render  - call back to render the content
+  # type    - data table
+  class Column
+    attr_accessor :name, :select, :render, :type
+  end
+
   class Datatable
     attr_reader :controller, :action
     attr_accessor :table, :include
@@ -19,7 +27,6 @@ module Datatable
       @table = model_class.table_name
       @include = []
       @columns = []
-      @view_stuff = []
       @option = {
         :bProcessing => true,
         :bServerSide => true,
@@ -35,50 +42,41 @@ module Datatable
       }
     end
 
-    def []=(index,hash)
-      @view_stuff[index] = hash
+    def column_count
+      @columns.count
     end
 
     #
-    # column[0] = name
-    # column[1] = fetcher    <-- a call back to render the content
-    # column[2] = extractor  <-- what to use as the select in the order by
-    # column[3] = type       <-- data table
     #
-    def column(name, fetcher=nil, extractor=nil,  type=nil)
+    def column(name, render=nil, select=nil,  type=nil)
       
-      result = []
+      result = Column.new
 
-      result << name
+      result.name = name
 
-      if extractor
-        # a user supplied extractor was provided
-        if extractor =~ /(\w+)\.(\w+)/
+      if select
+        # a user supplied select was provided
+        if select =~ /(\w+)\.(\w+)/
           table = $1
           column = $2
           unless $1 == @table
             @include << $1
           end
-          result << extractor
+          result.select = select
         else
-          result << extractor
+          result.select = select
         end
-      else
-        # determine the extractor from the name
+      else # no user supplied select so determine it from name
         if @model.column_names.include?(name.to_s)
-            result << (extractor ? extractor : "#{@table}.#{name}")
+            result.select =  (select ? select : "#{@table}.#{name}")
         else
-          result << nil
+          result.select = nil
         end
       end
 
-#      attribute_name = name.to_s
-#      if attribute_name =~ /(\w+)\.*/
-#        attribute_name = attribute_name.sub(@table + ".","")
-#      end
-      result << (fetcher ? fetcher : lambda{|o| o.send(name.to_s) || "" })
+      result.render = (render ? render : lambda{|o| o.send(name.to_s) || "" })
       
-      result << (type ? fetcher : :integer)
+      result.type =  (type ? render : :integer)
       @columns << result
     end
 
@@ -108,7 +106,7 @@ module Datatable
 
       column_content = []
       1.upto(@columns.count) do |index|
-        if @columns[index-1][1]
+        if @columns[index-1].select
           column_content << "          {bSortable: true}"
         else
           column_content << "          {bSortable: false}"
@@ -137,7 +135,7 @@ module Datatable
               <tr>
       CONTENT
       @columns.each do |column|
-        result << "        <th>#{column[0].to_s.titleize}</th>\n"
+        result << "        <th>#{column.name.to_s.titleize}</th>\n"
       end
       result << <<-CONTENT.gsub(/^\s{8}/,"")
               </tr>
@@ -157,7 +155,7 @@ module Datatable
     def array_of(data)
       result = []
       @columns.each do |column|
-        result << column[2].call(data)
+        result << column.render.call(data)
       end
       result
     end
@@ -181,7 +179,7 @@ module Datatable
       1.upto(params[:iSortingCols].to_i) do |count|
         cur_sort_col = "iSortCol_#{count - 1}".to_sym
         cur_sort_dir = "sSortDir_#{count - 1}".to_sym
-        col_name = @columns[params[cur_sort_col].to_i][1]
+        col_name = @columns[params[cur_sort_col].to_i].select
         if col_name
             col_direction  = params[cur_sort_dir].upcase
           result << "#{col_name} #{col_direction}"

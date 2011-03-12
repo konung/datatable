@@ -50,7 +50,7 @@ module Datatable
     end
 
     def script
-      <<-RESULT.gsub(/^\s{8}/,"")
+      result = <<-CONTENT.gsub(/^\s{8}/,"")
         <script type="text/javascript">
           $(document).ready(function() {
             $('.datatable').dataTable({
@@ -70,10 +70,26 @@ module Datatable
               bFilter: #{@option[:bFilter]},
               bAutoWidth: #{@option[:bAutoWidth]},
               aaSorting: #{@option[:aaSorting]},
+              aoColumns: [
+      CONTENT
+
+      column_content = []
+      1.upto(@columns.count) do |index|
+        if @columns[index-1][1]
+          column_content << "          {bSortable: true}"
+        else
+          column_content << "          {bSortable: false}"
+        end
+      end
+      result << column_content.join(",\n ")
+      result << "\n"
+
+      result << <<-CONTENT.gsub(/^\s{8}/,"")
+              ]
              });
           });
         </script>
-      RESULT
+      CONTENT
     end
 
     #

@@ -78,7 +78,14 @@ module Datatable
         end
       end
 
-      result.render = (render ? render : lambda{|o| o.send(name.to_s) || "" })
+#      result.render = (render ? render : lambda{|o| o.send(name.to_s) || "" })
+      if render.nil?
+        result.render = lambda{|o| o.send(name.to_s)}
+      elsif render.kind_of?(Proc)
+        result.render = render
+      else
+        result.render = render.to_s
+      end
       
       result.type =  (type ? render : :integer)
       @columns << result
@@ -156,13 +163,6 @@ module Datatable
       (html + script).html_safe
     end
 
-    def array_of(data)
-      result = []
-      @columns.each do |column|
-        result << column.render.call(data)
-      end
-      result
-    end
 
     def conditions(params)
       ""
@@ -183,25 +183,40 @@ module Datatable
       1.upto(params[:iSortingCols].to_i) do |count|
         cur_sort_col = "iSortCol_#{count - 1}".to_sym
         cur_sort_dir = "sSortDir_#{count - 1}".to_sym
-        col_name = @columns[params[cur_sort_col].to_i].select
-        if col_name
+        col_select = @columns[params[cur_sort_col].to_i].select
+        if col_select
             col_direction  = params[cur_sort_dir].upcase
-          result << "#{col_name} #{col_direction}"
+          result << "#{col_select} #{col_direction}"
         end
       end
       result.join(", ")
     end
 
     def count(params)
-      @model.count(:include => @include)
+#      @model.count(:include => @include)
+      #@model.includes(:serial_number).count
+      @model.count
+    end
+
+    def array_of(data)
+      result = []
+      @columns.each do |column|
+        if column.render.kind_of?(Proc)
+          result << column.render.call(data)
+        else
+          result << "foo"
+        end
+      end
+      result
     end
 
     def paginate(params)
       @model.paginate(
         :page => page(params),
         :order => order(params),
-        :per_page => params[:iDisplayLength],
-        :include => @include
+        :per_page => params[:iDisplayLength]
+        #:joins => :serial_number
+        #:include => :serial_number
       )
     end
 

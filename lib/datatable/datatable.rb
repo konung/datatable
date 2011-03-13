@@ -46,7 +46,7 @@ module Datatable
     #
     #
     def column(name, render=nil, select=nil,  type=nil)
-      
+
       result = Column.new
 
       result.name = name

@@ -66,7 +66,7 @@ module Datatable
             # it's not the current models table.
             @include << selector_table
           end
-          result.select = "#{selector_table}.#{selector_column}"
+          result.select = "#{@model.reflect_on_association(selector_table.to_sym).table_name}.#{selector_column}"
         else
           # it's an unqualifed selector
           if @model.column_names.include?(select.to_s)
@@ -218,9 +218,7 @@ module Datatable
     end
 
     def count(params)
-#      @model.count(:include => @include)
-      #@model.includes(:serial_number).count
-      @model.count
+      @model.includes(@include).count
     end
 
     def array_of(data)
@@ -239,9 +237,8 @@ module Datatable
       @model.paginate(
         :page => page(params),
         :order => order(params),
-        :per_page => params[:iDisplayLength]
-        #:joins => :serial_number
-        #:include => :serial_number
+        :per_page => params[:iDisplayLength],
+        :include => @include
       )
     end
 

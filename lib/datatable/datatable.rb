@@ -38,6 +38,11 @@ module Datatable
       @columns.count
     end
 
+    # returns true if the selector is in the form 'table_name.column_name'
+    def qualified_selector?(selector)
+      selector =~ /(\w+)\.(\w+)/
+    end
+
     #
     #
     def column(name, render=nil, select=nil,  type=nil)
@@ -48,17 +53,24 @@ module Datatable
 
       if select
         # a user supplied select was provided
-        if select =~ /(\w+)\.(\w+)/
-          table = $1
-          column = $2
-          unless $1 == @table
-            @include << $1
+        if qualified_selector?(select)
+          selector_table, selector_column = select.split(".")
+          unless selector_table == @table
+            # add the selectors table to include since
+            # it's not the current models table.
+            @include << selector_table
           end
-          result.select = select
+          result.select = "#{selector_table}.#{selector_column}"
         else
-          result.select = select
+          # it's an unqualifed selector
+          if @model.column_names.include?(select.to_s)
+            result.select = "#{@table_name}.#{select}"
+          else
+            raise "'#{@table_name}' does not include column '#{select}'"
+          end
         end
-      else # no user supplied select so determine it from name
+      else
+        # no user supplied select so determine it from name
         if @model.column_names.include?(name.to_s)
             result.select =  (select ? select : "#{@table}.#{name}")
         else
@@ -205,3 +217,5 @@ module Datatable
     
   end
 end
+
+

@@ -49,8 +49,14 @@ module Datatable
 
       result = Column.new
 
+      # The name value will be titlized and used as the tables
+      # column title.
+      #
       result.name = name
 
+      #
+      # SELECT
+      #
       if select
         # a user supplied select was provided
         if qualified_selector?(select)
@@ -78,16 +84,35 @@ module Datatable
         end
       end
 
-#      result.render = (render ? render : lambda{|o| o.send(name.to_s) || "" })
+      #
+      # RENDER
+      #
       if render.nil?
+        #
+        # if no render is supplied then assume then assume
+        # that it's the attribute name on the current model
+        #
         result.render = lambda{|o| o.send(name.to_s)}
       elsif render.kind_of?(Proc)
+        #
+        # if they supplied a proc then simply save the proc
+        # in render it will be used later
+        #
         result.render = render
       else
+        #
+        # if they supplied anything else just save it's string
+        # int render
+        #
         result.render = render.to_s
       end
-      
+
+      #
+      # TYPE is unused right now
+      #
       result.type =  (type ? render : :integer)
+
+      
       @columns << result
     end
 
@@ -204,7 +229,7 @@ module Datatable
         if column.render.kind_of?(Proc)
           result << column.render.call(data)
         else
-          result << "foo"
+          result << column.render
         end
       end
       result

@@ -5,3 +5,5 @@ A [Rails](http://rubyonrails.org) plugin for [Datatables](http://datatables.net)
 
 
 Copyright (c) 2011 Michael A. Greenly, released under the MIT license
+
+change to test submodule deploy

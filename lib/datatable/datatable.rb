@@ -43,6 +43,14 @@ module Datatable
       selector =~ /(\w+)\.(\w+)/
     end
 
+
+    #
+    #
+    #
+    #
+    #
+    #
+
     #
     #
     def column(name, render=nil, select=nil,  type=nil)
@@ -112,9 +120,18 @@ module Datatable
       #
       result.type =  (type ? render : :integer)
 
-      
+
       @columns << result
     end
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    #
+    
 
     def script
       result = <<-CONTENT.gsub(/^\s{8}/,"")
@@ -139,7 +156,6 @@ module Datatable
               aaSorting: #{@option[:aaSorting]},
               aoColumns: [
       CONTENT
-
       column_content = []
       1.upto(@columns.count) do |index|
         if @columns[index-1].select
@@ -150,7 +166,6 @@ module Datatable
       end
       result << column_content.join(",\n ")
       result << "\n"
-
       result << <<-CONTENT.gsub(/^\s{8}/,"")
               ]
              });
@@ -256,3 +271,24 @@ module Datatable
 end
 
 
+
+
+
+=begin
+  def index
+    @datatable = Datatable::Datatable.build(Boat) do |table|
+      table.column "serial_number.value", lambda{|truck| truck.serial_number.value}, "serial_number.value"
+      table.column "serial_number.date_code", lambda{|truck| truck.serial_number.date_code}, "serial_number.date_code"
+      table.column "boat_size.name", lambda{|truck| truck.boat_size.name}, "boat_size.name"
+      table.column "boat_model.name", lambda{|truck| truck.boat_model.name}, "boat_model.name"
+      #table.column :dealer, lambda{|truck| truck.dealer.nick_name}, "dealer.nick_name"
+      table.column "base_color.name", lambda{|truck| truck.base_color.name}, "base_color.name"
+      table.column "accent_color.name", lambda{|truck| truck.accent_color.name}, "accent_color.name"
+      table.column nil, lambda{|truck| "<a href='#{boat_path(truck)}'>Show</a>" }, "Action"
+    end
+    respond_to do |format|
+      format.html # index.html.erb
+      format.js { render :json => @datatable.json(params), :content_type => 'text/html'}
+    end
+  end
+=end

@@ -36,88 +36,91 @@ module Datatable
       selector =~ /(\w+)\.(\w+)/
     end
 
-
-
-    #
-    #
-    def column(name, render=nil, select=nil,  type=nil)
-
-      result = Column.new
-
-      # The name value will be titlized and used as the tables
-      # column title.
-      #
-      result.name = name
-
-      #
-      # SELECT
-      #
-      if select
-        # a user supplied select was provided
-        if qualified_selector?(select)
-          selector_table, selector_column = select.split(".")
-          unless selector_table == @table
-            # add the selectors table to include since
-            # it's not the current models table.
-            @include << selector_table
-          end
-          result.select = "#{@model.reflect_on_association(selector_table.to_sym).table_name}.#{selector_column}"
-        else
-          # it's an unqualifed selector
-          if @model.column_names.include?(select.to_s)
-            result.select = "#{@table_name}.#{select}"
-          else
-            raise "'#{@table_name}' does not include column '#{select}'"
-          end
-        end
-      else
-        # no user supplied select so determine it from name
-        if @model.column_names.include?(name.to_s)
-            result.select =  (select ? select : "#{@table}.#{name}")
-        else
-          result.select = nil
-        end
-      end
-
-      #
-      # RENDER
-      #
-      if render.nil?
-        #
-        # if no render is supplied then assume then assume
-        # that it's the attribute name on the current model
-        #
-        result.render = lambda{|o| o.send(name.to_s)}
-      elsif render.kind_of?(Proc)
-        #
-        # if they supplied a proc then simply save the proc
-        # in render it will be used later
-        #
-        result.render = render
-      else
-        #
-        # if they supplied anything else just save it's string
-        # int render
-        #
-        result.render = render.to_s
-      end
-
-      #
-      # TYPE is unused right now
-      #
-      result.type =  (type ? render : :integer)
-
-
-      @columns << result
+    def column(name, accessor=nil)
+      @columns << Column.new(name, accessor)
     end
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
+
+
+#    #
+#    #
+#    def column(name, render=nil, select=nil,  type=nil)
+#
+#      result = Column.new
+#
+#      # The name value will be titlized and used as the tables
+#      # column title.
+#      #
+#      result.name = name
+#
+#      #
+#      # SELECT
+#      #
+#      if select
+#        # a user supplied select was provided
+#        if qualified_selector?(select)
+#          selector_table, selector_column = select.split(".")
+#          unless selector_table == @table
+#            # add the selectors table to include since
+#            # it's not the current models table.
+#            @include << selector_table
+#          end
+#          result.select = "#{@model.reflect_on_association(selector_table.to_sym).table_name}.#{selector_column}"
+#        else
+#          # it's an unqualifed selector
+#          if @model.column_names.include?(select.to_s)
+#            result.select = "#{@table_name}.#{select}"
+#          else
+#            raise "'#{@table_name}' does not include column '#{select}'"
+#          end
+#        end
+#      else
+#        # no user supplied select so determine it from name
+#        if @model.column_names.include?(name.to_s)
+#            result.select =  (select ? select : "#{@table}.#{name}")
+#        else
+#          result.select = nil
+#        end
+#      end
+#
+#      #
+#      # RENDER
+#      #
+#      if render.nil?
+#        #
+#        # if no render is supplied then assume then assume
+#        # that it's the attribute name on the current model
+#        #
+#        result.render = lambda{|o| o.send(name.to_s)}
+#      elsif render.kind_of?(Proc)
+#        #
+#        # if they supplied a proc then simply save the proc
+#        # in render it will be used later
+#        #
+#        result.render = render
+#      else
+#        #
+#        # if they supplied anything else just save it's string
+#        # int render
+#        #
+#        result.render = render.to_s
+#      end
+#
+#      #
+#      # TYPE is unused right now
+#      #
+#      result.type =  (type ? render : :integer)
+#
+#
+#      @columns << result
+#    end
+#    #
+#    #
+#    #
+#    #
+#    #
+#    #
+#    #
+#    #
     
 
     def script
@@ -219,9 +222,9 @@ module Datatable
       result.join(", ")
     end
 
-    def sql_count(params)
-      @model.includes(@include).count
-    end
+#    def sql_count(params)
+#      @model.includes(@include).count
+#    end
 
     def array_of(data)
       result = []
@@ -242,6 +245,20 @@ module Datatable
         :per_page => params[:iDisplayLength],
         :include => @include
       )
+    end
+
+    def total_records
+      #@model.includes(@include).count
+      0
+    end
+
+    def total_display_records
+      0
+    end
+
+    def data
+      #data.map{|e| array_of(e)}
+      []
     end
 
     # http://www.datatables.net/usage/server-side
@@ -279,10 +296,10 @@ module Datatable
 #    end
     def to_json(params)
       result = {}
-      result[:iTotalRecords] = 0
-      result[:iTotalDisplayRecords] = 0
+      result[:iTotalRecords] = total_records
+      result[:iTotalDisplayRecords] = total_display_records
       result[:sEcho] = params.has_key?(:sEcho) ? params[:sEcho].to_i : -1
-      result[:aaData] = []
+      result[:aaData] = data
       ActiveSupport::JSON.encode(result)
     end
 
@@ -296,6 +313,19 @@ end
 =begin
   def index
     @datatable = Datatable::Datatable.build(Boat) do |table|
+
+
+#      table.column :serial, "serial_number.value"
+#      table.column :date_code, "serial_number.date_code"
+#      table.column :size, "boat_size.name"
+#      table.column :model, "boat_model.name"
+#      table.column :dealer, "serial_number.dealer.nick_name"
+#      table.column :base_color, "base_color.name"
+#      table.column :accent_color, "accent_color.name"
+#      table.column :action, nil, :render => "<a href='#{boat_path(truck)}'>Show</a>"
+
+
+
       table.column "serial_number.value", lambda{|truck| truck.serial_number.value}, "serial_number.value"
       table.column "serial_number.date_code", lambda{|truck| truck.serial_number.date_code}, "serial_number.date_code"
       table.column "boat_size.name", lambda{|truck| truck.boat_size.name}, "boat_size.name"

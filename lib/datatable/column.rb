@@ -10,5 +10,9 @@ module Datatable
   # type    - data table
   class Column
     attr_accessor :name, :select, :render, :type
+    def initialize(name, accessor=nil)
+      @name = name
+      @accessor = accessor
+    end
   end
 end

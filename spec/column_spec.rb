@@ -1,7 +1,15 @@
+require 'spec_helper'
 require 'datatable/column'
 
-describe Datatable::Column do
-  it "should do something" do
-    pending("help me do something")
+include Datatable
+
+describe Column do
+
+  describe "accessor" do
+    it "name exists and is stored at creation" do
+      column = Column.new("name")
+      column.name.should == "name"
+    end
   end
+
 end

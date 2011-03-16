@@ -1,6 +1,0 @@
-postgresql:
-  :adapter: postgresql
-  :username: <%= ENV['USER'] %>
-  :password:
-  :database: datatable_plugin_test
-  :min_messages: ERROR

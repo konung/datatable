@@ -4,15 +4,14 @@
 
 module Datatable
 
-  class Datatable
-    attr_reader :controller, :action
+  class Table
     attr_accessor :table, :include
 
-    def self.build(model_class)
-      table = new(model_class)
-      yield(table)
-      table
-    end
+#    def self.build(model_class)
+#      table = new(model_class)
+#      yield(table) if block_given?
+#      table
+#    end
 
     def initialize(model_class)
       @model = model_class
@@ -32,6 +31,7 @@ module Datatable
         :bJQeuryUI => true,
         :sAjaxSource => "/#{table}.js"
       }
+      yield(self) if block_given?
     end
 
     def column_count

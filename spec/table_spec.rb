@@ -1,10 +1,20 @@
-require 'datatable/datatable'
+require 'datatable/table'
+include Datatable
 
-describe Datatable do
+describe Table do
+
+  def mock_model(stubs={})
+    @mock_model ||= mock(Object, stubs.merge(:table_name => 'table', :column_names => ['col1','col2','col3']))
+  end
+
+  it "news a new instance given valid parameters" do
+    datatable = Table.new(mock_model)
+    datatable.should_not be_nil
+  end
 
   describe 'correctly orders' do
     before(:each) do
-      @datatable = Datatable::Datatable.build(stub(Object, :table_name => 'table', :column_names => ['col1','col2','col3'])) do |table|
+      @datatable = Datatable::Table.new(stub(Object, :table_name => 'table', :column_names => ['col1','col2','col3'])) do |table|
         table.column :col1
         table.column :col2
         table.column :col3

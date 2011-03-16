@@ -285,22 +285,13 @@ module Datatable
     #
     #  array      aaData                The data in a 2D array
     #
-#    def json(params)
-#      data = paginate(params)
-#      total_objects = sql_count(params)
-#      { 'sEcho' => params[:sEcho].to_i || -1,
-#        'iTotalRecords' => total_objects,
-#        'iTotalDisplayRecords'=> total_objects,
-#        'aaData' => data.map{|e| array_of(e)}
-#      }.to_json
-#    end
     def to_json(params)
-      result = {}
-      result[:iTotalRecords] = total_records
-      result[:iTotalDisplayRecords] = total_display_records
-      result[:sEcho] = params.has_key?(:sEcho) ? params[:sEcho].to_i : -1
-      result[:aaData] = data
-      ActiveSupport::JSON.encode(result)
+      ActiveSupport::JSON.encode({
+       :iTotalRecords => total_records,
+       :iTotalDisplayRecords => total_display_records,
+       :sEcho => (params.has_key?(:sEcho) ? params[:sEcho].to_i : -1),
+       :aaData => data
+      })
     end
 
   end

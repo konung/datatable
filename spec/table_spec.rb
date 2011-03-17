@@ -18,6 +18,10 @@ describe Table do
     datatable.should_not be_nil
   end
 
+  it "should test options" do
+    pending "test options"
+  end
+
   it "count returns the current number of columns" do
     datatable = Table.new(mock_model)
     datatable.count.should == 0
@@ -130,6 +134,7 @@ describe Table do
       datatable.stub(:data => [])
       ActiveSupport::JSON.decode(datatable.to_json({}))['aaData'].should == []
     end
+
   end
 
 
@@ -194,4 +199,6 @@ describe Table do
 #    end
 #
 #  end
+
+
 end

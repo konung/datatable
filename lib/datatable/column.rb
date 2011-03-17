@@ -30,7 +30,8 @@ module Datatable
     end
 
     def render(o)
-      o.send(accessor)
+      #o.send(accessor)
+      "bingo"
     end
 
   end

@@ -22,7 +22,7 @@ module Datatable
         :bAutoWidth => false,
         :aaSorting => "[[0, 'ASC']]",
         :bJQeuryUI => true,
-        :sAjaxSource => "/#{table}.js"
+        :sAjaxSource => "/#{@table_name}.js"
       }
       yield(self) if block_given?
     end
@@ -125,6 +125,32 @@ module Datatable
 #    #
 #    #
 #    #
+
+
+    #
+    # build the datatable here and then convert it to json when we render script
+    # this way we can test the options
+    #
+    def datatable_options
+      ActiveSupport::JSON.encode({
+        :sDom => '',
+        :oLanguage => {
+            :sSearch => "Search",
+            :sProcessing => "<img alt='Spinner' src='/images/spinner.gif'/>"
+        },
+        :bJQueryUI => @option[:bJQeuryUI],
+        :sPaginationType => @option[:sPaginationType],
+        :iDisplayLength => @option[:iDisplayLength],
+        :bProcessing => @option[:bProcessing],
+        :bServerSide => @option[:bServerSide],
+        :sAjaxSource => @option[:sAjaxSource],
+        :bLengthChange => @option[:bLengthChange],
+        :bStateSave => @option[:bStateSave],
+        :bFilter => @option[:bFilter],
+        :bAutoWidth => @option[:bAutoWidth],
+        :aaSorting => @option[:aaSorting],
+      })
+    end
     
 
     def script

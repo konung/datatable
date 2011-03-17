@@ -4,11 +4,11 @@
 module Datatable
 
   class Table
-    attr_accessor :table, :include
+    attr_accessor :table, :include, :model
 
     def initialize(model_class)
       @model = model_class
-      @table = model_class.table_name
+      @table_name = model_class.table_name
       @include = []
       @columns = []
       @option = {
@@ -27,17 +27,21 @@ module Datatable
       yield(self) if block_given?
     end
 
+    def model_column_names
+      @model.column_names
+    end
+
     def count
       @columns.count
     end
 
-    # returns true if the selector is in the form 'table_name.column_name'
-    def qualified_selector?(selector)
-      selector =~ /(\w+)\.(\w+)/
-    end
+#    # returns true if the selector is in the form 'table_name.column_name'
+#    def qualified_selector?(selector)
+#      selector =~ /(\w+)\.(\w+)/
+#    end
 
     def column(name, accessor=nil)
-      @columns << Column.new(name, accessor)
+      @columns << Column.new(self, name, accessor)
     end
 
 
@@ -59,7 +63,7 @@ module Datatable
 #        # a user supplied select was provided
 #        if qualified_selector?(select)
 #          selector_table, selector_column = select.split(".")
-#          unless selector_table == @table
+#          unless selector_table == @table_name
 #            # add the selectors table to include since
 #            # it's not the current models table.
 #            @include << selector_table
@@ -76,7 +80,7 @@ module Datatable
 #      else
 #        # no user supplied select so determine it from name
 #        if @model.column_names.include?(name.to_s)
-#            result.select =  (select ? select : "#{@table}.#{name}")
+#            result.select =  (select ? select : "#{@table_name}.#{name}")
 #        else
 #          result.select = nil
 #        end
@@ -193,21 +197,18 @@ module Datatable
       (html + script).html_safe
     end
 
-
     def conditions(params)
       ""
     end
 
-
-    def page(params)
-      (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
-    end
-
+    #
     # iSortingCols  - gives number of columns being sorted
     # iSortCol_0    - gives the index of the highest precedent column for sorting (the value is zero to n-1 columns)
     # sSortDir_0    - gives the direction of the highest precedent column for sorting (asc or desc)
     # iSortCol_1    - gives the index of the next highest precedent column for sorting
     # sSortDir_1    - gives the direction of next the highest precedent column for sorting
+    # etc....
+    #
     def order(params)
       result = []
       1.upto(params[:iSortingCols].to_i) do |count|
@@ -222,20 +223,8 @@ module Datatable
       result.join(", ")
     end
 
-#    def sql_count(params)
-#      @model.includes(@include).count
-#    end
-
-    def array_of(data)
-      result = []
-      @columns.each do |column|
-        if column.render.kind_of?(Proc)
-          result << column.render.call(data)
-        else
-          result << column.render
-        end
-      end
-      result
+    def page(params)
+      (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
     end
 
     def paginate(params)
@@ -247,25 +236,33 @@ module Datatable
       )
     end
 
-    def total_records
+    # since the column has access to the model couldn't this be right on the column?
+    def array_of(data)
+      result = []
+      @columns.each do |column|
+        result << column.render(data)
+      end
+      result
+    end
+
+    def data(params)
+      #paginate(params).map{|e| array_of(e)}
+      []
+    end
+    
+    def total_records(params)
       #@model.includes(@include).count
       0
     end
 
-    def total_display_records
+    def total_display_records(params)
+      #@model.includes(@include).count
       0
     end
 
-    def data
-      #data.map{|e| array_of(e)}
-      []
-    end
-
-    # http://www.datatables.net/usage/server-side
-    #
-    #
+    #------------------------------------------------------------------------------------------------------------------
     #  type       name                  description
-    # ----------------------------------------------------------------------------------------------------------
+    #------------------------------------------------------------------------------------------------------------------
     #  int        iTotalRecords         Total records, before filtering (i.e. the total number of records in
     #                                   the database)
     #
@@ -284,13 +281,13 @@ module Datatable
     #                                   client-side if required for display
     #
     #  array      aaData                The data in a 2D array
-    #
+    #-----------------------------------------------------------------------------------------------------------------
     def to_json(params)
       ActiveSupport::JSON.encode({
-       :iTotalRecords => total_records,
-       :iTotalDisplayRecords => total_display_records,
+       :iTotalRecords => total_records(params),
+       :iTotalDisplayRecords => total_display_records(params),
        :sEcho => (params.has_key?(:sEcho) ? params[:sEcho].to_i : -1),
-       :aaData => data
+       :aaData => data(params)
       })
     end
 

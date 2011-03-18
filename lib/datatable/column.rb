@@ -11,9 +11,10 @@ module Datatable
     # would it make more sense to pass the active record model
     # to the column instead of the datatable?
     #
-    def initialize(datatable, name, accessor=nil)
+    def initialize(datatable, name, accessor=nil, render=nil)
       @datatable = datatable
       @accessor = accessor
+      @render = render
       @name = name
     end
 
@@ -29,9 +30,27 @@ module Datatable
       end
     end
 
-    def render(o)
-      #o.send(accessor)
-      "bingo"
+    def select
+      nil
+    end
+
+    #
+    # recursively walk the association.accessor chaing and return the result
+    #
+    def render(object)
+      if @render
+        @render.call(object)
+      else
+        receiver = object
+        accessors = accessor.split(".")
+        while accessor = accessors.shift
+          if receiver.class.reflect_on_association(accessor.to_sym)
+            receiver = receiver.send(accessor)
+          else
+            return receiver.send(accessor)
+          end
+        end
+      end
     end
 
   end

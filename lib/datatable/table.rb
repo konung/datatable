@@ -4,12 +4,13 @@
 module Datatable
 
   class Table
-    attr_accessor :table, :include, :model
+    attr_accessor :table, :include, :model, :joins
 
     def initialize(model_class)
       @model = model_class
       @table_name = model_class.table_name
       @include = []
+      @joins = []
       @columns = []
       @option = {
         :bProcessing => true,
@@ -40,8 +41,8 @@ module Datatable
 #      selector =~ /(\w+)\.(\w+)/
 #    end
 
-    def column(name, accessor=nil)
-      @columns << Column.new(self, name, accessor)
+    def column(name, accessor=nil, render=nil)
+      @columns << Column.new(self, name, accessor, render)
     end
 
 
@@ -178,11 +179,12 @@ module Datatable
       CONTENT
       column_content = []
       1.upto(@columns.count) do |index|
-        if @columns[index-1].select
-          column_content << "          {bSortable: true}"
-        else
-          column_content << "          {bSortable: false}"
-        end
+        column_content << "          {bSortable: false}"
+#        if @columns[index-1].select
+#          column_content << "          {bSortable: true}"
+#        else
+#          column_content << "          {bSortable: false}"
+#        end
       end
       result << column_content.join(",\n ")
       result << "\n"
@@ -258,7 +260,8 @@ module Datatable
         :page => page(params),
         :order => order(params),
         :per_page => params[:iDisplayLength],
-        :include => @include
+        :include => @include,
+        :joins => @joins
       )
     end
 
@@ -272,18 +275,18 @@ module Datatable
     end
 
     def data(params)
-      #paginate(params).map{|e| array_of(e)}
-      []
+      paginate(params).map{|e| array_of(e)}
+      #[]
     end
     
     def total_records(params)
-      #@model.includes(@include).count
-      0
+      @model.includes(@include).joins(@joins).count
+      #0
     end
 
     def total_display_records(params)
-      #@model.includes(@include).count
-      0
+      @model.includes(@include).joins(@joins).count
+      #0
     end
 
     #------------------------------------------------------------------------------------------------------------------

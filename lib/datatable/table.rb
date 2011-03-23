@@ -179,12 +179,11 @@ module Datatable
       CONTENT
       column_content = []
       1.upto(@columns.count) do |index|
-        column_content << "          {bSortable: false}"
-#        if @columns[index-1].select
-#          column_content << "          {bSortable: true}"
-#        else
-#          column_content << "          {bSortable: false}"
-#        end
+        if @columns[index-1].accessor
+          column_content << "          {bSortable: true}"
+        else
+          column_content << "          {bSortable: false}"
+        end
       end
       result << column_content.join(",\n ")
       result << "\n"
@@ -243,7 +242,7 @@ module Datatable
         cur_sort_col = "iSortCol_#{count - 1}".to_sym
         cur_sort_dir = "sSortDir_#{count - 1}".to_sym
         col_select = @columns[params[cur_sort_col].to_i].select
-        if col_select
+        if col_select &&
             col_direction  = params[cur_sort_dir].upcase
           result << "#{col_select} #{col_direction}"
         end

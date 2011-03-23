@@ -25,17 +25,26 @@ module Datatable
         if @datatable.model_column_names.include?(@name.to_s)
           "#{@name}"
         else
-          raise "#{@name} is not an attribute of #{@datatable.model.class}"
+          nil
+          #raise "#{@name} is not an attribute of #{@datatable.model.class}"
         end
       end
     end
 
     def select
-      nil
+      receiver = @datatable.model
+      accessors = accessor.split(".")
+      while accessor = accessors.shift
+        if association = receiver.reflect_on_association(accessor.to_sym)
+          receiver = association.klass
+        else
+          return "#{receiver.table_name}.#{accessor}"
+        end
+      end
     end
 
     #
-    # recursively walk the association.accessor chaing and return the result
+    # recursively walk the association.accessor chain and return the result
     #
     def render(object)
       if @render

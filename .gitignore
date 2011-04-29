@@ -2,3 +2,4 @@
 docs
 *.gem
 cache/*
+test/rails_app/config/database.yml

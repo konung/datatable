@@ -3,3 +3,18 @@
 3) Spec that in rspec
 4) Back and forth on what's actually possible or at all performant to actually do w/ the interface.
 5) Make tests pass
+
+
+# Complexities
+-- select concat(first_name, last_name) as name
+-- joining so that you can see things
+  -- e.g. see customer and and sales rep name in the table
+  -- helpers that you can put in html to render form to do filtering
+  -- http://www.datatables.net/release-datatables/extras/ColReorder/col_filter.html
+-- multicolumn ordering
+-- combining two columns
+
+# Process
+-- manually make it work for each complex case
+-- make it into a class
+-- make it into a gem

@@ -6,13 +6,14 @@
 
 
 # Complexities
--- select concat(first_name, last_name) as name
 -- joining so that you can see things
   -- e.g. see customer and and sales rep name in the table
   -- helpers that you can put in html to render form to do filtering
   -- http://www.datatables.net/release-datatables/extras/ColReorder/col_filter.html
+-- select concat(first_name, last_name) as name, combining two columns
 -- multicolumn ordering
--- combining two columns
+-- Columns that you want to exist but be blank
+-- links to specific resources (lambda that calculates path?)
 
 # Process
 -- manually make it work for each complex case

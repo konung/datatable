@@ -33,6 +33,7 @@ gem 'mysql'
 gem 'datatable', :path => "../../"
 gem "jquery-rails"
 
+gem 'ruby-debug'
 
 # order has many items
 # belongs to customer

@@ -31,6 +31,22 @@
 
 <script>
   $(function(){
-    $('#orders').dataTable();
+    $('#orders').dataTable({
+      sAjaxSource: "<%= orders_path %>",
+      iDisplayLength: 25,
+      bProcessing: true,
+      bServerSide: true,
+      aoColumns: [
+      {
+        bSortable: true
+      },
+      {
+        bSortable: true
+      },
+      {
+        bSortable: true
+      }],
+      aaSorting: [[0, 'DESC']]
+    });
   })
 </script>

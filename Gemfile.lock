@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    Datatable (0.1.dev1)
+    datatable (0.1.dev1)
 
 GEM
   remote: http://rubygems.org/
@@ -87,8 +87,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  Datatable!
   activesupport
+  datatable!
   i18n
   rails
   rake

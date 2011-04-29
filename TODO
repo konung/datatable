@@ -6,6 +6,7 @@
 
 
 # Complexities
+-- paginating
 -- joining so that you can see things
   -- e.g. see customer and and sales rep name in the table
   -- helpers that you can put in html to render form to do filtering

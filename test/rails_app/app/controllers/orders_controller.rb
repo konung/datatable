@@ -6,18 +6,19 @@ class OrdersController < ApplicationController
 
       format.js do 
 
-        data = Order.limit(params[:iDisplayLength]).offset(params[:iDisplayStart].to_i).includes(:customer).map do |order|
-          [order.customer_id, order.customer.first_name, order.order_number, order.memo]
-        end
+        # data = Order.limit(params[:iDisplayLength]).offset(params[:iDisplayStart].to_i).includes(:customer).map do |order|
+        #   [order.customer_id, order.customer.first_name, order.order_number, order.memo]
+        # end
 
-        json = {
-          'sEcho' =>  params[:sEcho],
-          'iTotalRecords' => Order.count,
-          'iTotalDisplayRecords' => Order.count,
-          'aaData' => data
-        }
+        # json = {
+        #   'sEcho' =>  params[:sEcho],
+        #   'iTotalRecords' => Order.count,
+        #   'iTotalDisplayRecords' => Order.count,
+        #   'aaData' => data
+        # }
 
-        render :json => json.to_json #Order.limit(10).to_json
+        render :json => DataTable.query(params).json #Order.limit(10).to_json
+
       end
 
     end
@@ -30,3 +31,5 @@ class OrdersController < ApplicationController
   # }.to_json
 
 end
+
+

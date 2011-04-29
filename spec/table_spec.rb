@@ -45,17 +45,15 @@ describe Table do
       datatable.render.html_safe?.should be_true
     end
   end
-#
-#  #
-#  #
-#  #
-#  describe 'to_json' do
-#    it "returns a hash" do
-#      datatable = Table.new
-#      ActiveSupport::JSON.decode(datatable.to_json({})).should == {}
-#    end
-#  end
-#
 
+  #
+  #
+  #
+  describe 'to_json' do
+    it "returns a hash" do
+      datatable = Table.new
+      ActiveSupport::JSON.decode(datatable.to_json({})).should == {}
+    end
+  end
 
 end

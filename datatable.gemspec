@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Michael Greenly"]
   s.email       = ["michaelgreenly@logic-refinery.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/logic-refinery/datatable"
   s.summary     = %q{A rails plugin for the jquery.datatables library}
   s.description = %q{A rails plugin for the jquery.datatables library}
 

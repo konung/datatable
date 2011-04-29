@@ -6,20 +6,15 @@ class OrdersController < ApplicationController
 
       format.js do 
 
-
-        # [].tap do
-        # Order.limit(10).map do |order|
-
-        # end
-        # end
+        data = Order.limit(10).map do |order|
+          [order.customer_id, order.order_number, order.memo]
+        end
 
         json = {
           'sEcho' =>  params[:sEcho],
           'iTotalRecords' => 1,
           'iTotalDisplayRecords' => 1,
-          'aaData' => [
-            ['1', '239823', 'hello']
-        ]
+          'aaData' => data
         }
 
         render :json => json.to_json #Order.limit(10).to_json

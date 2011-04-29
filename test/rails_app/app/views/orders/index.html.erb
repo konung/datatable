@@ -3,6 +3,7 @@
   <thead>
     <tr>
       <th>Customer ID</th>
+      <th>Customer name</th>
       <th>Order number</th>
       <th>Memo</th>
     </tr>
@@ -15,15 +16,16 @@
 <script>
   $(function(){
     $('#orders').dataTable({
-//      oLanguage: {
-//        sSearch: "Search",
-//        sProcessing: "Working..."
-//      },
       sAjaxSource: "<%= orders_path %>",
-      iDisplayLength: 25,
+      sDom: '<"H"lr>t<"F"ip>',      
+      iDisplayLength: 10,
       bProcessing: true,
       bServerSide: true,
+      sPaginationType: "full_numbers",
       aoColumns: [
+      {
+        bSortable: true
+      },
       {
         bSortable: true
       },

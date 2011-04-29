@@ -6,14 +6,14 @@ class OrdersController < ApplicationController
 
       format.js do 
 
-        data = Order.limit(10).map do |order|
-          [order.customer_id, order.order_number, order.memo]
+        data = Order.limit(params[:iDisplayLength]).offset(params[:iDisplayStart].to_i).includes(:customer).map do |order|
+          [order.customer_id, order.customer.first_name, order.order_number, order.memo]
         end
 
         json = {
           'sEcho' =>  params[:sEcho],
-          'iTotalRecords' => 1,
-          'iTotalDisplayRecords' => 1,
+          'iTotalRecords' => Order.count,
+          'iTotalDisplayRecords' => Order.count,
           'aaData' => data
         }
 

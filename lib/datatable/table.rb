@@ -4,289 +4,43 @@
 module Datatable
 
   class Table
-    attr_accessor :table, :include, :model, :joins
 
-    def initialize(model_class)
-      @model = model_class
-      @table_name = model_class.table_name
-      @include = []
-      @joins = []
-      @columns = []
-      @option = {
-        :bProcessing => true,
-        :bServerSide => true,
-        :sPaginationType => "full_numbers",
-        :iDisplayLength => 25,
-        :bLengthChange => true,
-        :bStateSave => false,
-        :bFilter => true,
-        :bAutoWidth => false,
-        :aaSorting => "[[0, 'ASC']]",
-        :bJQeuryUI => true,
-        :sAjaxSource => "/#{@table_name}.js"
-      }
-      yield(self) if block_given?
-    end
-
-    def model_column_names
-      @model.column_names
-    end
-
-    def count
-      @columns.count
-    end
-
-#    # returns true if the selector is in the form 'table_name.column_name'
-#    def qualified_selector?(selector)
-#      selector =~ /(\w+)\.(\w+)/
-#    end
-
-    def column(name, accessor=nil, render=nil)
-      @columns << Column.new(self, name, accessor, render)
-    end
-
-
-#    #
-#    #
-#    def column(name, render=nil, select=nil,  type=nil)
-#
-#      result = Column.new
-#
-#      # The name value will be titlized and used as the tables
-#      # column title.
-#      #
-#      result.name = name
-#
-#      #
-#      # SELECT
-#      #
-#      if select
-#        # a user supplied select was provided
-#        if qualified_selector?(select)
-#          selector_table, selector_column = select.split(".")
-#          unless selector_table == @table_name
-#            # add the selectors table to include since
-#            # it's not the current models table.
-#            @include << selector_table
-#          end
-#          result.select = "#{@model.reflect_on_association(selector_table.to_sym).table_name}.#{selector_column}"
-#        else
-#          # it's an unqualifed selector
-#          if @model.column_names.include?(select.to_s)
-#            result.select = "#{@table_name}.#{select}"
-#          else
-#            raise "'#{@table_name}' does not include column '#{select}'"
-#          end
-#        end
-#      else
-#        # no user supplied select so determine it from name
-#        if @model.column_names.include?(name.to_s)
-#            result.select =  (select ? select : "#{@table_name}.#{name}")
-#        else
-#          result.select = nil
-#        end
-#      end
-#
-#      #
-#      # RENDER
-#      #
-#      if render.nil?
-#        #
-#        # if no render is supplied then assume then assume
-#        # that it's the attribute name on the current model
-#        #
-#        result.render = lambda{|o| o.send(name.to_s)}
-#      elsif render.kind_of?(Proc)
-#        #
-#        # if they supplied a proc then simply save the proc
-#        # in render it will be used later
-#        #
-#        result.render = render
-#      else
-#        #
-#        # if they supplied anything else just save it's string
-#        # int render
-#        #
-#        result.render = render.to_s
-#      end
-#
-#      #
-#      # TYPE is unused right now
-#      #
-#      result.type =  (type ? render : :integer)
-#
-#
-#      @columns << result
-#    end
-#    #
-#    #
-#    #
-#    #
-#    #
-#    #
-#    #
-#    #
-
-
-    #
-    # build the datatable here and then convert it to json when we render script
-    # this way we can test the options
-    #
-    def datatable_options
-      ActiveSupport::JSON.encode({
-        :sDom => '',
-        :oLanguage => {
-            :sSearch => "Search",
-            :sProcessing => "<img alt='Spinner' src='/images/spinner.gif'/>"
-        },
-        :bJQueryUI => @option[:bJQeuryUI],
-        :sPaginationType => @option[:sPaginationType],
-        :iDisplayLength => @option[:iDisplayLength],
-        :bProcessing => @option[:bProcessing],
-        :bServerSide => @option[:bServerSide],
-        :sAjaxSource => @option[:sAjaxSource],
-        :bLengthChange => @option[:bLengthChange],
-        :bStateSave => @option[:bStateSave],
-        :bFilter => @option[:bFilter],
-        :bAutoWidth => @option[:bAutoWidth],
-        :aaSorting => @option[:aaSorting],
-      })
+    # manage the options as a ruby hash
+    def datatable_func_opts
+      ActiveSupport::JSON.encode({})
     end
     
 
-    def script
-      result = <<-CONTENT.gsub(/^\s{8}/,"")
+    # generate javascript
+    def javascript
+      <<-CONTENT.gsub(/^\s{8}/,"")
         <script type="text/javascript">
           $(document).ready(function() {
-            $('.datatable').dataTable({
-              sDom: '<"H"lr>t<"F"ip>',
-              oLanguage: {
-                sSearch: "Search",
-                sProcessing: "<img alt='Spinner' src='/images/spinner.gif'/>"
-              },
-              bJQueryUI: #{@option[:bJQeuryUI]},
-              sPaginationType: "#{@option[:sPaginationType]}",
-              iDisplayLength: #{@option[:iDisplayLength]},
-              bProcessing: #{@option[:bProcessing]},
-              bServerSide: #{@option[:bServerSide]},
-              sAjaxSource: "#{@option[:sAjaxSource]}",
-              bLengthChange: #{@option[:bLengthChange]},
-              bStateSave: #{@option[:bStateSave]},
-              bFilter: #{@option[:bFilter]},
-              bAutoWidth: #{@option[:bAutoWidth]},
-              aaSorting: #{@option[:aaSorting]},
-              aoColumns: [
-      CONTENT
-      column_content = []
-      1.upto(@columns.count) do |index|
-        if @columns[index-1].accessor
-          column_content << "          {bSortable: true}"
-        else
-          column_content << "          {bSortable: false}"
-        end
-      end
-      result << column_content.join(",\n ")
-      result << "\n"
-      result << <<-CONTENT.gsub(/^\s{8}/,"")
-              ]
-             });
+            $('.datatable').dataTable(#{ActiveSupport::JSON.encode(datatable_func_opts)});
           });
         </script>
       CONTENT
     end
 
-    #
-    #
-    #
-    #
+    # generate html
     def html
-      result =<<-CONTENT.gsub(/^\s{8}/,"")
+      <<-CONTENT.gsub(/^\s{8}/,"")
         <div class='datatable_container'>
           <table class='datatable'>
             <thead>
-              <tr>
-      CONTENT
-      @columns.each do |column|
-        result << "        <th>#{column.name.to_s.titleize}</th>\n"
-      end
-      result << <<-CONTENT.gsub(/^\s{8}/,"")
-              </tr>
             </thead>
             <tbody>
             </tbody>
           </table>
         </div>
       CONTENT
-      result
     end
 
+    # convienence method to provide html+javascript
     def render
-      (html + script).html_safe
+      (html + javascript).html_safe
     end
 
-    def conditions(params)
-      ""
-    end
-
-    #
-    # iSortingCols  - gives number of columns being sorted
-    # iSortCol_0    - gives the index of the highest precedent column for sorting (the value is zero to n-1 columns)
-    # sSortDir_0    - gives the direction of the highest precedent column for sorting (asc or desc)
-    # iSortCol_1    - gives the index of the next highest precedent column for sorting
-    # sSortDir_1    - gives the direction of next the highest precedent column for sorting
-    # etc....
-    #
-    def order(params)
-      result = []
-      1.upto(params[:iSortingCols].to_i) do |count|
-        cur_sort_col = "iSortCol_#{count - 1}".to_sym
-        cur_sort_dir = "sSortDir_#{count - 1}".to_sym
-        col_select = @columns[params[cur_sort_col].to_i].select
-        if col_select &&
-            col_direction  = params[cur_sort_dir].upcase
-          result << "#{col_select} #{col_direction}"
-        end
-      end
-      result.join(", ")
-    end
-
-    def page(params)
-      (params[:iDisplayStart].to_i/params[:iDisplayLength].to_i rescue 0)+1
-    end
-
-    def paginate(params)
-      @model.paginate(
-        :page => page(params),
-        :order => order(params),
-        :per_page => params[:iDisplayLength],
-        :include => @include,
-        :joins => @joins
-      )
-    end
-
-    # since the column has access to the model couldn't this be right on the column?
-    def array_of(data)
-      result = []
-      @columns.each do |column|
-        result << column.render(data)
-      end
-      result
-    end
-
-    def data(params)
-      paginate(params).map{|e| array_of(e)}
-      #[]
-    end
-    
-    def total_records(params)
-      @model.includes(@include).joins(@joins).count
-      #0
-    end
-
-    def total_display_records(params)
-      @model.includes(@include).joins(@joins).count
-      #0
-    end
 
     #------------------------------------------------------------------------------------------------------------------
     #  type       name                  description
@@ -311,49 +65,8 @@ module Datatable
     #  array      aaData                The data in a 2D array
     #-----------------------------------------------------------------------------------------------------------------
     def to_json(params)
-      ActiveSupport::JSON.encode({
-       :iTotalRecords => total_records(params),
-       :iTotalDisplayRecords => total_display_records(params),
-       :sEcho => (params.has_key?(:sEcho) ? params[:sEcho].to_i : -1),
-       :aaData => data(params)
-      })
+      ActiveSupport::JSON.encode({})
     end
 
   end
 end
-
-
-
-
-
-=begin
-  def index
-    @datatable = Datatable::Datatable.build(Boat) do |table|
-
-
-#      table.column :serial, "serial_number.value"
-#      table.column :date_code, "serial_number.date_code"
-#      table.column :size, "boat_size.name"
-#      table.column :model, "boat_model.name"
-#      table.column :dealer, "serial_number.dealer.nick_name"
-#      table.column :base_color, "base_color.name"
-#      table.column :accent_color, "accent_color.name"
-#      table.column :action, nil, :render => "<a href='#{boat_path(truck)}'>Show</a>"
-
-
-
-      table.column "serial_number.value", lambda{|truck| truck.serial_number.value}, "serial_number.value"
-      table.column "serial_number.date_code", lambda{|truck| truck.serial_number.date_code}, "serial_number.date_code"
-      table.column "boat_size.name", lambda{|truck| truck.boat_size.name}, "boat_size.name"
-      table.column "boat_model.name", lambda{|truck| truck.boat_model.name}, "boat_model.name"
-      #table.column :dealer, lambda{|truck| truck.dealer.nick_name}, "dealer.nick_name"
-      table.column "base_color.name", lambda{|truck| truck.base_color.name}, "base_color.name"
-      table.column "accent_color.name", lambda{|truck| truck.accent_color.name}, "accent_color.name"
-      table.column nil, lambda{|truck| "<a href='#{boat_path(truck)}'>Show</a>" }, "Action"
-    end
-    respond_to do |format|
-      format.html # index.html.erb
-      format.js { render :json => @datatable.json(params), :content_type => 'text/html'}
-    end
-  end
-=end

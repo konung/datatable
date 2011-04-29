@@ -17,7 +17,7 @@ class OrdersController < ApplicationController
         #   'aaData' => data
         # }
 
-        render :json => DataTable.query(params).json #Order.limit(10).to_json
+        render :json => DataTable.new(params).json #Order.limit(10).to_json
 
       end
 

@@ -5,11 +5,21 @@ class OrdersController < ApplicationController
       format.html { @orders = Order.limit(10) }
 
       format.js do 
+
+
+        # [].tap do
+        # Order.limit(10).map do |order|
+
+        # end
+        # end
+
         json = {
-          'sEcho' =>  -1,
-          'iTotalRecords' => 0,
-          'iTotalDisplayRecords' => 0,
-          'aaData' => []
+          'sEcho' =>  params[:sEcho],
+          'iTotalRecords' => 1,
+          'iTotalDisplayRecords' => 1,
+          'aaData' => [
+            ['1', '239823', 'hello']
+        ]
         }
 
         render :json => json.to_json #Order.limit(10).to_json

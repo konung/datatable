@@ -9,29 +9,16 @@
   </thead>
 
   <tbody>
-    <% @orders.each do |order| %>
-      <tr>
-
-        <td>
-          <%= order.customer_id %>
-        </td>
-
-        <td>
-          <%= order.order_number %>
-        </td>
-
-        <td>
-          <%= order.memo %>
-        </td>
-
-      </tr>
-    <% end %>
   </tbody>
 </table>
 
 <script>
   $(function(){
     $('#orders').dataTable({
+//      oLanguage: {
+//        sSearch: "Search",
+//        sProcessing: "Working..."
+//      },
       sAjaxSource: "<%= orders_path %>",
       iDisplayLength: 25,
       bProcessing: true,

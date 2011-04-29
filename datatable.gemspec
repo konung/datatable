@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "datatable/version"
 
 Gem::Specification.new do |s|
-  s.name        = "Datatable"
+  s.name        = "datatable"
   s.version     = Datatable::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Michael Greenly"]

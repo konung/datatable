@@ -1,0 +1,5 @@
+1) Spec out the ideal interface. Embedded app.
+2) List the public api methods that we want to support
+3) Spec that in rspec
+4) Back and forth on what's actually possible or at all performant to actually do w/ the interface.
+5) Make tests pass

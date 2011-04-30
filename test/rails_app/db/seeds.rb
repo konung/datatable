@@ -6,6 +6,15 @@
 #   cities = City.create([{ :name => 'Chicago' }, { :name => 'Copenhagen' }])
 #   Mayor.create(:name => 'Daley', :city => cities.first)
 
+
+def db_rand(value="")
+  if ActiveRecord::Base.connection.adapter_name =~ /postgres/i
+    "random(#{value})"
+  else
+    "rand(#{value})"
+  end
+end
+
 SalesRep.delete_all && Customer.delete_all && Order.delete_all && Item.delete_all && OrderItem.delete_all
 
 5.times do |i|
@@ -24,10 +33,10 @@ end
 end
 
 200.times do |i|
-  customer = Customer.limit(1).order('rand()').first
+  customer = Customer.limit(1).order(db_rand()).first
   order = customer.orders.create!(:order_number => rand(239832981))
   rand(10).times do
-    order.items << Item.limit(1).order('rand()')
+    order.items << Item.limit(1).order(db_rand())
   end
   order.save!
 end

@@ -19,7 +19,7 @@ gem "jquery-rails"
 #
 # If you want you can install ruby-debug manually in this situation
 #
-#  gem install ruby-debug19 -- --with-ruby-include=/home/mgreenly/.rvm/src/$RUBY_VERSION/
+#  gem install ruby-debug19 -- --with-ruby-include=$rvm_path/src/$RUBY_VERSION/
 #
 group :debug do
   gem 'ruby-debug', :platform => :ruby_18

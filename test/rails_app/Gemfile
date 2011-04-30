@@ -7,5 +7,22 @@ gem 'mysql'
 
 gem 'datatable', :path => "../../"
 gem "jquery-rails"
-gem 'ruby-debug'
+
+
+#
+# ruby-debug can't be installed using bundler on Linx under rvm with Ruby 1.9 because it
+# tries to download header files to folders not owned by the current user.  The easiest
+# way to work around this is to put ruby-debug in an optional group and that can be 
+# excluded when bundle install is run.
+#
+#  bundle install --exclude=debug
+#
+# If you want you can install ruby-debug manually in this situation
+#
+#  gem install ruby-debug19 -- --with-ruby-include=/home/mgreenly/.rvm/src/$RUBY_VERSION/
+#
+group :debug do
+  gem 'ruby-debug', :platform => :ruby_18
+  gem 'ruby-debug19', :require => 'ruby-debug', :platform => :ruby_19
+end
 

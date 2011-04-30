@@ -1,5 +1,5 @@
 PATH
-  remote: ../../
+  remote: ../
   specs:
     datatable (0.1.dev1)
 

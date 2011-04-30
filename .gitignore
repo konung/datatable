@@ -2,5 +2,4 @@
 docs
 *.gem
 cache/*
-test/rails_app/config/database.yml
-test/rails_app/vendor/ruby
+example_app/config/database.yml

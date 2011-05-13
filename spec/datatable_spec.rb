@@ -22,6 +22,20 @@ describe DataTable do
     DataTable.new.json['iTotalDisplayRecords'].should == 0
   end
 
+  it 'should deal w/ pagination' do
+    params = {'iDisplayLength' => 10, 'iDisplayStart' => 20 }
+    DataTable.query(params).json.should == {
+      'iTotalRecords' => 320,
+      'iTotalDisplayRecords' => 320,
+      'aaData' => [[] * 320]
+    }
+  end
+
+  # have to pass params to something
+  # DataTable.new(Model) do 
+  #  column :foo, :asc, :as => 'bar'
+  # end
+
   # it 'should give basic results' do
   #   params = {"bSortable_0"=>"true", "iColumns"=>"4", "bSortable_1"=>"true", "iSortCol_0"=>"0", "bSearchable_0"=>"true", "sSearch_0"=>"", "bSortable_2"=>"true", "bSearchable_1"=>"true", "sSearch_1"=>"", "bRegex_0"=>"false", "iDisplayLength"=>"10", "bSortable_3"=>"true", "bSearchable_2"=>"true", "sSearch_2"=>"", "bRegex_1"=>"false", "sSortDir_0"=>"DESC", "bSearchable_3"=>"true", "sSearch_3"=>"", "bRegex_2"=>"false", "sEcho"=>"1", "iSortingCols"=>"1", "bRegex_3"=>"false", "sSearch"=>"", "_"=>"1304112480707", "bRegex"=>"false", "iDisplayStart"=>"0", "sColumns"=>""}
 

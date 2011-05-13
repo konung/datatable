@@ -21,6 +21,16 @@ gem "jquery-rails"
 #
 #  gem install ruby-debug19 -- --with-ruby-include=$rvm_path/src/$RUBY_VERSION/
 #
+group :test, :development do
+  gem "rake"
+  gem "i18n"
+  gem "webrat"
+  gem "activesupport"
+  gem "rspec"
+  gem "rspec-rails"
+end
+
+
 group :debug do
   gem 'ruby-debug', :platform => :ruby_18
   gem 'ruby-debug19', :require => 'ruby-debug', :platform => :ruby_19

@@ -15,15 +15,25 @@ describe 'asfd' do
       set_model Order 
 
       column :order_number
+      column :memo
     end
 
-    data_table = OrdersSimple.new
-    OrdersSimple.relation.should == Order.select(:order_number)
-    data_table.sql.should == 'SELECT order_number FROM `orders`'
+    OrdersSimple.relation.should == Order.select([:order_number, :memo])
   end
 
+  it 'should store a partial sql query' do
+    class OrdersSimple < DataTable
+      set_model Order 
 
+      column :memo
 
+      join :customers do
+        column :first_name
+      end
+    end
 
+    customers = Arel::Table.new(:customers)
+    OrdersSimple.relation.should == Order.select(:memo).joins(:customer).select(customers[:first_name]).to_sql
+  end
 
 end

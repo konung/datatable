@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe OrdersIndex do
+describe 'asfd' do
 
 # it 'should work' do
 #   Order.create!(:order_number => 32)
@@ -12,12 +12,13 @@ describe OrdersIndex do
 
   it 'should store a partial sql query' do
     class OrdersSimple < DataTable
-      model Order 
+      set_model Order 
+
       column :order_number
     end
 
     data_table = OrdersSimple.new
-    data_table.sql.should == 'SELECT order_number FROM orders'
+    data_table.sql.should == 'SELECT order_number FROM `orders`'
   end
 
 

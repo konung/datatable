@@ -1,17 +1,17 @@
 class OrdersIndex < DataTable
 
-  column :order_number
+  # column :order_number
 
-  join :customers do
-    column :first_name
-    column :last_name
+  # join :customers do
+  #   column :first_name
+  #   column :last_name
 
-    join :sales_reps do
-      column :first_name
-      column :last_name
-    end
-  end
-  column :memo
+  #   join :sales_reps do
+  #     column :first_name
+  #     column :last_name
+  #   end
+  # end
+  # column :memo
 
 end
 

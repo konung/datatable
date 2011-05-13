@@ -7,14 +7,15 @@ class DataTable
   attr_accessor :total_count
   attr_accessor :displayed_count
 
-  def self.column(*args)
+  def self.column(c)
+    @@relation = @@relation.select(c)
   end
 
   def self.join(*args)
   end
 
-  def self.model(model_name)
-    @@model_name = model_name
+  def self.set_model(klass)
+    @@relation = klass #Arel::Table.new(klass.table_name)
   end
 
   # 1. data table subclass is initialized 
@@ -48,6 +49,10 @@ class DataTable
 
   def query(params)
     self
+  end
+
+  def sql
+    @@relation.to_sql
   end
 
 

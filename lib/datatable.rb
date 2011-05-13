@@ -15,7 +15,8 @@ class DataTable
     @@relation = @@relation.select(c)
   end
 
-  def self.join(*args)
+  def self.join(association)
+    @@relation = @@relation.joins(association)
   end
 
   def self.set_model(klass)

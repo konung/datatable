@@ -52,4 +52,8 @@ describe 'Data tables subclasses' do
     OrdersSimple.relation.should == Order.select(:memo).joins(:customer).select(customers[:first_name])
   end
 
+
+  # Next: Better way to keep track of joins (a stack of classes? reflect on associations to get real table name).
+  #
+
 end

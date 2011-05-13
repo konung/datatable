@@ -30,7 +30,7 @@ class DataTable
 
   def self.set_model(klass)
     @@klass = klass
-    @@relation = klass #Arel::Table.new(klass.table_name)
+    @@relation = klass
   end
 
   # 1. data table subclass is initialized 

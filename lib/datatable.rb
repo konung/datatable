@@ -7,6 +7,10 @@ class DataTable
   attr_accessor :total_count
   attr_accessor :displayed_count
 
+  def self.relation
+    @@relation
+  end
+
   def self.column(c)
     @@relation = @@relation.select(c)
   end

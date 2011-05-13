@@ -18,8 +18,11 @@ describe 'asfd' do
     end
 
     data_table = OrdersSimple.new
+    OrdersSimple.relation.should == Order.select(:order_number)
     data_table.sql.should == 'SELECT order_number FROM `orders`'
   end
+
+
 
 
 

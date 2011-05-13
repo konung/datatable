@@ -12,14 +12,24 @@ class DataTable
   end
 
   def self.column(c)
-    @@relation = @@relation.select(c)
+    @@inner_class ||= nil
+    if @@inner_class
+      table = Arel::Table.new(@@inner_class.to_s.pluralize)
+      @@relation = @@relation.select(table[c])
+    else
+      @@relation = @@relation.select(c)
+    end
   end
 
-  def self.join(association)
+  def self.join(association, &block)
+    @@inner_class = association
     @@relation = @@relation.joins(association)
+    instance_eval(&block) if block_given?
+    @@inner_class = nil
   end
 
   def self.set_model(klass)
+    @@klass = klass
     @@relation = klass #Arel::Table.new(klass.table_name)
   end
 

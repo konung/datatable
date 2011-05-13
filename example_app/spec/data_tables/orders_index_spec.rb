@@ -18,6 +18,7 @@ describe 'Data tables subclasses' do
       column :memo
     end
 
+    OrdersSimple.new.sql.should == Order.select([:order_number, :memo]).to_sql
     OrdersSimple.relation.should == Order.select([:order_number, :memo])
   end
 
@@ -31,6 +32,7 @@ describe 'Data tables subclasses' do
     end
 
     customers = Arel::Table.new(:customers)
+    OrdersSimple.new.sql.should == Order.select(:memo).joins(:customer).to_sql
     OrdersSimple.relation.should == Order.select(:memo).joins(:customer)
   end
 

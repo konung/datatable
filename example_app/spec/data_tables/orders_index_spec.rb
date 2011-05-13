@@ -31,7 +31,6 @@ describe 'Data tables subclasses' do
     end
 
     customers = Arel::Table.new(:customers)
-    OrdersSimple.new.sql.should == Order.select(:memo).joins(:customer).to_sql
     OrdersSimple.relation.should == Order.select(:memo).joins(:customer)
   end
 
@@ -41,13 +40,14 @@ describe 'Data tables subclasses' do
 
       column :memo
 
-      join :customers do
+      join :customer do
         column :first_name
       end
     end
 
     customers = Arel::Table.new(:customers)
-    OrdersSimple.relation.should == Order.select(:memo).joins(:customer).select(customers[:first_name]).to_sql
+    OrdersSimple.new.sql.should == Order.select(:memo).joins(:customer).select(customers[:first_name]).to_sql
+    OrdersSimple.relation.should == Order.select(:memo).joins(:customer).select(customers[:first_name])
   end
 
 end

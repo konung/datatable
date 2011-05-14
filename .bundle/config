@@ -1,3 +1,3 @@
 --- 
-BUNDLE_PATH: cache
+BUNDLE_PATH: vendor
 BUNDLE_DISABLE_SHARED_GEMS: "1"

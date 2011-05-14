@@ -1,6 +1,6 @@
 .idea
 docs
 *.gem
-cache/*
+vendor/ruby
 example_app/config/database.yml
 */.DS_Store

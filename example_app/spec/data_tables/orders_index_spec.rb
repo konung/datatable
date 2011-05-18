@@ -55,3 +55,41 @@ describe 'Data tables subclasses' do
   end
 
 end
+
+describe 'query paramters' do
+
+  before do
+    class OrdersSimple < DataTable
+      set_model Order
+      column :memo
+      join :customer do
+        column :first_name
+      end
+    end
+  end
+
+  it "sEcho" do
+    echo = rand(239823)
+    params = {'sEcho' => echo }
+    OrdersSimple.new(params).as_json['sEcho'].should == echo
+  end
+
+  it "sColumns"
+
+  it "iDisplayStart"
+
+  it "iDisplayLength"
+   #{"sEcho"=>"1", "iColumns"=>"4",
+  # "iDisplayStart"=>"0", "iDisplayLength"=>"10", "sSearch"=>"",
+  # "bRegex"=>"false",
+  # "sSearch_0"=>"", "bRegex_0"=>"false", "bSearchable_0"=>"true",
+  # "sSearch_1"=>"", "bRegex_1"=>"false", "bSearchable_1"=>"true",
+  # "sSearch_2"=>"", "bRegex_2"=>"false", "bSearchable_2"=>"true",
+  # "sSearch_3"=>"", "bRegex_3"=>"false", "bSearchable_3"=>"true",
+  #
+  # "iSortingCols"=>"1",
+  # "iSortCol_0"=>"0", "sSortDir_0"=>"DESC", "bSortable_0"=>"true",
+  # "bSortable_1"=>"true", "bSortable_2"=>"true", "bSortable_3"=>"true",
+  # "_"=>"1305745194153" }
+  #end
+end

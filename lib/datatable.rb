@@ -21,28 +21,28 @@ class DataTable
     @relation
   end
 
-  def self.klass
-    @klass
+  def self.model
+    @model
   end
 
-  def self.current_klass
-    @inner_klass || @klass
+  def self.current_model
+    @inner_model || @model
   end
 
   def self.column(c)
-    @relation= @relation.select(current_klass.arel_table[c])
+    @relation= @relation.select(current_model.arel_table[c])
   end
 
   def self.join(association, &block)
-    @inner_klass = current_klass.reflect_on_association(association).klass
+    @inner_model = current_model.reflect_on_association(association).klass
     @relation = @relation.joins(association)
     instance_eval(&block) if block_given?
-    @inner_klass = nil
+    @inner_model = nil
   end
 
-  def self.set_model(klass)
-    @klass = klass
-    @relation = klass
+  def self.set_model(model)
+    @model = model
+    @relation = model
   end
 
   def self.query(params)
@@ -58,10 +58,6 @@ class DataTable
     @records = []
   end
 
-  def some_method(a)
-    [ '', '', '' ]
-  end
-
   def as_json
     {
       'sEcho' => echo,
@@ -72,7 +68,7 @@ class DataTable
   end
 
   def query
-    @records = self.class.klass.connection.select_rows(sql)
+    @records = self.class.model.connection.select_rows(sql)
     @total_count = @records.count
     self
   end

@@ -30,9 +30,11 @@ class DataTable
   end
 
   def self.column(c)
+    raise "set_model not called on #{self.name}" unless @model
     @relation= @relation.select(current_model.arel_table[c])
   end
 
+  # TODO: Change to joins to match arel
   def self.join(association, &block)
     @inner_model = current_model.reflect_on_association(association).klass
     @relation = @relation.joins(association)

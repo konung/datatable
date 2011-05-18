@@ -87,11 +87,36 @@ describe 'query paramters' do
      OrdersSimple.query(@params).as_json['iTotalDisplayRecords'].should == 3
    end
 
+  it 'should return valid aaData' do
+    class OrdersComplex < DataTable
+      set_model Order
+      column :order_number
+      column :memo
+      join :customer do
+        column :first_name
+      end
+    end
+    orders = [Factory(:order), Factory(:order)]
+    OrdersComplex.query(@params).as_json['aaData'].should == orders.map { |o| [o.order_number.to_s, o.memo, o.customer.first_name]}
+  end
+
+  it 'should return valid aaData in different order' do
+    class OrdersComplex < DataTable
+      set_model Order
+      column :memo
+      column :order_number
+    end
+    orders = [Factory(:order), Factory(:order)]
+    OrdersComplex.query(@params).as_json['aaData'].should == orders.map { |o| [o.memo, o.order_number.to_s]}
+  end
 
   it "sColumns"
 
   it "iDisplayStart"
+  
   it "iDisplayLength"
+
+
    #{"sEcho"=>"1", "iColumns"=>"4",
   # "iDisplayStart"=>"0", "iDisplayLength"=>"10", "sSearch"=>"",
   # "bRegex"=>"false",

@@ -61,6 +61,7 @@ describe 'query paramters' do
   before do
     class OrdersSimple < DataTable
       set_model Order
+      column :id
       column :memo
       join :customer do
         column :first_name
@@ -110,12 +111,20 @@ describe 'query paramters' do
     OrdersComplex.query(@params).as_json['aaData'].should == orders.map { |o| [o.memo, o.order_number.to_s]}
   end
 
+  it "should provide first page" do
+    class OrdersComplex2 < DataTable
+      set_model Order
+      column :id
+    end
+    orders = [Factory(:order), Factory(:order), Factory(:order), Factory(:order)]
+    OrdersComplex2.query(@params).as_json['iTotalRecords'].should == 2
+    OrdersComplex2.query(@params).as_json['iTotalDisplayRecords'].should = 2
+    OrdersComplex2.query(@params).as_json['aaData'].should = orders[0..1].map {|o| [o.id] }
+  end
+
+  #TODO: Make it so that pagination works by having only the desired number of records returned
+
   it "sColumns"
-
-  it "iDisplayStart"
-  
-  it "iDisplayLength"
-
 
    #{"sEcho"=>"1", "iColumns"=>"4",
   # "iDisplayStart"=>"0", "iDisplayLength"=>"10", "sSearch"=>"",

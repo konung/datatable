@@ -15,9 +15,14 @@ class DataTable
   attr_accessor :data
   attr_accessor :total_count
   attr_accessor :displayed_count
+  attr_accessor :records
 
   def self.relation
     @relation
+  end
+
+  def self.klass
+    @klass
   end
 
   def self.current_klass
@@ -40,24 +45,35 @@ class DataTable
     @relation = klass
   end
 
-  def initialize(params={})
-    @echo = (params['sEcho'] || -1).to_i
-    @data = []
-    @displayed_count = 0
-    @total_count = 0
+  def self.query(params)
+    datatable = new(params)
+    datatable.query
+    datatable
   end
 
-  def json
+  def initialize(params={})
+    @echo = (params['sEcho'] || -1).to_i
+    @displayed_count = 0
+    @total_count = 0
+    @records = []
+  end
+
+  def some_method(a)
+    [ '', '', '' ]
+  end
+
+  def as_json
     {
       'sEcho' => echo,
-      'aaData' => data,
+      'aaData' => records,
       'iTotalRecords' => total_count,
-      'iTotalDisplayRecords' => displayed_count,
-      'aaRecords' => []
+      'iTotalDisplayRecords' => records.length,
     }
   end
 
-  def query(params)
+  def query
+    @records = self.class.klass.connection.select_rows(sql)
+    @total_count = @records.count
     self
   end
 

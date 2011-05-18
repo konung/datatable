@@ -66,6 +66,8 @@ describe 'query paramters' do
         column :first_name
       end
     end
+
+    @params = {}
   end
 
   it "sEcho" do
@@ -74,10 +76,21 @@ describe 'query paramters' do
     OrdersSimple.new(params).as_json['sEcho'].should == echo
   end
 
+  it 'should return the number of records when there are no records' do
+    OrdersSimple.new.as_json['iTotalRecords'].should == 0
+    OrdersSimple.new.as_json['iTotalDisplayRecords'].should == 0
+  end
+
+  it 'should return the number of records' do
+    3.times{ Factory(:order) }
+     OrdersSimple.query(@params).as_json['iTotalRecords'].should == 3
+     OrdersSimple.query(@params).as_json['iTotalDisplayRecords'].should == 3
+   end
+
+
   it "sColumns"
 
   it "iDisplayStart"
-
   it "iDisplayLength"
    #{"sEcho"=>"1", "iColumns"=>"4",
   # "iDisplayStart"=>"0", "iDisplayLength"=>"10", "sSearch"=>"",

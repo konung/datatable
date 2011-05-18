@@ -1,3 +1,12 @@
+# 1. data table subclass is initialized
+#   class methods are going to be called on the class instance, and the class will store table data
+#
+# 2. instantiate an instance of the data table subclass ( OrdersIndex.new)
+#
+# 3. query the instance w/ pagination and sorting params
+#    a query gets executed w/ params -> ARel
+#    results get stored  -> AR
+#    results get passed back as json
 class DataTable
   # include SQLGenerator
   # include ParamsParser
@@ -8,42 +17,28 @@ class DataTable
   attr_accessor :displayed_count
 
   def self.relation
-    @@relation
+    @relation
+  end
+
+  def self.current_klass
+    @inner_klass || @klass
   end
 
   def self.column(c)
-    @@inner_class ||= nil
-    if @@inner_class
-      table = Arel::Table.new(@@inner_class.to_s.pluralize)
-      @@relation = @@relation.select(table[c])
-    else
-      @@relation = @@relation.select(c)
-    end
+    @relation= @relation.select(current_klass.arel_table[c])
   end
 
   def self.join(association, &block)
-    @@inner_class = association
-    @@relation = @@relation.joins(association)
+    @inner_klass = current_klass.reflect_on_association(association).klass
+    @relation = @relation.joins(association)
     instance_eval(&block) if block_given?
-    @@inner_class = nil
+    @inner_klass = nil
   end
 
   def self.set_model(klass)
-    @@klass = klass
-    @@relation = klass
+    @klass = klass
+    @relation = klass
   end
-
-  # 1. data table subclass is initialized 
-  #   class methods are going to be called on the class instance, and the class will store table data
-  #
-  # 2. instantiate an instance of the data table subclass ( OrdersIndex.new)
-  #
-  # 3. query the instance w/ pagination and sorting params
-  #    a query gets executed w/ params -> ARel
-  #    results get stored  -> AR
-  #    results get passed back as json
-
-
 
   def initialize(params={})
     @echo = (params['sEcho'] || -1).to_i
@@ -67,8 +62,7 @@ class DataTable
   end
 
   def sql
-    @@relation.to_sql
+    self.class.relation.to_sql
   end
-
 
 end

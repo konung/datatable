@@ -18,8 +18,9 @@ describe 'Data tables subclasses' do
       column :memo
     end
 
-    OrdersSimple.new.sql.should == Order.select([:order_number, :memo]).to_sql
-    OrdersSimple.relation.should == Order.select([:order_number, :memo])
+    orders = Order.arel_table
+    OrdersSimple.new.sql.should == Order.select(orders[:order_number]).select(orders[:memo]).to_sql
+    OrdersSimple.relation.should == Order.select(orders[:order_number]).select(orders[:memo])
   end
 
   it 'should handle a simple join' do
@@ -31,9 +32,9 @@ describe 'Data tables subclasses' do
       join :customer
     end
 
-    customers = Arel::Table.new(:customers)
-    OrdersSimple.new.sql.should == Order.select(:memo).joins(:customer).to_sql
-    OrdersSimple.relation.should == Order.select(:memo).joins(:customer)
+    orders = Order.arel_table
+    OrdersSimple.new.sql.should == Order.select(orders[:memo]).joins(:customer).to_sql
+    OrdersSimple.relation.should == Order.select(orders[:memo]).joins(:customer)
   end
 
   it 'should handle a join with an inner column' do
@@ -47,13 +48,10 @@ describe 'Data tables subclasses' do
       end
     end
 
+    orders = Order.arel_table
     customers = Arel::Table.new(:customers)
-    OrdersSimple.new.sql.should == Order.select(:memo).joins(:customer).select(customers[:first_name]).to_sql
-    OrdersSimple.relation.should == Order.select(:memo).joins(:customer).select(customers[:first_name])
+    OrdersSimple.new.sql.should == Order.select(orders[:memo]).joins(:customer).select(customers[:first_name]).to_sql
+    OrdersSimple.relation.should == Order.select(orders[:memo]).joins(:customer).select(customers[:first_name])
   end
-
-
-  # Next: Better way to keep track of joins (a stack of classes? reflect on associations to get real table name).
-  #
 
 end

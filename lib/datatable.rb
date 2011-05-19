@@ -8,9 +8,6 @@
 #    results get stored  -> AR
 #    results get passed back as json
 class DataTable
-  # include SQLGenerator
-  # include ParamsParser
-
   attr_accessor :echo
   attr_accessor :data
   attr_accessor :total_count
@@ -47,6 +44,38 @@ class DataTable
     @relation = model
   end
 
+
+  #------------------------------------------------------------------------------------------------------------------
+  #  type       name                  description
+  #------------------------------------------------------------------------------------------------------------------
+  #  int        iDisplayStart       Display start point
+  #
+  #  int        iDisplayLength      Number of records to display
+  #
+  #  int        iColumns            Number of columns being displayed (useful for getting individual column search info)
+  #
+  #  string     sSearch             Global search field
+  #
+  #  boolean    bEscapeRegex        Global search is regex or not
+  #
+  #  boolean    bSortable_(int)     Indicator for if a column is flagged as sortable or not on the client-side
+  #
+  #  boolean    bSearchable_(int)   Indicator for if a column is flagged as searchable or not on the client-side
+  #
+  #  string     sSearch_(int)	      Individual column filter
+  #
+  #  boolean    bEscapeRegex_(int)	Individual column filter is regex or not
+  #
+  #  int        iSortingCols	      Number of columns to sort on
+  #
+  #  int        iSortCol_(int)	    Column being sorted on (you will need to decode this number for your database)
+  #
+  #  string     sSortDir_(int)	    Direction to be sorted - "desc" or "asc". Note that the prefix for this variable
+  #                                 is wrong in 1.5.x where iSortDir_(int) was used)
+  #
+  #  string     sEcho	              Information for DataTables to use for rendering
+  #
+  #-----------------------------------------------------------------------------------------------------------------
   def self.query(params)
     datatable = new(params)
     datatable.query
@@ -60,6 +89,28 @@ class DataTable
     @records = []
   end
 
+  #------------------------------------------------------------------------------------------------------------------
+  #  type       name                  description
+  #------------------------------------------------------------------------------------------------------------------
+  #  int        iTotalRecords         Total records, before filtering (i.e. the total number of records in
+  #                                   the database)
+  #
+  #  int        iTotalDisplayRecords  Total records, after filtering (i.e. the total number of records after
+  #                                   filtering has been applied - not just the number of records being returned
+  #                                   in this result set)
+  #
+  #  string     sEcho                 An unaltered copy of sEcho sent from the client side. This parameter will
+  #                                   change with each draw (it is basically a draw count) - so it is important
+  #                                   that this is implemented. Note that it strongly recommended for security
+  #                                   reasons that you 'cast' this parameter to an integer in order to prevent
+  #                                   Cross Site Scripting (XSS) attacks.
+  #
+  #  string     sColumns              Optional - this is a string of column names, comma separated (used in
+  #                                   combination with sName) which will allow DataTables to reorder data on the
+  #                                   client-side if required for display
+  #
+  #  array      aaData                The data in a 2D array
+  #-----------------------------------------------------------------------------------------------------------------
   def as_json
     {
       'sEcho' => echo,

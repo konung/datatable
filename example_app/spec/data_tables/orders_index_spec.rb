@@ -118,8 +118,8 @@ describe 'query paramters' do
     end
     orders = [Factory(:order), Factory(:order), Factory(:order), Factory(:order)]
     OrdersComplex2.query(@params).as_json['iTotalRecords'].should == 2
-    OrdersComplex2.query(@params).as_json['iTotalDisplayRecords'].should = 2
-    OrdersComplex2.query(@params).as_json['aaData'].should = orders[0..1].map {|o| [o.id] }
+    OrdersComplex2.query(@params).as_json['iTotalDisplayRecords'].should == 2
+    OrdersComplex2.query(@params).as_json['aaData'].should == orders[0..1].map {|o| [o.id] }
   end
 
   #TODO: Make it so that pagination works by having only the desired number of records returned

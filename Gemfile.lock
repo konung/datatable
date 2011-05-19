@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    datatable (0.1.dev1)
+    datatable (0.1.0.dev1)
 
 GEM
   remote: http://rubygems.org/
@@ -66,6 +66,7 @@ GEM
       rake (>= 0.8.7)
       thor (~> 0.14.4)
     rake (0.8.7)
+    rdoc (3.6.1)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
@@ -92,5 +93,6 @@ DEPENDENCIES
   i18n
   rails
   rake
+  rdoc
   rspec
   webrat

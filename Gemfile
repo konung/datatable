@@ -5,6 +5,7 @@ gemspec
 gem 'rails'
 
 group :test do
+  gem 'rdoc'
   gem "rake"
   gem "i18n"
   gem "rspec"

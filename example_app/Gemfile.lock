@@ -1,7 +1,7 @@
 PATH
   remote: ../
   specs:
-    datatable (0.1.dev1)
+    datatable (0.1.0.dev1)
 
 GEM
   remote: http://rubygems.org/

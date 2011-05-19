@@ -18,10 +18,10 @@ RSpec::Core::RakeTask.new(:spec) do |task|
 end
 
 desc 'Generate documentation for the datatable plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
+Rake::RDocTask.new(:rdoc => 'rdoc', :clobber_rdoc => "rdoc:clobber", :rerdoc => 'rdoc:force') do |rdoc|
   rdoc.rdoc_dir = 'docs'
   rdoc.title    = 'Datatable'
-  rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.options  << "--all"
   rdoc.rdoc_files.include('README.md')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
@@ -33,5 +33,5 @@ end
 
 desc "publish gem"
 task :release => :build do
-  system "gem push bundler-#{Datatable::VERSION}"
+  system "gem push bundler-#{DataTable::VERSION::STRING}"
 end

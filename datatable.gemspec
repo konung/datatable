@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "datatable/version"
+require "datatable"
 
 Gem::Specification.new do |s|
   s.name        = "datatable"
-  s.version     = Datatable::VERSION
+  s.version     = DataTable::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Michael Greenly"]
   s.email       = ["michaelgreenly@logic-refinery.com"]

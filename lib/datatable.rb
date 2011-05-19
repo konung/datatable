@@ -8,6 +8,9 @@
 #    results get stored  -> AR
 #    results get passed back as json
 class DataTable
+
+  VERSION = "0.1.0.dev1"
+
   attr_accessor :echo
   attr_accessor :data
   attr_accessor :total_count
@@ -129,5 +132,36 @@ class DataTable
   def sql
     self.class.relation.to_sql
   end
+
+  # generate javascript
+  def javascript
+    <<-CONTENT.gsub(/^\s{8}/,"")
+      <script type="text/javascript">
+        $(document).ready(function() {
+          $('.datatable').dataTable({#{datatable_options}});
+        });
+      </script>
+    CONTENT
+  end
+
+  # generate html
+  def html
+    <<-CONTENT.gsub(/^\s{8}/,"")
+      <div class='datatable_container'>
+        <table class='datatable'>
+          <thead>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    CONTENT
+  end
+
+  # convienence method to provide html+javascript
+  def render
+    (html + javascript).html_safe
+  end
+  
 
 end

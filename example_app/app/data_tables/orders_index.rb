@@ -1,4 +1,4 @@
-class OrdersIndex < DataTable
+class OrdersIndex < DataTable::Base
 
   # column :order_number
 

@@ -11,7 +11,7 @@ describe 'Data tables subclasses' do
   # end
 
   it 'should select two fields' do
-    class OrdersSimple < DataTable
+    class OrdersSimple < DataTable::Base
       set_model Order 
 
       column :order_number
@@ -24,7 +24,7 @@ describe 'Data tables subclasses' do
   end
 
   it 'should handle a simple join' do
-    class OrdersSimple < DataTable
+    class OrdersSimple < DataTable::Base
       set_model Order 
 
       column :memo
@@ -38,7 +38,7 @@ describe 'Data tables subclasses' do
   end
 
   it 'should handle a join with an inner column' do
-    class OrdersSimple < DataTable
+    class OrdersSimple < DataTable::Base
       set_model Order 
 
       column :memo
@@ -59,7 +59,7 @@ end
 describe 'query paramters' do
 
   before do
-    class OrdersSimple < DataTable
+    class OrdersSimple < DataTable::Base
       set_model Order
       column :id
       column :memo
@@ -89,7 +89,7 @@ describe 'query paramters' do
    end
 
   it 'should return valid aaData' do
-    class OrdersComplex < DataTable
+    class OrdersComplex < DataTable::Base
       set_model Order
       column :order_number
       column :memo
@@ -102,7 +102,7 @@ describe 'query paramters' do
   end
 
   it 'should return valid aaData in different order' do
-    class OrdersComplex < DataTable
+    class OrdersComplex < DataTable::Base
       set_model Order
       column :memo
       column :order_number
@@ -112,7 +112,7 @@ describe 'query paramters' do
   end
 
   it "should provide first page" do
-    class OrdersComplex2 < DataTable
+    class OrdersComplex2 < DataTable::Base
       set_model Order
       column :id
     end
@@ -123,8 +123,6 @@ describe 'query paramters' do
     OrdersComplex2.query(@params).as_json['iTotalDisplayRecords'].should == 2
     OrdersComplex2.query(@params).as_json['aaData'].should == orders[0..1].map {|o| [o.id.to_s] }
   end
-
-  #TODO: Make it so that pagination works by having only the desired number of records returned
 
   it "sColumns"
 

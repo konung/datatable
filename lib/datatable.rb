@@ -11,14 +11,15 @@ class DataTable
 
   VERSION = "0.1.0.dev1"
 
-  attr_accessor :echo
-  attr_accessor :data
-  attr_accessor :total_count
-  attr_accessor :displayed_count
+  #attr_accessor :data
   attr_accessor :records
 
   def self.relation
     @relation
+  end
+
+  def self.relation=(right)
+    @relation = right
   end
 
   def self.model
@@ -85,10 +86,12 @@ class DataTable
     datatable
   end
 
+  def self.sql
+    relation.to_sql
+  end
+
   def initialize(params={})
-    @echo = (params['sEcho'] || -1).to_i
-    @displayed_count = 0
-    @total_count = 0
+    @params = params
     @records = []
   end
 
@@ -116,22 +119,20 @@ class DataTable
   #-----------------------------------------------------------------------------------------------------------------
   def as_json
     {
-      'sEcho' => echo,
+      'sEcho' => (@params['sEcho'] || -1).to_i,
       'aaData' => records,
-      'iTotalRecords' => total_count,
+      'iTotalRecords' => @records.count,
       'iTotalDisplayRecords' => records.length,
     }
   end
 
   def query
-    @records = self.class.model.connection.select_rows(sql)
-    @total_count = @records.count
+    relation = self.class.relation
+    relation = relation.offset(@params['iDisplayStart']).limit(@params['iDisplayLength'])
+    @records = self.class.model.connection.select_rows(relation.to_sql)
     self
   end
 
-  def sql
-    self.class.relation.to_sql
-  end
 
   # generate javascript
   def javascript

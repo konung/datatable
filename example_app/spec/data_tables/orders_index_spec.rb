@@ -19,7 +19,7 @@ describe 'Data tables subclasses' do
     end
 
     orders = Order.arel_table
-    OrdersSimple.new.sql.should == Order.select(orders[:order_number]).select(orders[:memo]).to_sql
+    OrdersSimple.sql.should == Order.select(orders[:order_number]).select(orders[:memo]).to_sql
     OrdersSimple.relation.should == Order.select(orders[:order_number]).select(orders[:memo])
   end
 
@@ -33,7 +33,7 @@ describe 'Data tables subclasses' do
     end
 
     orders = Order.arel_table
-    OrdersSimple.new.sql.should == Order.select(orders[:memo]).joins(:customer).to_sql
+    OrdersSimple.sql.should == Order.select(orders[:memo]).joins(:customer).to_sql
     OrdersSimple.relation.should == Order.select(orders[:memo]).joins(:customer)
   end
 
@@ -50,7 +50,7 @@ describe 'Data tables subclasses' do
 
     orders = Order.arel_table
     customers = Arel::Table.new(:customers)
-    OrdersSimple.new.sql.should == Order.select(orders[:memo]).joins(:customer).select(customers[:first_name]).to_sql
+    OrdersSimple.sql.should == Order.select(orders[:memo]).joins(:customer).select(customers[:first_name]).to_sql
     OrdersSimple.relation.should == Order.select(orders[:memo]).joins(:customer).select(customers[:first_name])
   end
 
@@ -116,10 +116,12 @@ describe 'query paramters' do
       set_model Order
       column :id
     end
+    @params['iDisplayStart'] = 0
+    @params['iDisplayLength'] = 2
     orders = [Factory(:order), Factory(:order), Factory(:order), Factory(:order)]
     OrdersComplex2.query(@params).as_json['iTotalRecords'].should == 2
     OrdersComplex2.query(@params).as_json['iTotalDisplayRecords'].should == 2
-    OrdersComplex2.query(@params).as_json['aaData'].should == orders[0..1].map {|o| [o.id] }
+    OrdersComplex2.query(@params).as_json['aaData'].should == orders[0..1].map {|o| [o.id.to_s] }
   end
 
   #TODO: Make it so that pagination works by having only the desired number of records returned

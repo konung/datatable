@@ -33,12 +33,18 @@ module DataTable
       @model
     end
 
+    def self.columns
+      @columns
+    end
+
     def self.current_model
       @inner_model || @model
     end
 
     def self.column(c)
       raise "set_model not called on #{self.name}" unless @model
+      @columns ||= []
+      @columns << "#{@model.table_name}.#{c}"
       @relation= @relation.select(current_model.arel_table[c])
     end
 
@@ -149,20 +155,6 @@ module DataTable
             $('.datatable').dataTable({#{datatable_options}});
           });
         </script>
-      CONTENT
-    end
-
-    # generate html
-    def html
-      <<-CONTENT.gsub(/^\s{8}/,"")
-        <div class='datatable_container'>
-          <table class='datatable'>
-            <thead>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
       CONTENT
     end
 

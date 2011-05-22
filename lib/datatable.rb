@@ -17,7 +17,6 @@ module DataTable
 
   class Base
 
-
     #attr_accessor :data
     attr_accessor :records
 
@@ -39,6 +38,24 @@ module DataTable
 
     def self.current_model
       @inner_model || @model
+    end
+
+
+    def self.option(key,value)
+      @options ||= {}
+      @options[key] = value
+    end
+
+    def self.javascript_options(path)
+      defaults = {
+        'sAjaxSource' =>  path,
+        'sDom' => '<"H"lr>t<"F"ip>',
+        'iDisplayLength' => 10,
+        'bProcessing' => true,
+        'bServerSide' => true,
+        'sPaginationType' => "full_numbers"
+      }
+      @options ? @options.merge(defaults) : defaults
     end
 
     def self.column(c)

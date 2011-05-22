@@ -1,16 +1,21 @@
 require 'spec_helper'
 
 describe DataTable::Helper do
+
+  before do
+   Object.send(:remove_const, :OrderTable) rescue nil
+   class OrderTable < DataTable::Base
+     set_model Order
+     column :order_number
+     column :memo
+#     option 'sAjaxSource', ''
+#     option 'iDisplayLength', 5
+#     option 'per_page', 5
+   end
+   assign(:data_table, OrderTable)
+  end
+  
   describe "html emitter" do
-    before do
-     Object.send(:remove_const, :OrderTable) rescue nil
-     class OrderTable < DataTable::Base
-       set_model Order
-       column :order_number
-       column :memo
-     end
-     assign(:data_table, OrderTable)
-    end
 
     it "should emit table" do
      helper.data_table_html.should have_selector("table.datatable")
@@ -21,19 +26,13 @@ describe DataTable::Helper do
     end
   end
 
-  describe "hash genarator" do
-    before do
+#  describe "javascript emitter" do
+#    it "should emit javascript " do
+#      helper.data_table_javascript.should = ""
+#    end
+#  end
 
-    end
-
-    it "should set sAjaxSource"
-    it "should set sDom"
-    it "should set iDisplayLength"
-    it "should set bProcessing"
-    it "should set bServerSide"
-    it "should set sPaginationType"
-    it "should set aoColumns"
-  end
+  # Test that javascript gets rendered
 
 =begin
 {

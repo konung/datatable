@@ -18,10 +18,16 @@ module DataTable
       CONTENT
     end
 
-    def _attributes_hash
+    def _data_table_attributes_hash(params={})
+       @data_table.config
+      {
+          'sAjaxSource' => @request.path,
+          'sDom' => '<"H"lr>t<"F"ip>'
+      }
     end
 
-    def data_table_javascript
+    def data_table_javascript()
+      "<script>$(function(){$('#data_table').dataTable(#{@data_table.javascript_options})</script>"
     end
 
   end

@@ -1,15 +1,17 @@
-#require 'spec_helper'
-#
+require 'spec_helper'
+
 #require 'data_table/railtie'
 #require 'data_table/data_table_helper'
-#
-##Specs in this file have access to a helper object that includes
-##the AccentColorsHelper. For example:
-#
-#describe DataTableHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       helper.concat_strings("this","that").should == "this that"
-#     end
-#   end
-#end
+
+#Specs in this file have access to a helper object that includes
+#the AccentColorsHelper. For example:
+
+#require 'data_table/helper'
+
+describe DataTable::Helper do
+   describe "string concat" do
+     it "concats two strings with spaces" do
+       helper.concat_strings("this","that").should == "this that"
+     end
+   end
+end

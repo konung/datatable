@@ -7,6 +7,10 @@
 #    a query gets executed w/ params -> ARel
 #    results get stored  -> AR
 #    results get passed back as json
+
+require 'data_table/railtie' if defined?(Rails)
+require 'data_table/helper'
+
 module DataTable
 
   VERSION = "0.1.0.dev1"

@@ -6,18 +6,22 @@ module DataTable
 
     def data_table_html
       <<-CONTENT.gsub(/^\s{6}/,"")
-        <div class='datatable_container'>
-          <table class='datatable'>
-            <thead>
-              <tr>
-                #{'<th></th>' * @data_table.columns.length}
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
+        <table class='datatable'>
+          <thead>
+            <tr>
+              #{'<th></th>' * @data_table.columns.length}
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       CONTENT
+    end
+
+    def _attributes_hash
+    end
+
+    def data_table_javascript
     end
 
   end

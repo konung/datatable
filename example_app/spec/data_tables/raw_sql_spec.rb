@@ -106,6 +106,7 @@ describe 'Operations on the table' do
 
   before do
     Object.send(:remove_const, :T) rescue nil
+
     class T < DataTable::Base
       set_model Order
       sql <<-SQL
@@ -115,8 +116,10 @@ describe 'Operations on the table' do
     end
 
     @params = {}
+
+    Order.delete_all
     @orders = [*0..20].map do 
-      Factory(:order, :memo => rand(2).even?  ? 'a' : 'b') 
+      Factory(:order, :memo => rand(2).even?  ? 'hello' : 'goodbye') 
     end
   end
 
@@ -130,21 +133,30 @@ describe 'Operations on the table' do
     @params['bSortable_0'] = 2 # Memo
     @params['sSortDir_0'] = 'asc' 
 
-    @params['bSortable_2'] = 0 # ID
-    @params['sSortDir_2'] = 'desc' 
+    @params['bSortable_1'] = 0 # ID
+    @params['sSortDir_1'] = 'desc' 
 
     T.query(@params).to_json['aaData'][0][0].should == Order.order('memo asc, id desc')[0].id.to_s
     T.query(@params).to_json['aaData'][-1][0].should == Order.order('memo asc, id desc')[-1].id.to_s
   end
 
-  it 'should sort by columns in random orders (3, 2, 4)'
-  it 'should sort ascending and descending'
+  it 'should sort ascending and descending' do
+    @params['bSortable_0'] = 2 # Memo
+    @params['sSortDir_0'] = 'desc' 
+
+    @params['bSortable_1'] = 0 # ID
+    @params['sSortDir_1'] = 'asc' 
+
+    T.query(@params).to_json['aaData'][0][0].should == Order.order('memo desc, id asc')[0].id.to_s
+    T.query(@params).to_json['aaData'][-1][0].should == Order.order('memo desc, id asc')[-1].id.to_s
+  end
 
   # Multi column searching
   #   input: a search term
   #   a way to search on all of the columns that are searchable
   #   need to know the datatype of whats in the columns
   it 'should global search' do
+    # Assume memo and id are searchable
     ## Pass in params for searching by the columns that are searchable
     # Define which columns are searchable
     # search using OR for each of those cols
@@ -152,7 +164,32 @@ describe 'Operations on the table' do
     # Types
   end
 
-  it 'should only search columns that are searchable'
+  it 'should global search string' do
+    # Memo is searchable
+    @params['sSearch'] = 'hel'
+    T.query(@params).to_json['aaData'][0][0].should == Order.where('memo LIKE ?', '%hel%')[0].id.to_s
+    T.query(@params).to_json['aaData'][0].map(&:first).should_not include?(Order.where('memo NOT LIKE ?', '%hel%').map(&:id).map(&:to_s))
+  end
+
+  it 'should global search integer' do
+    # Id 
+    order_id =  Orders.all[rand(Order.count)].id.to_s
+    @params['sSearch'] = order_id
+    T.query(@params).to_json['aaData'][0][0].should == order_id
+    T.query(@params).to_json['aaData'][0].length.should == 1
+  end
+
+  # Maybe: Test multiple results for integer
+
+  it 'should only search columns that are searchable' do
+    # ORder number is NOT searchable
+    #  Too clever...
+    Order.last.update_attribute(:order_number => Order.first.id)
+    @params['sSearch'] = Order.first.id
+    T.query(@params).to_json['aaData'][0][0].should == Order.first.id
+    T.query(@params).to_json['aaData'][0].length.should == 1
+  end
+    
   # TODO
   # it 'should deal w/ dates'
 

@@ -27,9 +27,26 @@ describe 'Use raw sql' do
           customer_counts.sales_rep_id = sales_reps.id
         LIMIT {{limit}}
         OFFSET {{offset}}
+        
+        WHERE 
+          fullname LIKE ? OR count like ? 
+        AND
+          
+        order by fullname;
+     
       SQL
+
+      column :fullname, :heading => "customer fullname" 
+
+      column "Customer full name"
+
+      column :memo, "asdf"
+      headings [{:fullname => 'Customer full name'}, :count]
+      heading ['hi', nil, nil, nil, nil, 'Customer name']
+      columns [:foo, :bar, :baz]
     end
 
+   
     @sales_reps = [Factory(:sales_rep), Factory(:sales_rep),
       Factory(:sales_rep), Factory(:sales_rep)]
 
@@ -71,6 +88,77 @@ describe 'Use raw sql' do
 
 
   it 'should allow ordering by arbitrary columns'
+
+
+   # Store/ retrive:
+    #   data type 
+    #   ordering
+    #   human title
+
+    #TODO: These tests have to all work with both SQL and Arel stuff
+
+
+    # Column sorting
+    #   input: an index to be sorted on
+    #     array of columns to sort on and asc/desc
+    #     [['asc', 1], ['desc', 3]]
+    #
+    #   need to know what index a column is
+    #   and from that index need to know the column name
+    #   sometimes will need the table name
+    it 'should sort' do
+      # Pass in params for sorting by various columns in various orders
+      # Test that  records are returned in the correct order
+    end
+
+    it 'should sort by one column'
+    it 'should sort by multiple columns'
+    it 'should sort by columns in random orders (3, 2, 4)'
+    it 'should sort ascending and descending'
+    
+    # Multi column searching
+    #   input: a search term
+    #   a way to search on all of the columns that are searchable
+    #   need to know the datatype of whats in the columns
+    it 'should global search' do
+      ## Pass in params for searching by the columns that are searchable
+      # Define which columns are searchable
+      # search using OR for each of those cols
+      # E.g. where int = num OR string LIKE str
+      # Types
+    end
+
+    it 'should only search columns that are searchable'
+    # TODO
+    # it 'should deal w/ dates'
+
+    # Individual column searching
+    #   input: index and a search term
+    #   need to know what index a col is and the col name
+    #   need to know the type
+    it 'should search by individual columns'
+    it 'should search by one string column'
+    it 'should search by one integer column'
+    it 'should search by multiple columns'
+
+    # Column heading naming for display
+    #   ['heading name', 'heading name']
+    #   strings that map to column names
+    it 'should use pretty headings when they are available' do
+      # Given a heading for a column
+      # The html helper should ouput the right thing somehow
+    end
+    it 'should humanize headings by default' 
+
+
+    # Column ordering (store/retrieve)
+    #   column names in order
+    #   sometimes will need to have the table name
+    #   ['col.table', 'col.table']
+    #   {'table.column' => :string, ...}
+    it 'should allow manually setting the order of columns'
+    it 'should otherwise automatically set the order' # E.g. arel
+
 
 
 

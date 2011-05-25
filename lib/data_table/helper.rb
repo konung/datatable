@@ -6,10 +6,10 @@ module DataTable
 
     def data_table_html
       <<-CONTENT.gsub(/^\s{6}/,"").html_safe
-        <table class='datatable'>
+        <table id='data_table'>
           <thead>
             <tr>
-      #{'<th></th>' * @data_table.columns.length}
+      #{'<th>Heading</th>' * @data_table.columns.length}
             </tr>
           </thead>
           <tbody>

@@ -41,7 +41,6 @@ module DataTable
       @inner_model || @model
     end
 
-
     def self.option(key,value)
       @options ||= {}
       @options[key] = value
@@ -117,7 +116,8 @@ module DataTable
       datatable
     end
 
-    def self.sql
+    # Private
+    def self.to_sql
       relation.to_sql
     end
 
@@ -148,19 +148,33 @@ module DataTable
     #
     #  array      aaData                The data in a 2D array
     #-----------------------------------------------------------------------------------------------------------------
-    def as_json
+    def to_json
       {
         'sEcho' => (@params['sEcho'] || -1).to_i,
         'aaData' => records,
-        'iTotalRecords' => @records.count,
+        'iTotalRecords' => @records.length, 
+        #self.class.model.count,
         'iTotalDisplayRecords' => records.length,
       }
     end
 
+    def self.sql(s)
+      @sql_string = s
+    end
+
+    def self.sql_string
+      @sql_string
+    end
+
     def query
-      relation = self.class.relation
-      relation = relation.offset(@params['iDisplayStart']).limit(@params['iDisplayLength'])
-      @records = self.class.model.connection.select_rows(relation.to_sql)
+      if self.class.sql_string
+        raise "set_model not called on #{self.class.name}" unless self.class.model
+        @records = self.class.model.connection.select_rows(self.class.sql_string)
+      else
+        relation = self.class.relation 
+        relation = relation.offset(@params['iDisplayStart']).limit(@params['iDisplayLength'])
+        @records = self.class.model.connection.select_rows(relation.to_sql)
+      end
       self
     end
 

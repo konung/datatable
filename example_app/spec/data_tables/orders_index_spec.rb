@@ -19,7 +19,7 @@ describe 'Data tables subclasses' do
     end
 
     orders = Order.arel_table
-    OrdersSimple.sql.should == Order.select(orders[:order_number]).select(orders[:memo]).to_sql
+    OrdersSimple.to_sql.should == Order.select(orders[:order_number]).select(orders[:memo]).to_sql
     OrdersSimple.relation.should == Order.select(orders[:order_number]).select(orders[:memo])
   end
 
@@ -33,7 +33,7 @@ describe 'Data tables subclasses' do
     end
 
     orders = Order.arel_table
-    OrdersSimple.sql.should == Order.select(orders[:memo]).joins(:customer).to_sql
+    OrdersSimple.to_sql.should == Order.select(orders[:memo]).joins(:customer).to_sql
     OrdersSimple.relation.should == Order.select(orders[:memo]).joins(:customer)
   end
 
@@ -50,7 +50,7 @@ describe 'Data tables subclasses' do
 
     orders = Order.arel_table
     customers = Arel::Table.new(:customers)
-    OrdersSimple.sql.should == Order.select(orders[:memo]).joins(:customer).select(customers[:first_name]).to_sql
+    OrdersSimple.to_sql.should == Order.select(orders[:memo]).joins(:customer).select(customers[:first_name]).to_sql
     OrdersSimple.relation.should == Order.select(orders[:memo]).joins(:customer).select(customers[:first_name])
   end
 
@@ -74,18 +74,18 @@ describe 'query paramters' do
   it "sEcho" do
     echo = rand(239823)
     params = {'sEcho' => echo }
-    OrdersSimple.new(params).as_json['sEcho'].should == echo
+    OrdersSimple.new(params).to_json['sEcho'].should == echo
   end
 
   it 'should return the number of records when there are no records' do
-    OrdersSimple.new.as_json['iTotalRecords'].should == 0
-    OrdersSimple.new.as_json['iTotalDisplayRecords'].should == 0
+    OrdersSimple.new.to_json['iTotalRecords'].should == 0
+    OrdersSimple.new.to_json['iTotalDisplayRecords'].should == 0
   end
 
   it 'should return the number of records' do
     3.times{ Factory(:order) }
-     OrdersSimple.query(@params).as_json['iTotalRecords'].should == 3
-     OrdersSimple.query(@params).as_json['iTotalDisplayRecords'].should == 3
+     OrdersSimple.query(@params).to_json['iTotalRecords'].should == 3
+     OrdersSimple.query(@params).to_json['iTotalDisplayRecords'].should == 3
    end
 
   it 'should return valid aaData' do
@@ -98,7 +98,7 @@ describe 'query paramters' do
       end
     end
     orders = [Factory(:order), Factory(:order)]
-    OrdersComplex.query(@params).as_json['aaData'].should == orders.map { |o| [o.order_number.to_s, o.memo, o.customer.first_name]}
+    OrdersComplex.query(@params).to_json['aaData'].should == orders.map { |o| [o.order_number.to_s, o.memo, o.customer.first_name]}
   end
 
   it 'should return valid aaData in different order' do
@@ -108,7 +108,7 @@ describe 'query paramters' do
       column :order_number
     end
     orders = [Factory(:order), Factory(:order)]
-    OrdersComplex.query(@params).as_json['aaData'].should == orders.map { |o| [o.memo, o.order_number.to_s]}
+    OrdersComplex.query(@params).to_json['aaData'].should == orders.map { |o| [o.memo, o.order_number.to_s]}
   end
 
   it "should provide first page" do
@@ -119,13 +119,16 @@ describe 'query paramters' do
     @params['iDisplayStart'] = 0
     @params['iDisplayLength'] = 2
     orders = [Factory(:order), Factory(:order), Factory(:order), Factory(:order)]
-    OrdersComplex2.query(@params).as_json['iTotalRecords'].should == 2
-    OrdersComplex2.query(@params).as_json['iTotalDisplayRecords'].should == 2
-    OrdersComplex2.query(@params).as_json['aaData'].should == orders[0..1].map {|o| [o.id.to_s] }
+    OrdersComplex2.query(@params).to_json['iTotalRecords'].should == 2
+    OrdersComplex2.query(@params).to_json['iTotalDisplayRecords'].should == 2
+    OrdersComplex2.query(@params).to_json['aaData'].should == orders[0..1].map {|o| [o.id.to_s] }
   end
 
-  it "sColumns"
+end
 
+describe 'ordering' do
+
+  it 'should allow ordering by arbitrary columns'
 
 end
 

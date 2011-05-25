@@ -18,7 +18,7 @@ describe DataTable::Helper do
   describe "html emitter" do
 
     it "should emit table" do
-      helper.data_table_html.should have_selector("table.datatable")
+      helper.data_table_html.should have_selector("table#data_table")
     end
 
     it "should emit table with 2 columns" do

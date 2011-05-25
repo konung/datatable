@@ -15,4 +15,4 @@ class OrdersIndex < DataTable::Base
 
 end
 
-#    column :fullname, :select => "sales_reps.*, TRIM(BOTH FROM COALESCE(fname, ' ') || ' ' || COALESCE(lname, ' ')) AS fullname"
+

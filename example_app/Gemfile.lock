@@ -1,7 +1,7 @@
 PATH
   remote: ../
   specs:
-    datatable (0.1.0.dev1)
+    data_table (0.1.0.dev1)
 
 GEM
   remote: http://rubygems.org/
@@ -122,7 +122,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
-  datatable!
+  data_table!
   factory_girl_rails
   i18n
   jquery-rails

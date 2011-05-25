@@ -26,11 +26,26 @@ describe DataTable::Helper do
     end
   end
 
-#  describe "javascript emitter" do
-#    it "should emit javascript " do
-#      helper.data_table_javascript.should = ""
-#    end
-#  end
+  describe "javascript emitter" do
+    it "should output a javascript tag" do
+      helper.data_table_javascript.should match(/script/)
+    end
+
+    it "should ouput the options" do
+      helper.request.path = 'ohai'
+      helper.data_table_javascript.should match('sAjaxSource')
+      helper.data_table_javascript.should match('ohai')
+    end
+
+    it "should be JSON" do
+      helper.data_table_javascript.should match(/"bProcessing":true/)
+    end
+
+    it "should be HTML safe" do
+      helper.data_table_javascript.html_safe?.should be_true
+    end
+
+  end
 
   # Test that javascript gets rendered
 

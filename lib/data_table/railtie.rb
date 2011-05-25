@@ -1,8 +1,10 @@
-require 'data_table/data_table_helper'
+require 'data_table/helper'
+require 'rails'
+
 module DataTable
-  class Railtie < Rails::Railtie
-    initializer "data_table.data_table_helper" do
-      ActionView::Base.send :include, DataTableHelper
+  class Railtie < ::Rails::Railtie
+    initializer "data_table.helper" do
+      ActionView::Base.send :include, DataTable::Helper
     end
   end
 end

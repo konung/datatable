@@ -115,23 +115,26 @@ describe 'Operations on the table' do
     end
 
     @params = {}
-    @orders = [*0..2].map { Factory(:order) }
+    @orders = [*0..20].map do 
+      Factory(:order, :memo => rand(2).even?  ? 'a' : 'b') 
+    end
   end
 
   it 'should sort by one column' do
-    @params['bSortable_0'] = true
+    @params['bSortable_0'] = 0
     @params['sSortDir_0'] = 'desc' # Assume first col is ID
     T.query(@params).to_json['aaData'][0][0].should == @orders[-1].id.to_s
   end
 
   it 'should sort by multiple columns' do
-  # @params['bSortable_0'] = true
-  # @params['bSortable_0'] = true
-  # @params['sSortDir_0'] = 'desc' # Assume first col is ID
-  # T.query(@params).to_json.should == @orders[0]
+    @params['bSortable_0'] = 2 # Memo
+    @params['sSortDir_0'] = 'asc' 
 
-  # @params['sSortDir_0'] = 'desc' 
-  # T.query(@params).to_json.should == @orders[-1]
+    @params['bSortable_2'] = 0 # ID
+    @params['sSortDir_2'] = 'desc' 
+
+    T.query(@params).to_json['aaData'][0][0].should == Order.order('memo asc, id desc')[0].id.to_s
+    T.query(@params).to_json['aaData'][-1][0].should == Order.order('memo asc, id desc')[-1].id.to_s
   end
 
   it 'should sort by columns in random orders (3, 2, 4)'

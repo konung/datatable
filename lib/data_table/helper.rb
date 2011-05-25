@@ -5,7 +5,7 @@ module DataTable
     end
 
     def data_table_html
-      <<-CONTENT.gsub(/^\s{6}/,"")
+      <<-CONTENT.gsub(/^\s{6}/,"").html_safe
         <table class='datatable'>
           <thead>
             <tr>
@@ -30,7 +30,11 @@ module DataTable
     def data_table_javascript
       # TODO: this will escape ampersands
       # ERB::Util.h('http://www.foo.com/ab/asdflkj?asdf=asdf&asdf=alsdf') => "http://www.foo.com/ab/asdflkj?asdf=asdf&amp;asdf=alsdf" 
-      "<script>$(function(){$('#data_table').dataTable(#{@data_table.javascript_options(h request.path).to_json})</script>".html_safe
+      "<script>
+        $(function(){
+          $('#data_table').dataTable(#{@data_table.javascript_options(h request.path).to_json})
+        });
+      </script>".html_safe
     end
   end
 end

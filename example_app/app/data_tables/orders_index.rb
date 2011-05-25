@@ -1,17 +1,19 @@
 class OrdersIndex < DataTable::Base
 
-  # column :order_number
+  set_model Order
 
-  # join :customers do
-  #   column :first_name
-  #   column :last_name
+  column :order_number
 
-  #   join :sales_reps do
-  #     column :first_name
-  #     column :last_name
-  #   end
-  # end
-  # column :memo
+  join :customer do
+    column :first_name
+    column :last_name
+
+    join :sales_rep do
+      column :first_name
+      column :last_name
+    end
+  end
+  column :memo
 
 end
 

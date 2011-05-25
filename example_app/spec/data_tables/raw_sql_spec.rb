@@ -28,22 +28,17 @@ describe 'Use raw sql' do
         LIMIT {{limit}}
         OFFSET {{offset}}
         
-        WHERE 
-          fullname LIKE ? OR count like ? 
-        AND
-          
-        order by fullname;
      
       SQL
-
-      column :fullname, :heading => "customer fullname" 
-
-      column "Customer full name"
-
-      column :memo, "asdf"
-      headings [{:fullname => 'Customer full name'}, :count]
-      heading ['hi', nil, nil, nil, nil, 'Customer name']
-      columns [:foo, :bar, :baz]
+# 
+#       column :fullname, :heading => "customer fullname" 
+# 
+#       column "Customer full name"
+# 
+#       column :memo, "asdf"
+#       headings [{:fullname => 'Customer full name'}, :count]
+#       heading ['hi', nil, nil, nil, nil, 'Customer name']
+#       columns [:foo, :bar, :baz]
     end
 
    

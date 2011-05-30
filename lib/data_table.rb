@@ -179,7 +179,7 @@ module DataTable
       @params['iSortingCols'].times do |count|
         col_index = @params["iSortCol_#{count}"]
         col_dir = @params["sSortDir_#{count}"]
-        col_name = self.class.column_names[col_index]
+        col_name = self.class.column_names[col_index][0]
         result << " " + (col_name + " " + col_dir)
       end
       " ORDER BY" + result.join(", ")
@@ -192,15 +192,45 @@ module DataTable
       result
     end
 
+    def sanitize(*args)
+        ActiveRecord::Base.send(:sanitize_sql_array, args)
+    end
+    
+    def search_string
+      filter = @params['sSearch']
+      return '' unless filter
+      
+      result = []
+      self.class.column_names.each do |col|
+       if col[1] == :string
+         result << sanitize("#{col[0]} like ?", "%#{filter}%")
+       else
+         # to_i returns 0 on arbitrary strings
+         # so only search for integers = 0 when someone actually typed 0
+         if filter == "0" || filter.to_i > 0
+          result << "#{col[0]} = #{filter.to_i}"
+         end
+       end
+
+      end
+      "WHERE (" + result.join(" OR ") + ")"
+    end
+
+
+    def query_sql
+      current_sql = self.class.sql_string.dup
+      current_sql << search_string
+      current_sql << order_string if @params['iSortingCols'].to_i > 0
+      current_sql << limit_offset
+    end
+
     def query
       if self.class.sql_string
         raise "set_model not called on #{self.class.name}" unless self.class.model
-        current_sql = self.class.sql_string.dup
-        current_sql << order_string if @params['iSortingCols'].to_i > 0
-        current_sql << limit_offset
+        current_sql = query_sql
         @records = self.class.model.connection.select_rows(current_sql)
       else
-        relation = self.class.relation 
+        relation = self.class.relation
         relation = relation.offset(@params['iDisplayStart']).limit(@params['iDisplayLength'])
         @records = self.class.model.connection.select_rows(relation.to_sql)
       end

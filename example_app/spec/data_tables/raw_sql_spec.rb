@@ -174,7 +174,7 @@ describe 'Operations on the table' do
     # Memo is searchable
     @params['sSearch'] = 'hel'
     T.query(@params).to_json['aaData'][0][0].should == Order.where('memo LIKE ?', '%hel%')[0].id.to_s
-    T.query(@params).to_json['aaData'][0].map(&:first).should_not include?(Order.where('memo NOT LIKE ?', '%hel%').map(&:id).map(&:to_s))
+    T.query(@params).to_json['aaData'][0].map(&:first).should_not include(Order.where('memo NOT LIKE ?', '%hel%').map(&:id).map(&:to_s))
   end
 
   it 'should global search integer' do

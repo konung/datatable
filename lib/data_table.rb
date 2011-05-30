@@ -31,6 +31,14 @@ module DataTable
       @model
     end
 
+    def self.assign_column_names(args)
+      @column_names = args
+    end
+
+    def self.column_names
+      @column_names
+    end
+
     def self.columns
       #TODO: make more helpful
       raise 'There are no columns on the DataTable' unless @columns
@@ -166,13 +174,30 @@ module DataTable
       @sql_string
     end
 
+    def order_string
+      result = []
+      @params['iSortingCols'].times do |count|
+        col_index = @params["iSortCol_#{count}"]
+        col_dir = @params["sSortDir_#{count}"]
+        col_name = self.class.column_names[col_index]
+        result << " " + (col_name + " " + col_dir)
+      end
+      " ORDER BY" + result.join(", ")
+    end
+
+    def limit_offset
+      result = ""
+      result << " LIMIT #{@params['iDisplayLength']}" if @params['iDisplayLength']
+      result << " OFFSET #{@params['iDisplayStart']}" if @params['iDisplayStart']
+      result
+    end
+
     def query
       if self.class.sql_string
         raise "set_model not called on #{self.class.name}" unless self.class.model
-        current_sql = self.class.sql_string
-        # TODO: Better errors if there is no limit passed into the sql string
-        current_sql.gsub!("{{limit}}", (@params['iDisplayLength'] || 999999999).to_s)
-        current_sql.gsub!("{{offset}}", (@params['iDisplayStart'] || 0).to_s)
+        current_sql = self.class.sql_string.dup
+        current_sql << order_string if @params['iSortingCols'].to_i > 0
+        current_sql << limit_offset
         @records = self.class.model.connection.select_rows(current_sql)
       else
         relation = self.class.relation 

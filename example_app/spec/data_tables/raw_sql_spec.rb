@@ -6,9 +6,6 @@ describe 'Use raw sql' do
 
     class SalesRepCustomers < DataTable::Base
 
-      def pp_time(time)
-        time.strftime()
-      end
       set_model SalesRep
 
       sql <<-SQL
@@ -29,10 +26,7 @@ describe 'Use raw sql' do
           customer_counts
         ON
           customer_counts.sales_rep_id = sales_reps.id
-        LIMIT {{limit}}
-        OFFSET {{offset}}
-
-
+  
       SQL
       # 
       #       column :fullname, :heading => "customer fullname" 
@@ -131,9 +125,26 @@ describe 'Operations on the table' do
         SELECT id, order_number, memo
           FROM orders
       SQL
+
+      assign_column_names ["orders.id", "orders.order_number", "orders.memo" ]
+
     end
 
-    @params = {}
+    @params = {
+        "iColumns" =>	4,
+        "bSearchable_0" => true,
+        "bSearchable_1" => true,
+        "bSearchable_2" => true,
+        "bSearchable_3" => true,
+        "bSortable_0" => true,
+        "bSortable_1" => true,
+        "bSortable_2" => true,
+        "bSortable_3" => true,
+        "sSearch_0" => nil,
+        "sSearch_1" => nil,
+        "sSearch_2" => nil,
+        "sSearch_3" => nil,
+        "sSearch" => nil   }
 
     Order.delete_all
     @orders = [*0..20].map do 
@@ -142,17 +153,17 @@ describe 'Operations on the table' do
   end
 
   it 'should sort by one column' do
-    @params['bSortable_0'] = 0
+    @params['iSortCol_0'] = 0
     @params['sSortDir_0'] = 'desc' # Assume first col is ID
     @params['iSortingCols'] = 1
-    T.query(@params).to_json['aaData'][0][0].should == @orders[-1].id.to_s
+    T.query(@params).to_json['aaData'][0][0].should == Order.order("id desc").first.id.to_s
   end
 
   it 'should sort by multiple columns' do
-    @params['bSortable_0'] = 2 # Memo
+    @params['iSortCol_0'] = 2 # Memo
     @params['sSortDir_0'] = 'asc' 
 
-    @params['bSortable_1'] = 0 # ID
+    @params['iSortCol_1'] = 0 # ID
     @params['sSortDir_1'] = 'desc' 
 
     @params['iSortingCols'] = 2
@@ -163,10 +174,10 @@ describe 'Operations on the table' do
   end
 
   it 'should sort ascending and descending' do
-    @params['bSortable_0'] = 2 # Memo
+    @params['iSortCol_0'] = 2 # Memo
     @params['sSortDir_0'] = 'desc' 
 
-    @params['bSortable_1'] = 0 # ID
+    @params['iSortCol_1'] = 0 # ID
     @params['sSortDir_1'] = 'asc'
 
     @params['iSortingCols'] = 2

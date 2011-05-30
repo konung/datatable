@@ -53,7 +53,21 @@ describe 'Use raw sql' do
       Factory(:customer, :sales_rep => @sales_reps[rand(4)])
     end
 
-    @params = {}
+    @params = {
+        "iColumns" =>	4,
+        "bSearchable_0" => true,
+        "bSearchable_1" => true,
+        "bSearchable_2" => true,
+        "bSearchable_3" => true,
+        "bSortable_0" => true,
+        "bSortable_1" => true,
+        "bSortable_2" => true,
+        "bSortable_3" => true,
+        "sSearch_0" => nil,
+        "sSearch_1" => nil,
+        "sSearch_2" => nil,
+        "sSearch_3" => nil,
+        "sSearch" => nil   }
   end
 
   it 'should return the correct number of records' do
@@ -61,9 +75,7 @@ describe 'Use raw sql' do
   end
 
   it 'should return the records' do
-    puts "*" * 80
-    puts
-    first_row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S.%6N"), @sales_reps[0].customers.count].map(&:to_s)
+    first_row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S.%6N").gsub(/0*$/, ""), @sales_reps[0].customers.count].map(&:to_s)
     SalesRepCustomers.query(@params).to_json['aaData'][0].should  == first_row
   end
 
@@ -71,7 +83,7 @@ describe 'Use raw sql' do
     @params['iDisplayStart'] = 0
     @params['iDisplayLength'] = 2
 
-    row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S.%6N"), @sales_reps[0].customers.count].map(&:to_s)
+    row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S.%6N").gsub(/0*$/, ""), @sales_reps[0].customers.count].map(&:to_s)
     SalesRepCustomers.query(@params).to_json['iTotalRecords'].should == 2
     SalesRepCustomers.query(@params).to_json['aaData'].length.should == 2
     SalesRepCustomers.query(@params).to_json['aaData'][0].should == row
@@ -81,7 +93,7 @@ describe 'Use raw sql' do
     @params['iDisplayStart'] = 2
     @params['iDisplayLength'] = 2
 
-    row = [@sales_reps[2].id, @sales_reps[2].first_name, @sales_reps[2].created_at.strftime("%Y-%m-%d %R:%S.%6N"), @sales_reps[2].customers.count].map(&:to_s)
+    row = [@sales_reps[2].id, @sales_reps[2].first_name, @sales_reps[2].created_at.strftime("%Y-%m-%d %R:%S.%6N").gsub(/0*$/, ""), @sales_reps[2].customers.count].map(&:to_s)
     SalesRepCustomers.query(@params).to_json['iTotalRecords'].should == 2
     SalesRepCustomers.query(@params).to_json['aaData'].length.should == 2
     SalesRepCustomers.query(@params).to_json['aaData'][0].should == row
@@ -125,13 +137,14 @@ describe 'Operations on the table' do
 
     Order.delete_all
     @orders = [*0..20].map do 
-      Factory(:order, :memo => rand(2).even?  ? 'hello' : 'goodbye') 
+      Factory(:order, :order_number => rand(2), :memo => rand(2).even?  ? 'hello' : 'goodbye')
     end
   end
 
   it 'should sort by one column' do
     @params['bSortable_0'] = 0
     @params['sSortDir_0'] = 'desc' # Assume first col is ID
+    @params['iSortingCols'] = 1
     T.query(@params).to_json['aaData'][0][0].should == @orders[-1].id.to_s
   end
 
@@ -142,6 +155,9 @@ describe 'Operations on the table' do
     @params['bSortable_1'] = 0 # ID
     @params['sSortDir_1'] = 'desc' 
 
+    @params['iSortingCols'] = 2
+
+
     T.query(@params).to_json['aaData'][0][0].should == Order.order('memo asc, id desc')[0].id.to_s
     T.query(@params).to_json['aaData'][-1][0].should == Order.order('memo asc, id desc')[-1].id.to_s
   end
@@ -151,7 +167,10 @@ describe 'Operations on the table' do
     @params['sSortDir_0'] = 'desc' 
 
     @params['bSortable_1'] = 0 # ID
-    @params['sSortDir_1'] = 'asc' 
+    @params['sSortDir_1'] = 'asc'
+
+    @params['iSortingCols'] = 2
+
 
     T.query(@params).to_json['aaData'][0][0].should == Order.order('memo desc, id asc')[0].id.to_s
     T.query(@params).to_json['aaData'][-1][0].should == Order.order('memo desc, id asc')[-1].id.to_s
@@ -179,7 +198,7 @@ describe 'Operations on the table' do
 
   it 'should global search integer' do
     # Id 
-    order_id =  Orders.all[rand(Order.count)].id.to_s
+    order_id =  Order.all[rand(Order.count)].id.to_s
     @params['sSearch'] = order_id
     T.query(@params).to_json['aaData'][0][0].should == order_id
     T.query(@params).to_json['aaData'][0].length.should == 1
@@ -189,8 +208,10 @@ describe 'Operations on the table' do
 
   it 'should only search columns that are searchable' do
     # ORder number is NOT searchable
-    #  Too clever...
-    Order.last.update_attribute(:order_number => Order.first.id)
+    # we need to make one value exist in 2 columsn for the test
+    # 
+    Order.last.update_attribute(:order_number, Order.first.id)
+    @params['bSearchable_1'] = false
     @params['sSearch'] = Order.first.id
     T.query(@params).to_json['aaData'][0][0].should == Order.first.id
     T.query(@params).to_json['aaData'][0].length.should == 1
@@ -203,10 +224,29 @@ describe 'Operations on the table' do
   #   input: index and a search term
   #   need to know what index a col is and the col name
   #   need to know the type
-  it 'should search by individual columns'
-  it 'should search by one string column'
-  it 'should search by one integer column'
-  it 'should search by multiple columns'
+  it 'should search by one string column' do
+    @params['bSearchable_2'] = 'true'   # col2 = memo
+    @params['sSearch_2'] = "hello"
+    T.query(@params).to_json['aaData'].length.should == Order.where('memo LIKE ?', '%hello%').count
+    T.query(@params).to_json['aaData'].map { |r| r[2] }.uniq.should == ['hello']
+  end
+
+  it 'should search by one integer column' do
+    @params['bSearchable_1'] = 'true'   # col2 = memo
+    @params['sSearch_1'] = "2"
+    T.query(@params).to_json['aaData'].length.should == Order.where(:order_number => 1).count
+    T.query(@params).to_json['aaData'].map { |r| r[1] }.uniq.should == ["1"]
+  end
+
+  it 'should search by multiple columns' do
+    @params['bSearchable_2'] = 'true'   # col2 = memo
+    @params['sSearch_2'] = "hello"
+    @params['bSearchable_1'] = 'true'   # col2 = memo
+    @params['sSearch_1'] = "2"
+    T.query(@params).to_json['aaData'].length.should == Order.where('memo LIKE ?', '%hello%').where(:order_number => 1).count
+    T.query(@params).to_json['aaData'].map { |r| r[2] }.uniq.should == ['hello']
+    T.query(@params).to_json['aaData'].map { |r| r[1] }.uniq.should == ["1"]
+  end
 
   # Column heading naming for display
   #   ['heading name', 'heading name']

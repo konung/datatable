@@ -171,7 +171,7 @@ module DataTable
         raise "set_model not called on #{self.class.name}" unless self.class.model
         current_sql = self.class.sql_string
         # TODO: Better errors if there is no limit passed into the sql string
-        current_sql.gsub!("{{limit}}", (@params['iDisplayLength'] || 18_446_744_073_709_551_615).to_s)
+        current_sql.gsub!("{{limit}}", (@params['iDisplayLength'] || 999999999).to_s)
         current_sql.gsub!("{{offset}}", (@params['iDisplayStart'] || 0).to_s)
         @records = self.class.model.connection.select_rows(current_sql)
       else

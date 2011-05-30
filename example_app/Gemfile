@@ -22,7 +22,7 @@ gem "jquery-rails"
 #  gem install ruby-debug19 -- --with-ruby-include=$rvm_path/src/$RUBY_VERSION/
 #
 group :test, :development do
-  gem "rake"
+  gem 'rake', '0.8.7'
   gem "i18n"
   gem "webrat"
   gem "activesupport"

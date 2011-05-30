@@ -5,12 +5,16 @@ describe 'Use raw sql' do
   before do
 
     class SalesRepCustomers < DataTable::Base
+
+      def pp_time(time)
+        time.strftime()
+      end
       set_model SalesRep
 
       sql <<-SQL
         SELECT 
           sales_reps.id,
-          CONCAT(first_name, last_name) AS fullname,
+          first_name AS fullname,
           sales_reps.created_at,
           COALESCE(customer_counts.value,0) AS count
         FROM 
@@ -57,7 +61,9 @@ describe 'Use raw sql' do
   end
 
   it 'should return the records' do
-    first_row = [@sales_reps[0].id, @sales_reps[0].first_name + @sales_reps[0].last_name, @sales_reps[0].read_attribute(:created_at).to_s.gsub(' UTC',''), @sales_reps[0].customers.count].map(&:to_s)
+    puts "*" * 80
+    puts
+    first_row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S.%6N"), @sales_reps[0].customers.count].map(&:to_s)
     SalesRepCustomers.query(@params).to_json['aaData'][0].should  == first_row
   end
 
@@ -65,7 +71,7 @@ describe 'Use raw sql' do
     @params['iDisplayStart'] = 0
     @params['iDisplayLength'] = 2
 
-    row = [@sales_reps[0].id, @sales_reps[0].first_name + @sales_reps[0].last_name, @sales_reps[0].read_attribute(:created_at).to_s.gsub(' UTC',''), @sales_reps[0].customers.count].map(&:to_s)
+    row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S.%6N"), @sales_reps[0].customers.count].map(&:to_s)
     SalesRepCustomers.query(@params).to_json['iTotalRecords'].should == 2
     SalesRepCustomers.query(@params).to_json['aaData'].length.should == 2
     SalesRepCustomers.query(@params).to_json['aaData'][0].should == row
@@ -75,7 +81,7 @@ describe 'Use raw sql' do
     @params['iDisplayStart'] = 2
     @params['iDisplayLength'] = 2
 
-    row = [@sales_reps[2].id, @sales_reps[2].first_name + @sales_reps[2].last_name, @sales_reps[2].read_attribute(:created_at).to_s.gsub(' UTC',''), @sales_reps[2].customers.count].map(&:to_s)
+    row = [@sales_reps[2].id, @sales_reps[2].first_name, @sales_reps[2].created_at.strftime("%Y-%m-%d %R:%S.%6N"), @sales_reps[2].customers.count].map(&:to_s)
     SalesRepCustomers.query(@params).to_json['iTotalRecords'].should == 2
     SalesRepCustomers.query(@params).to_json['aaData'].length.should == 2
     SalesRepCustomers.query(@params).to_json['aaData'][0].should == row

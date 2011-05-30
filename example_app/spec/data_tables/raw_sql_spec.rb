@@ -203,10 +203,6 @@ describe 'Operations on the table' do
   it 'should global search string' do
     # Memo is searchable
     @params['sSearch'] = 'hel'
-    puts "*" * 80
-    puts Order.where('memo LIKE ?', '%hel%').to_sql
-    puts "*" * 80
-    puts T.query(@params).query_sql
     T.query(@params).to_json['aaData'][0][0].should == Order.where('memo LIKE ?', '%hel%')[0].id.to_s
     T.query(@params).to_json['aaData'][0].map(&:first).should_not include(Order.where('memo NOT LIKE ?', '%hel%').map(&:id).map(&:to_s))
   end
@@ -228,7 +224,7 @@ describe 'Operations on the table' do
     Order.last.update_attribute(:order_number, Order.first.id)
     @params['bSearchable_1'] = false
     @params['sSearch'] = Order.first.id
-    T.query(@params).to_json['aaData'][0][0].should == Order.first.id
+    T.query(@params).to_json['aaData'][0][0].should == Order.first.id.to_s
     T.query(@params).to_json['aaData'][0].length.should == 1
   end
     

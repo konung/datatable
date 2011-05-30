@@ -201,7 +201,8 @@ module DataTable
       return '' unless filter
       
       result = []
-      self.class.column_names.each do |col|
+      self.class.column_names.each_with_index do |col, i|
+       next unless @params["bSearchable_#{i}"]
        if col[1] == :string
          result << sanitize("#{col[0]} like ?", "%#{filter}%")
        else
@@ -213,6 +214,7 @@ module DataTable
        end
 
       end
+      return "" if result.empty?
       "WHERE (" + result.join(" OR ") + ")"
     end
 

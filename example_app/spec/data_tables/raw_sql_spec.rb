@@ -225,7 +225,16 @@ describe 'Operations on the table' do
     @params['bSearchable_1'] = false
     @params['sSearch'] = Order.first.id
     T.query(@params).to_json['aaData'][0][0].should == Order.first.id.to_s
-    T.query(@params).to_json['aaData'][0].length.should == 1
+    T.query(@params).to_json['aaData'].length.should == 1
+  end
+
+  it "shouldn't barf when no columns are searchable" do
+    @params['bSearchable_0'] = false
+    @params['bSearchable_1'] = false
+    @params['bSearchable_2'] = false
+    @params['sSearch'] = "foo"
+    puts T.query(@params).query_sql
+    T.query(@params)
   end
     
   # TODO
@@ -236,23 +245,23 @@ describe 'Operations on the table' do
   #   need to know what index a col is and the col name
   #   need to know the type
   it 'should search by one string column' do
-    @params['bSearchable_2'] = 'true'   # col2 = memo
+    @params['bSearchable_2'] = true  # col2 = memo
     @params['sSearch_2'] = "hello"
     T.query(@params).to_json['aaData'].length.should == Order.where('memo LIKE ?', '%hello%').count
     T.query(@params).to_json['aaData'].map { |r| r[2] }.uniq.should == ['hello']
   end
 
   it 'should search by one integer column' do
-    @params['bSearchable_1'] = 'true'   # col2 = memo
+    @params['bSearchable_1'] = true   # col2 = memo
     @params['sSearch_1'] = "2"
     T.query(@params).to_json['aaData'].length.should == Order.where(:order_number => 1).count
     T.query(@params).to_json['aaData'].map { |r| r[1] }.uniq.should == ["1"]
   end
 
   it 'should search by multiple columns' do
-    @params['bSearchable_2'] = 'true'   # col2 = memo
+    @params['bSearchable_2'] = true   # col2 = memo
     @params['sSearch_2'] = "hello"
-    @params['bSearchable_1'] = 'true'   # col2 = memo
+    @params['bSearchable_1'] = true   # col2 = memo
     @params['sSearch_1'] = "2"
     T.query(@params).to_json['aaData'].length.should == Order.where('memo LIKE ?', '%hello%').where(:order_number => 1).count
     T.query(@params).to_json['aaData'].map { |r| r[2] }.uniq.should == ['hello']

@@ -174,6 +174,9 @@ module DataTable
       @sql_string
     end
 
+    #
+    # TODO: look closer at this should it be isortingcols -1 ?
+    #
     def order_string
       result = []
       @params['iSortingCols'].times do |count|
@@ -195,11 +198,10 @@ module DataTable
     def sanitize(*args)
         ActiveRecord::Base.send(:sanitize_sql_array, args)
     end
-    
-    def search_string
+
+    def global_search_string
       filter = @params['sSearch']
-      return '' unless filter
-      
+      return nil unless filter
       result = []
       self.class.column_names.each_with_index do |col, i|
        next unless @params["bSearchable_#{i}"]
@@ -214,14 +216,39 @@ module DataTable
        end
 
       end
-      return "" if result.empty?
-      "WHERE (" + result.join(" OR ") + ")"
+      return nil if result.empty?
+      "(" + result.join(" OR ") + ")"
+    end
+
+    def individual_search_strings
+      cols = self.class.column_names
+      result = []
+      (@params['iColumns'] - 1).times do |i|
+        filter = @params["sSearch_#{i}"]
+        next if filter.blank?
+        if cols[i][1] == :string
+          result << sanitize("#{cols[i][0]} like ?", "%#{filter}%")
+        else
+          # to_i returns 0 on arbitrary strings
+          # so only search for integers = 0 when someone actually typed 0
+          if filter == "0" || filter.to_i > 0
+           result << "#{cols[i][0]} = #{filter.to_i}"
+          end
+        end
+      end
+      return nil if result.empty?
+      "(" + result.join(" AND ") + ")"
+    end
+
+    def search_string
+      result = [global_search_string, individual_search_strings].compact
+      "where " + result.join(" AND ") if result.any?
     end
 
 
     def query_sql
       current_sql = self.class.sql_string.dup
-      current_sql << search_string
+      current_sql << (search_string || "")
       current_sql << order_string if @params['iSortingCols'].to_i > 0
       current_sql << limit_offset
     end

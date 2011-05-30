@@ -233,7 +233,6 @@ describe 'Operations on the table' do
     @params['bSearchable_1'] = false
     @params['bSearchable_2'] = false
     @params['sSearch'] = "foo"
-    puts T.query(@params).query_sql
     T.query(@params)
   end
     
@@ -254,16 +253,16 @@ describe 'Operations on the table' do
   it 'should search by one integer column' do
     @params['bSearchable_1'] = true   # col2 = memo
     @params['sSearch_1'] = "2"
-    T.query(@params).to_json['aaData'].length.should == Order.where(:order_number => 1).count
+    T.query(@params).to_json['aaData'].length.should == Order.where(:order_number => 2).count
     T.query(@params).to_json['aaData'].map { |r| r[1] }.uniq.should == ["1"]
   end
 
   it 'should search by multiple columns' do
-    @params['bSearchable_2'] = true   # col2 = memo
-    @params['sSearch_2'] = "hello"
     @params['bSearchable_1'] = true   # col2 = memo
     @params['sSearch_1'] = "2"
-    T.query(@params).to_json['aaData'].length.should == Order.where('memo LIKE ?', '%hello%').where(:order_number => 1).count
+    @params['bSearchable_2'] = true   # col2 = memo
+    @params['sSearch_2'] = "hello"
+    T.query(@params).to_json['aaData'].length.should == Order.where('memo LIKE ?', '%hello%').where(:order_number => 2).count
     T.query(@params).to_json['aaData'].map { |r| r[2] }.uniq.should == ['hello']
     T.query(@params).to_json['aaData'].map { |r| r[1] }.uniq.should == ["1"]
   end

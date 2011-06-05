@@ -1,31 +1,8 @@
-1) Spec out the ideal interface. Embedded app.
-2) List the public api methods that we want to support
-3) Spec that in rspec
-4) Back and forth on what's actually possible or at all performant to actually do w/ the interface.
-5) Make tests pass
-
-
-# Complexities
--- paginating
--- joining so that you can see things
-  -- e.g. see customer and and sales rep name in the table
-  -- helpers that you can put in html to render form to do filtering
-  -- http://www.datatables.net/release-datatables/extras/ColReorder/col_filter.html
--- select concat(first_name, last_name) as name, combining two columns
--- multicolumn ordering
--- Columns that you want to exist but be blank
--- links to specific resources (lambda that calculates path?)
-
-# Process
--- manually make it work for each complex case
--- make it into a class
--- make it into a gem
-
-
 June 5 TODO:
 -- arel version of table operations
 -- column ordering
 
+-- Group pagination specs together
 -- sql version of helpers
 -- sDom
 -- like for integer columns?

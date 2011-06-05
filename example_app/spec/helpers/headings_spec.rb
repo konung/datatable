@@ -10,9 +10,6 @@ describe "headings" do
         set_model Order
         column :order_number
         column :memo
-        #     option 'sAjaxSource', ''
-        #     option 'iDisplayLength', 5
-        #     option 'per_page', 5
       end
       assign(:data_table, OrderTable)
     end
@@ -55,7 +52,18 @@ describe "headings" do
     end
 
     it 'should use pretty headings when they are available' do
-      helper.data_table_html.should have_selector("table#data_table")
+      OrderTable.assign_column_names(
+        [
+          ["orders.id", :integer, "Another heading that we specify manually"],
+          ["orders.order_number", :integer, "Yet another"],
+          ["customers.first_name", :string],
+          ["customers.last_name", :string],
+          ["orders.memo", :string, "And another"] 
+      ])
+
+      ["Another heading that we specify manually","Yet another" , "And another"].each do |heading|
+        helper.data_table_html.should contain(heading)
+      end
     end
 
   end

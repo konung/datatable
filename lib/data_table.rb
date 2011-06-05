@@ -45,6 +45,31 @@ module DataTable
       @columns || @column_names
     end
 
+    def self._columns
+      # given the select part of a sql query
+      # for each of the columns requested
+      # create a hash inside of the columns hash
+      #   -- figure out the typ
+      select = sql_string.scan(/SELECT(.*)FROM/im)[0][0]
+      select_columns = select.split(",").map(&:strip)
+
+      select_columns.each_with_object({}) do |column, hash|
+        
+        table_name = column.split('.')[0]
+
+        c = Class.new(ActiveRecord::Base)
+        
+        c.class_eval do
+          set_table_name table_name
+        end
+
+        type = c.columns.select { |col| col.name == column.split('.').last.to_s}.first.type
+
+        hash[column] = {:type => type}
+      end
+      
+    end
+
     def self.current_model
       @inner_model || @model
     end

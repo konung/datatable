@@ -41,7 +41,7 @@ module DataTable
 
     def self.columns
       #TODO: make more helpful
-      raise 'There are no columns on the DataTable' unless @columns || @column_names
+      raise 'There are no columns on the DataTable (use assign_column_names)' unless @columns || @column_names
       @columns || @column_names
     end
 
@@ -226,7 +226,7 @@ module DataTable
     end
 
     def individual_search_strings
-      cols = self.class.column_names
+      cols = self.class.columns
       result = []
       (@params['iColumns'] - 1).times do |i|
         filter = @params["sSearch_#{i}"]

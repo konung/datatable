@@ -28,6 +28,7 @@ describe 'Use raw sql' do
           customer_counts.sales_rep_id = sales_reps.id
   
       SQL
+      assign_column_names []
       # 
       #       column :fullname, :heading => "customer fullname" 
       # 

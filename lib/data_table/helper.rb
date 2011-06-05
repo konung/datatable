@@ -1,8 +1,10 @@
 module DataTable
   module Helper
-    def concat_strings(a, b)
-      a + " " + b
+
+    def data_table
+      "#{data_table_html} #{data_table_javascript}"
     end
+
 
     def data_table_html
       <<-CONTENT.gsub(/^\s{6}/,"").html_safe

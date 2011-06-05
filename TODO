@@ -1,7 +1,21 @@
 June 5 TODO:
--- arel version of table operations
--- column ordering
+-- make it so that you can just use raw sql
+-- make it so that w/ raw sql you can customize individual columns
+-- make it so that w/ arel you can customize columns
 
+-- config/initilizer for default settings
+
+-- can't click on pagination
+-- individual columns js
+
+DataTable.config do |config|
+  config.default_options = {
+    :bLengthChange => true
+  }
+end
+
+
+-- column ordering
 -- Group pagination specs together
 -- sql version of helpers
 -- sDom

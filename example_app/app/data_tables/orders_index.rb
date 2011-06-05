@@ -11,7 +11,25 @@ class OrdersIndex < DataTable::Base
     FROM orders
     JOIN customers ON(customers.id = orders.customer_id)
   SQL
-
+# 
+#   column :id, :width => 300, :heading => 'ohai'
+# 
+#   join :customers do 
+#     column ....
+#   end
+# 
+#   [
+#     Column.new(:type => :integer, :width => 300, :name => 'orders.id', :heading => "ohai"),
+#     Column.new(:type => :integer, :width => 300, :name => 'orders.id', :heading => "ohai")
+#   ]
+# 
+#   method {
+#     "orders.id" => {:width => 300}
+#   }
+# 
+#   {
+#     "orders.id" => {:type => :integer, :width => 300}
+#   }
   assign_column_names [
     ["orders.id", :integer],
     ["orders.order_number", :integer, "Order number"],
@@ -32,7 +50,7 @@ end
 #     column :last_name
 # 
 #     # join :sales_rep do
-#     #   column :first_name
+#     #   column :first_name, :width => 300
 #     #   column :last_name
 #     # end
 #   end

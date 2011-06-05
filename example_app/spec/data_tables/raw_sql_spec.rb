@@ -29,15 +29,7 @@ describe 'Use raw sql' do
   
       SQL
       assign_column_names []
-      # 
-      #       column :fullname, :heading => "customer fullname" 
-      # 
-      #       column "Customer full name"
-      # 
-      #       column :memo, "asdf"
-      #       headings [{:fullname => 'Customer full name'}, :count]
-      #       heading ['hi', nil, nil, nil, nil, 'Customer name']
-      #       columns [:foo, :bar, :baz]
+
     end
 
 

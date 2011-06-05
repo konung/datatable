@@ -351,8 +351,6 @@ describe 'Operations on the table' do
 
   it 'only searches - when someone actually types 0'
 
-
-
   # Column ordering (store/retrieve)
   #   column names in order
   #   sometimes will need to have the table name

@@ -46,6 +46,7 @@ describe 'Generating sql based on our DSL' do
       join :customer do
         column :first_name
       end
+
     end
 
     orders = Order.arel_table

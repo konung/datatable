@@ -54,6 +54,10 @@ module DataTable
       @options[key] = value
     end
 
+    def self.options(hash)
+      @options = hash
+    end
+
     def self.javascript_options(path)
       defaults = {
         'sAjaxSource' =>  path,

@@ -41,8 +41,8 @@ module DataTable
 
     def self.columns
       #TODO: make more helpful
-      raise 'There are no columns on the DataTable' unless @columns
-      @columns
+      raise 'There are no columns on the DataTable' unless @columns || @column_names
+      @columns || @column_names
     end
 
     def self.current_model
@@ -57,7 +57,7 @@ module DataTable
     def self.javascript_options(path)
       defaults = {
         'sAjaxSource' =>  path,
-        'sDom' => '<"H"lr>t<"F"ip>',
+        'sDom' => '<"H"lfr>t<"F"ip>',
         'iDisplayLength' => 10,
         'bProcessing' => true,
         'bServerSide' => true,
@@ -69,12 +69,13 @@ module DataTable
     def self.column(c)
       raise "set_model not called on #{self.name}" unless @model
       @columns ||= []
-      @columns << "#{@model.table_name}.#{c}"
+      @columns << ["#{current_model.table_name}.#{c}",  current_model.columns.select { |col| col.name == c.to_s}.first.type ]
       @relation= @relation.select(current_model.arel_table[c])
     end
 
     # TODO: Change to joins to match arel
     def self.join(association, &block)
+
       @inner_model = current_model.reflect_on_association(association).klass
       @relation = @relation.joins(association)
       instance_eval(&block) if block_given?
@@ -119,6 +120,10 @@ module DataTable
     #
     #-----------------------------------------------------------------------------------------------------------------
     def self.query(params)
+      params.each do |key, value|
+        params[key] = value.to_i if key =~ /^i/
+      end
+
       datatable = new(params)
       datatable.query
       datatable

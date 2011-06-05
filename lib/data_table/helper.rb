@@ -9,7 +9,7 @@ module DataTable
         <table id='data_table'>
           <thead>
             <tr>
-      #{'<th>Heading</th>' * @data_table.columns.length}
+      #{headings}
             </tr>
           </thead>
           <tbody>
@@ -18,16 +18,8 @@ module DataTable
       CONTENT
     end
 
-    # Private
-    def _data_table_attributes_hash(params={})
-      @data_table.config
-      {
-        'sAjaxSource' => @request.path,
-        'sDom' => '<"H"lr>t<"F"ip>'
-      }
-    end
-
     def data_table_javascript
+      raise "No @data_table assign" unless @data_table
       # TODO: this will escape ampersands
       # ERB::Util.h('http://www.foo.com/ab/asdflkj?asdf=asdf&asdf=alsdf') => "http://www.foo.com/ab/asdflkj?asdf=asdf&amp;asdf=alsdf" 
       "<script>
@@ -36,5 +28,22 @@ module DataTable
         });
       </script>".html_safe
     end
+
+    private
+
+    def headings
+      @data_table.columns.map do |column|
+        "<th>#{human_column_name column[0]}</th>"
+      end.join
+    end
+
+    def human_column_name(column)
+      columns = column.split('.')
+      [columns[0].singularize, columns[1]].map(&:humanize).map(&:titleize).join(" ")
+    end
+
+
+
+
   end
 end

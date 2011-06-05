@@ -144,7 +144,7 @@ describe 'javascript options' do
   it "should output default options" do
     options = OrdersTable.javascript_options("path").should == {
       'sAjaxSource' => 'path',
-      'sDom' => '<"H"lr>t<"F"ip>',
+      'sDom' => '<"H"lfr>t<"F"ip>',
       'iDisplayLength' => 10,
       'bProcessing' => true,
       'bServerSide' => true,

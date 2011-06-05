@@ -20,3 +20,14 @@
 -- manually make it work for each complex case
 -- make it into a class
 -- make it into a gem
+
+
+June 5 TODO:
+-- headings
+-- arel version of table operations
+-- column ordering
+
+-- sql version of helpers
+-- sDom
+-- like for integer columns?
+-- always force use of @data table (in helper)

@@ -174,14 +174,6 @@ describe 'Operations on the table' do
 
   it 'only searches - when someone actually types 0'
 
-  # Column heading naming for display
-  #   ['heading name', 'heading name']
-  #   strings that map to column names
-  it 'should use pretty headings when they are available' do
-    # Given a heading for a column
-    # The html helper should ouput the right thing somehow
-  end
-  it 'should humanize headings by default' 
 
 
   # Column ordering (store/retrieve)

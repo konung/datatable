@@ -187,10 +187,10 @@ module DataTable
       @params['iSortingCols'].times do |count|
         col_index = @params["iSortCol_#{count}"]
         col_dir = @params["sSortDir_#{count}"]
-        col_name = self.class.column_names[col_index][0]
+        col_name = self.class.columns[col_index][0]
         result << " " + (col_name + " " + col_dir)
       end
-      " ORDER BY" + result.join(", ")
+      result.join(", ")
     end
 
     def limit_offset
@@ -254,7 +254,7 @@ module DataTable
     def query_sql
       current_sql = self.class.sql_string.dup
       current_sql << (search_string || "")
-      current_sql << order_string if @params['iSortingCols'].to_i > 0
+      current_sql << (" ORDER BY" + order_string) if @params['iSortingCols'].to_i > 0
       current_sql << limit_offset
     end
 
@@ -265,6 +265,7 @@ module DataTable
         @records = self.class.model.connection.select_rows(current_sql)
       else
         relation = self.class.relation
+        relation = relation.order(order_string) if @params['iSortingCols'].to_i > 0
         relation = relation.offset(@params['iDisplayStart']).limit(@params['iDisplayLength'])
         @records = self.class.model.connection.select_rows(relation.to_sql)
       end

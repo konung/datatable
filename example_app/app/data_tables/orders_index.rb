@@ -14,7 +14,7 @@ class OrdersIndex < DataTable::Base
 
   assign_column_names [
     ["orders.id", :integer],
-    ["orders.order_number", :integer],
+    ["orders.order_number", :integer, "Order number"],
     ["customers.first_name", :string],
     ["customers.last_name", :string],
     ["orders.memo", :string]

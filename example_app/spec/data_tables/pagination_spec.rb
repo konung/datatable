@@ -11,8 +11,10 @@ describe 'basic query params and pagination' do
         column :first_name
       end
     end
-
     @params = {}
+
+    @params['iColumns'] = 3
+
   end
 
   it "sEcho" do
@@ -41,6 +43,8 @@ describe 'basic query params and pagination' do
         column :first_name
       end
     end
+    @params['iColumns'] = 3
+
     orders = [Factory(:order), Factory(:order)]
     OrdersComplex.query(@params).to_json['aaData'].should == orders.map { |o| [o.order_number.to_s, o.memo, o.customer.first_name]}
   end
@@ -51,6 +55,7 @@ describe 'basic query params and pagination' do
       column :memo
       column :order_number
     end
+    @params['iColumns'] = 2
     orders = [Factory(:order), Factory(:order)]
     OrdersComplex.query(@params).to_json['aaData'].should == orders.map { |o| [o.memo, o.order_number.to_s]}
   end
@@ -60,6 +65,8 @@ describe 'basic query params and pagination' do
       set_model Order
       column :id
     end
+    @params['iColumns'] = 1
+
     @params['iDisplayStart'] = 0
     @params['iDisplayLength'] = 2
     orders = [Factory(:order), Factory(:order), Factory(:order), Factory(:order)]

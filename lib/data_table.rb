@@ -208,7 +208,7 @@ module DataTable
       filter = @params['sSearch']
       return nil unless filter
       result = []
-      self.class.column_names.each_with_index do |col, i|
+      self.class.columns.each_with_index do |col, i|
        next unless @params["bSearchable_#{i}"]
        if col[1] == :string
          result << sanitize("#{col[0]} like ?", "%#{filter}%")
@@ -247,13 +247,15 @@ module DataTable
 
     def search_string
       result = [global_search_string, individual_search_strings].compact
-      "where " + result.join(" AND ") if result.any?
+      result.join(" AND ") if result.any?
     end
 
 
     def query_sql
       current_sql = self.class.sql_string.dup
-      current_sql << (search_string || "")
+      if(search = search_string)
+        current_sql << "WHERE " + search
+      end
       current_sql << (" ORDER BY" + order_string) if @params['iSortingCols'].to_i > 0
       current_sql << limit_offset
     end
@@ -265,6 +267,9 @@ module DataTable
         @records = self.class.model.connection.select_rows(current_sql)
       else
         relation = self.class.relation
+        if(search = search_string)
+          relation = relation.where(search)
+        end
         relation = relation.order(order_string) if @params['iSortingCols'].to_i > 0
         relation = relation.offset(@params['iDisplayStart']).limit(@params['iDisplayLength'])
         @records = self.class.model.connection.select_rows(relation.to_sql)

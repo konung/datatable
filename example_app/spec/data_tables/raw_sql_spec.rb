@@ -6,7 +6,7 @@ describe 'Use raw sql' do
 
     class SalesRepCustomers < DataTable::Base
 
-      set_model SalesRep
+      #set_model SalesRep
 
       sql <<-SQL
         SELECT 

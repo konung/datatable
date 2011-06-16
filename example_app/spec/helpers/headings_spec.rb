@@ -3,7 +3,6 @@ require 'spec_helper'
 describe "headings" do
 
   describe "arel" do
-
     before do
       Object.send(:remove_const, :OrderTable) rescue nil
       class OrderTable < DataTable::Base
@@ -14,6 +13,8 @@ describe "headings" do
       assign(:data_table, OrderTable)
     end
 
+    it "should have tests"
+
   end
 
   describe "raw sql" do
@@ -22,7 +23,7 @@ describe "headings" do
       Object.send(:remove_const, :OrderTable) rescue nil
       class OrderTable < DataTable::Base
 
-        set_model Order
+        #set_model Order
 
         sql <<-SQL
         SELECT orders.id, 

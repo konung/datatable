@@ -8,9 +8,6 @@ describe DataTable::Helper do
       set_model Order
       column :order_number
       column :memo
-      #     option 'sAjaxSource', ''
-      #     option 'iDisplayLength', 5
-      #     option 'per_page', 5
     end
     assign(:data_table, OrderTable)
   end
@@ -52,35 +49,27 @@ describe DataTable::Helper do
 
   end
 
-  # Test that javascript gets rendered
+  describe "javascript options" do
 
-=begin
-{
-      sAjaxSource: "<%= orders_path %>",
-      sDom: '<"H"lr>t<"F"ip>',
-      iDisplayLength: 10,
-      bProcessing: true,
-      bServerSide: true,
-      sPaginationType: "full_numbers",
-      aoColumns: [
-      {
-        bSortable: true
-      },
-      {
-        bSortable: true
-      },
-      {
-        bSortable: true
-      },
-      {
-        bSortable: true
-      }],
-      aaSorting: [[0, 'DESC']]
-    });
-  }
-=end
+    it "should output default options" do
+      helper.send(:javascript_options).should == {
+        'sAjaxSource' => '',
+        'sDom' => '<"H"lfr>t<"F"ip>',
+        'iDisplayLength' => 10,
+        'bProcessing' => true,
+        'bServerSide' => true,
+        'sPaginationType' => "full_numbers"
+      }
+    end
 
+    it "should merge defaults with others" do
+      class OrderTable
+        option 'foo', 'bar'
+      end
+      helper.send(:javascript_options)['foo'].should == 'bar'
+    end
 
+  end
 
 end
 

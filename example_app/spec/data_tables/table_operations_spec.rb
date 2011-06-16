@@ -22,7 +22,7 @@ describe 'Operations on the table' do
     Object.send(:remove_const, :T) rescue nil
 
     class T < DataTable::Base
-      set_model Order
+      #set_model Order
       sql <<-SQL
         SELECT id, order_number, memo
           FROM orders

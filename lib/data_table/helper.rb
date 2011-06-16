@@ -20,13 +20,14 @@ module DataTable
       CONTENT
     end
 
+
     def data_table_javascript
       raise "No @data_table assign" unless @data_table
       # TODO: this will escape ampersands
       # ERB::Util.h('http://www.foo.com/ab/asdflkj?asdf=asdf&asdf=alsdf') => "http://www.foo.com/ab/asdflkj?asdf=asdf&amp;asdf=alsdf" 
       "<script>
         $(function(){
-          $('#data_table').dataTable(#{@data_table.javascript_options(h request.path).to_json})
+          $('#data_table').dataTable(#{javascript_options.to_json})
         });
       </script>".html_safe
     end
@@ -48,6 +49,17 @@ module DataTable
       [columns[0].singularize, columns[1]].map(&:humanize).map(&:titleize).join(" ")
     end
 
+    def javascript_options
+      defaults = {
+        'sAjaxSource' => h(request.path),
+        'sDom' => '<"H"lfr>t<"F"ip>',
+        'iDisplayLength' => 10,
+        'bProcessing' => true,
+        'bServerSide' => true,
+        'sPaginationType' => "full_numbers"
+      }
+      @data_table.javascript_options.merge(defaults)
+    end
 
 
 

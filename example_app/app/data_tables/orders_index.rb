@@ -1,6 +1,6 @@
 class OrdersIndex < DataTable::Base
 
-  set_model Order
+  #set_model Order
 
   sql <<-SQL
     SELECT orders.id, 

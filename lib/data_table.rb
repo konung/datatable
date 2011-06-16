@@ -10,37 +10,27 @@
 
 require 'data_table/railtie'
 require 'data_table/helper'
+require 'data_table/active_record_dsl'
 
 module DataTable
 
   class Base
 
-    attr_accessor :records
-
-    def self.relation
-      @relation
-    end
-
-    def self.relation=(right)
-      @relation = right
-    end
+    include DataTable::ActiveRecordDSL
 
     def self.model
       @model
     end
 
-    def self.assign_column_names(args)
-      @column_names = args
-    end
-
-    def self.column_names
-      @column_names
-    end
+    attr_accessor :records
 
     def self.columns
-      #TODO: make more helpful
-      raise 'There are no columns on the DataTable (use assign_column_names)' unless @columns || @column_names
-      @columns || @column_names
+      raise 'There are no columns on the DataTable (use assign_column_names)' unless @columns
+      @columns
+    end
+
+    def self.assign_column_names(args)
+      @columns = args
     end
 
     def self._columns
@@ -52,67 +42,32 @@ module DataTable
       select_columns = select.split(",").map(&:strip)
 
       select_columns.each_with_object({}) do |column, hash|
-        
+
         table_name = column.split('.')[0]
 
         c = Class.new(ActiveRecord::Base)
-        
+
         c.class_eval do
           set_table_name table_name
         end
 
-        type = c.columns.select { |col| col.name == column.split('.').last.to_s}.first.type
+        type = c.columns.detect { |col| col.name == column.split('.').last.to_s}.type
 
         hash[column] = {:type => type}
       end
-      
-    end
 
-    def self.current_model
-      @inner_model || @model
     end
 
     def self.option(key,value)
-      @options ||= {}
-      @options[key] = value
+      @javascript_options ||= {}
+      @javascript_options[key] = value
+    end
+    
+    def self.javascript_options
+      @javascript_options || {}
     end
 
-    def self.options(hash)
-      @options = hash
-    end
 
-    def self.javascript_options(path)
-      defaults = {
-        'sAjaxSource' =>  path,
-        'sDom' => '<"H"lfr>t<"F"ip>',
-        'iDisplayLength' => 10,
-        'bProcessing' => true,
-        'bServerSide' => true,
-        'sPaginationType' => "full_numbers"
-      }
-      @options ? @options.merge(defaults) : defaults
-    end
-
-    def self.column(c)
-      raise "set_model not called on #{self.name}" unless @model
-      @columns ||= []
-      @columns << ["#{current_model.table_name}.#{c}",  current_model.columns.select { |col| col.name == c.to_s}.first.type ]
-      @relation= @relation.select(current_model.arel_table[c])
-    end
-
-    # TODO: Change to joins to match arel
-    def self.join(association, &block)
-
-      @inner_model = current_model.reflect_on_association(association).klass
-      @relation = @relation.joins(association)
-      instance_eval(&block) if block_given?
-      @inner_model = nil
-    end
-
-    def self.set_model(model)
-      @model = model
-      @relation = model
-    end
 
 
     #------------------------------------------------------------------------------------------------------------------
@@ -289,10 +244,12 @@ module DataTable
 
     def query
       if self.class.sql_string
-        raise "set_model not called on #{self.class.name}" unless self.class.model
         current_sql = query_sql
-        @records = self.class.model.connection.select_rows(current_sql)
+        connection = self.class.model ? self.class.model.connection : ActiveRecord::Base.connection
+        @records = connection.select_rows(current_sql)
+
       else
+        raise "set_model not called on #{self.class.name}" unless self.class.model
         relation = self.class.relation
         if(search = search_string)
           relation = relation.where(search)
@@ -303,24 +260,6 @@ module DataTable
       end
       self
     end
-
-
-#    # generate javascript
-#    def javascript
-#      <<-CONTENT.gsub(/^\s{8}/,"")
-#        <script type="text/javascript">
-#          $(document).ready(function() {
-#            $('.datatable').dataTable({#{datatable_options}});
-#          });
-#        </script>
-#      CONTENT
-#    end
-
-#    # convienence method to provide html+javascript
-#    def render
-#      (html + javascript).html_safe
-#    end
-
 
   end
 end

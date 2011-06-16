@@ -32,7 +32,7 @@ describe 'Operations on the table' do
 
       _column_attributes({
           'orders.id'   => {:type => :integer},
-          'orders.order_number' => {:type => :string},
+          'orders.order_number' => {:type => :integer},
           'orders.memo' => {:type => :string }
       })
       

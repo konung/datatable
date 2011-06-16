@@ -172,36 +172,39 @@ module DataTable
       filter = @params['sSearch']
       return nil unless filter
       result = []
-      self.class.columns.each_with_index do |col, i|
-       next unless @params["bSearchable_#{i}"]
-       if col[1] == :string
-         result << sanitize("#{col[0]} like ?", "%#{filter}%")
-       else
-         # to_i returns 0 on arbitrary strings
-         # so only search for integers = 0 when someone actually typed 0
-         if filter == "0" || filter.to_i > 0
-          result << "#{col[0]} = #{filter.to_i}"
-         end
-       end
 
+      column_attributes.keys.each_with_index do |col, i|
+        next unless @params["bSearchable_#{i}"]
+        attributes = column_attributes[col]
+        if attributes[:type] == :string
+          result << sanitize("#{col} like ?", "%#{filter}%")
+        else
+          # to_i returns 0 on arbitrary strings
+          # so only search for integers = 0 when someone actually typed 0
+          if filter == "0" || filter.to_i > 0
+           result << "#{col} = #{filter.to_i}"
+          end
+        end
       end
+
       return nil if result.empty?
       "(" + result.join(" OR ") + ")"
     end
 
     def individual_search_strings
-      cols = self.class.columns
+      keys = column_attributes.keys
       result = []
       (@params['iColumns'] - 1).times do |i|
         filter = @params["sSearch_#{i}"]
         next if filter.blank?
-        if cols[i][1] == :string
-          result << sanitize("#{cols[i][0]} like ?", "%#{filter}%")
+        attributes = column_attributes[keys[i]]
+        if attributes[:type] == :string
+          result << sanitize("#{keys[i]} like ?", "%#{filter}%")
         else
           # to_i returns 0 on arbitrary strings
           # so only search for integers = 0 when someone actually typed 0
           if filter == "0" || filter.to_i > 0
-           result << "#{cols[i][0]} = #{filter.to_i}"
+           result << "#{keys[i]} = #{filter.to_i}"
           end
         end
       end

@@ -30,6 +30,13 @@ describe 'Use raw sql' do
       SQL
       assign_column_names []
 
+      _column_attributes({
+          'sales_reps'   => {:type => :integer},
+          'fullname' => {:type => :string},
+          'sales_reps.created_at' => {:type => :datetime },
+          'count' => {:type => :integer }
+      })
+
     end
 
 

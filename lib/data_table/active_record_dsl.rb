@@ -23,11 +23,11 @@ module DataTable
      def column(c)
        raise "set_model not called on #{self.name}" unless @model
 
-       @column_attributes ||= {}
-       @column_attributes["#{current_model.table_name}.#{c}"] = {:type => current_model.columns.detect{ |col| col.name == c.to_s}.type }
+       @columns ||= {}
+       @columns["#{current_model.table_name}.#{c}"] = {:type => current_model.columns.detect{ |col| col.name == c.to_s}.type }
 
-       @columns ||= []
-       @columns << ["#{current_model.table_name}.#{c}",  current_model.columns.detect{ |col| col.name == c.to_s}.type ]
+#       @columns ||= {}
+#       @columns << ["#{current_model.table_name}.#{c}",  current_model.columns.detect{ |col| col.name == c.to_s}.type ]
        @relation= @relation.select(current_model.arel_table[c])
      end
 

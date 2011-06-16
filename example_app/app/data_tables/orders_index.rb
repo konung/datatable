@@ -30,13 +30,15 @@ class OrdersIndex < DataTable::Base
 #   {
 #     "orders.id" => {:type => :integer, :width => 300}
 #   }
-  assign_column_names [
-    ["orders.id", :integer],
-    ["orders.order_number", :integer, "Order number"],
-    ["customers.first_name", :string],
-    ["customers.last_name", :string],
-    ["orders.memo", :string]
-  ]
+#  assign_column_names [
+#    ["orders.id", :integer],
+#    ["orders.order_number", :integer, "Order number"],
+#    ["customers.first_name", :string],
+#    ["customers.last_name", :string],
+#    ["orders.memo", :string]
+#  ]
+
+
 end
 
 # class OrdersIndex < DataTable::Base

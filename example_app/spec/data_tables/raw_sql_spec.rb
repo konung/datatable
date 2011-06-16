@@ -28,9 +28,8 @@ describe 'Use raw sql' do
           customer_counts.sales_rep_id = sales_reps.id
   
       SQL
-      assign_column_names []
-
-      _column_attributes({
+      
+      columns({
           'sales_reps'   => {:type => :integer},
           'fullname' => {:type => :string},
           'sales_reps.created_at' => {:type => :datetime },

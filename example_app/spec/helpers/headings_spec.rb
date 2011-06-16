@@ -35,6 +35,11 @@ describe "headings" do
         JOIN customers ON(customers.id = orders.customer_id)
         SQL
 
+
+        #
+        # replace this with a hash
+        #
+
         assign_column_names [
           ["orders.id", :integer],
           ["orders.order_number", :integer],

@@ -32,22 +32,21 @@ module DataTable
       @sql_string
     end
 
-    def self.columns
-      raise 'There are no columns on the DataTable (use assign_column_names)' unless @columns
-      @columns
+    def self.columns(*args)
+      if args.empty?
+        raise 'There are no columns on the DataTable (use assign_column_names)' unless @columns
+        return @columns
+      end
+      @columns = args.first
     end
 
-    def self.assign_column_names(args)
-      @columns = args
-    end
-
-    def self.column_attributes
-      @column_attributes
-    end
-
-    def self._column_attributes(args)
-      @column_attributes = args
-    end
+#    def self.column_attributes
+#      @column_attributes
+#    end
+#
+#    def self._column_attributes(args)
+#      @column_attributes = args
+#    end
 
     def self._columns
       # given the select part of a sql query
@@ -121,7 +120,7 @@ module DataTable
     private
 
     def column_attributes
-      self.class.column_attributes
+      self.class.columns
     end
 
     def sql_instance_query

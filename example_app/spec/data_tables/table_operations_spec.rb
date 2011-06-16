@@ -28,9 +28,7 @@ describe 'Operations on the table' do
           FROM orders
       SQL
 
-      assign_column_names [["orders.id", :integer], ["orders.order_number", :integer], ["orders.memo", :string] ]
-
-      _column_attributes({
+      columns({
           'orders.id'   => {:type => :integer},
           'orders.order_number' => {:type => :integer},
           'orders.memo' => {:type => :string }

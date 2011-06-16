@@ -10,6 +10,8 @@ DONE -- b) making columns a hash inside of datatable
 DONE -- c) remove the array version
 DONE -- d) remove the set_columns thing from all of the tests
 
+DO the client side portion of the individual column searching
+
 
 June 5 TODO:
 -- make it so that you can just use raw sql

@@ -13,8 +13,6 @@ require 'data_table/helper'
 
 module DataTable
 
-  VERSION = "0.1.0.dev1"
-
   class Base
 
     attr_accessor :records
@@ -307,21 +305,21 @@ module DataTable
     end
 
 
-    # generate javascript
-    def javascript
-      <<-CONTENT.gsub(/^\s{8}/,"")
-        <script type="text/javascript">
-          $(document).ready(function() {
-            $('.datatable').dataTable({#{datatable_options}});
-          });
-        </script>
-      CONTENT
-    end
+#    # generate javascript
+#    def javascript
+#      <<-CONTENT.gsub(/^\s{8}/,"")
+#        <script type="text/javascript">
+#          $(document).ready(function() {
+#            $('.datatable').dataTable({#{datatable_options}});
+#          });
+#        </script>
+#      CONTENT
+#    end
 
-    # convienence method to provide html+javascript
-    def render
-      (html + javascript).html_safe
-    end
+#    # convienence method to provide html+javascript
+#    def render
+#      (html + javascript).html_safe
+#    end
 
 
   end

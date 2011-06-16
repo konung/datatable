@@ -1,10 +1,8 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.0.7'
-
 gem 'pg'
 gem 'mysql'
-
 gem 'data_table', :path => "../"
 gem "jquery-rails"
 
@@ -22,6 +20,7 @@ gem "jquery-rails"
 #  gem install ruby-debug19 -- --with-ruby-include=$rvm_path/src/$RUBY_VERSION/
 #
 group :test, :development do
+  #gem 'ruby-debug', :platform => :ruby_18
   gem 'rake', '0.8.7'
   gem "i18n"
   gem "webrat"
@@ -32,9 +31,4 @@ group :test, :development do
   gem "webrat"
 end
 
-
-# group :debug do
-  gem 'ruby-debug', :platform => :ruby_18
-  # gem 'ruby-debug19', :require => 'ruby-debug', :platform => :ruby_19
-# end
 

@@ -2,7 +2,7 @@ module DataTable
   module Helper
 
     def data_table
-      "#{data_table_html} #{data_table_javascript}"
+      "#{data_table_html} #{data_table_javascript}".html_safe
     end
 
 

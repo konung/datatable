@@ -2,8 +2,6 @@ source "http://rubygems.org"
 
 gemspec
 
-gem 'rails'
-
 group :test do
   gem 'rdoc'
   gem "rake"

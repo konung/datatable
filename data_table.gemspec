@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "data_table"
+require "data_table/version"
 
 Gem::Specification.new do |s|
   s.name        = "data_table"
@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/logic-refinery/datatable"
   s.summary     = %q{A rails plugin for the jquery.datatables library}
   s.description = %q{A rails plugin for the jquery.datatables library}
+  s.add_dependency('rails', '>= 3.0.0')
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

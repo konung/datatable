@@ -41,6 +41,14 @@ module DataTable
       @columns = args
     end
 
+    def self.column_attributes
+      @column_attributes
+    end
+
+    def self._column_attributes(args)
+      @column_attributes = args
+    end
+
     def self._columns
       # given the select part of a sql query
       # for each of the columns requested
@@ -112,6 +120,10 @@ module DataTable
 
     private
 
+    def column_attributes
+      self.class.column_attributes
+    end
+
     def sql_instance_query
       current_sql = query_sql
       connection = self.class.model ? self.class.model.connection : ActiveRecord::Base.connection
@@ -134,12 +146,14 @@ module DataTable
     #
     def order_string
       result = []
+
       @params['iSortingCols'].times do |count|
         col_index = @params["iSortCol_#{count}"]
         col_dir = @params["sSortDir_#{count}"]
-        col_name = self.class.columns[col_index][0]
+        col_name = column_attributes.keys[col_index]
         result << " " + (col_name + " " + col_dir)
       end
+
       result.join(", ")
     end
 

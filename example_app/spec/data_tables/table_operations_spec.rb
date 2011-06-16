@@ -30,6 +30,12 @@ describe 'Operations on the table' do
 
       assign_column_names [["orders.id", :integer], ["orders.order_number", :integer], ["orders.memo", :string] ]
 
+      _column_attributes({
+          'orders.id'   => {:type => :integer},
+          'orders.order_number' => {:type => :string},
+          'orders.memo' => {:type => :string }
+      })
+      
     end
 
     @params = {
@@ -210,6 +216,7 @@ describe 'Operations on the table' do
       column :id
       column :order_number
       column :memo
+
     end
 
     @params = {

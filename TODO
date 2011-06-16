@@ -1,13 +1,14 @@
-Next session:
--- Working on parsing out column names from sql queries (parsing_spec.rb)
--- Just finished making it so that it gets the type from column names 
--- Working on making columns be stored as a hash inside of DataTable
--- So, a) finish making the parsing work, then
--- Test _columns (w/ underscore) individually so that we know it has the right stuff
--- THEN drop it in to the methods that use columns (w/ no underscore) and make those work
--- b) making columns a hash inside of datatable
--- c) remove the array version
--- d) remove the set_columns thing from all of the tests
+Next session: (from befor last session)
+1) change the array to a hash in the table headings test
+2) figure out the URL
+     -- need to pass two peices of info; column index of the id(s) and url string
+     -- the text is taken from the curren column
+3) Working on parsing out column names from sql queries (parsing_spec.rb) (parsing things like select count(foo) as bar what type is bar?
+7) Test _columns (w/ underscore) individually so that we know it has the right stuff
+8) THEN drop it in to the methods that use columns (w/ no underscore) and make those work
+DONE -- b) making columns a hash inside of datatable
+DONE -- c) remove the array version
+DONE -- d) remove the set_columns thing from all of the tests
 
 
 June 5 TODO:

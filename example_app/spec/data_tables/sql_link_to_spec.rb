@@ -1,18 +1,21 @@
 require 'spec_helper'
+include Rails.application.routes.url_helpers
 
 describe 'Creating links for SQL DataTables' do
 
   before do
+
     Object.send(:remove_const, :T) rescue nil
     class T < DataTable::Base
+
       sql <<-SQL
         SELECT id FROM orders
       SQL
 
+
       columns(
-        {'orders.id' => {:type => :integer, 
-          :link_to => link_to('{{orders.id}}', order_path('{{orders.id}}') ) }}
-        )
+        {"orders.id" => {:type => :integer, :link_to => link_to('{{0}}', order_path('{{0}}')) }}
+      )
     end
 
     @params = {
@@ -27,7 +30,9 @@ describe 'Creating links for SQL DataTables' do
   end
 
   it 'should provide a hash of variables to replace and what column index to replace them with' do
-
+    t.columns['orders.id'][:replacements].should == {
+      0 => 0
+    }
   end
 
 end

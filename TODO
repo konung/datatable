@@ -1,8 +1,39 @@
+0)  working on sql_link_to_spec.rb
+
+1) Make it so that you can call url helpers from inside of a DataTable class
+ -- include doesn't seem to work, or extend.
+
+2) From there, make it so that the replacements hash gets created, which is a hash were the keys are what to replace, and the values are the index to replace text that matches the key with
+'{{0}}' => 3 
+would mean that you replace {{0}} with the value in column 3 for that row...
+
+3) Then construct aoColumnDefs in the helper (in javascript)
+
+
+
+_____________________________________________________
+
 Next session: 
 
 2) figure out the URL
+data structure
+rendering
      -- need to pass two peices of info; column index of the id(s) and url string
      -- the text is taken from the curren column
+
+use the column name to link to something
+override to link to something
+
+<a href="column">either a column or set text</a>
+
+
+is the link created on the front or back end?
+
+
+
+
+
+
 
 3) Working on parsing out column names from sql queries (parsing_spec.rb) (parsing things like select count(foo) as bar what type is bar?
 7) Test _columns (w/ underscore) individually so that we know it has the right stuff

@@ -13,7 +13,6 @@ require 'data_table/helper'
 require 'data_table/active_record_dsl'
 
 module DataTable
-
   class Base
 
     include DataTable::ActiveRecordDSL

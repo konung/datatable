@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Michael Greenly"]
   s.email       = ["michaelgreenly@logic-refinery.com"]
   s.homepage    = "https://github.com/logic-refinery/datatable"
-  s.summary     = %q{A rails plugin for the jquery.datatables library}
-  s.description = %q{A rails plugin for the jquery.datatables library}
+  s.summary     = %q{A Rails plugin for the jquery.datatables library}
+  s.description = %q{A Rails plugin for the jquery.datatables library}
   s.add_dependency('rails', '>= 3.0.0')
 
   s.files         = `git ls-files`.split("\n")

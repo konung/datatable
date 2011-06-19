@@ -1,8 +1,9 @@
 Next session: 
-1) Make table headings work w/ the new way of doing columns (Table headings test)
+
 2) figure out the URL
      -- need to pass two peices of info; column index of the id(s) and url string
      -- the text is taken from the curren column
+
 3) Working on parsing out column names from sql queries (parsing_spec.rb) (parsing things like select count(foo) as bar what type is bar?
 7) Test _columns (w/ underscore) individually so that we know it has the right stuff
 8) THEN drop it in to the methods that use columns (w/ no underscore) and make those work
@@ -11,6 +12,12 @@ DONE -- c) remove the array version
 DONE -- d) remove the set_columns thing from all of the tests
 
 DO the client side portion of the individual column searching
+
+
+
+
+
+
 
 
 June 5 TODO:

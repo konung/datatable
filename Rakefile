@@ -2,7 +2,7 @@ require 'bundler'
 Bundler.require :default, :test
 
 require 'rake'
-require 'rake/rdoctask'
+require 'rdoc/task'
 require 'rspec/core/rake_task'
 require 'rake/clean'
 
@@ -11,10 +11,8 @@ CLOBBER.include('*.gem')
 desc 'rake spec'
 task :default => :spec
 
-desc "run all examples"
-RSpec::Core::RakeTask.new(:spec) do |task|
-  task.verbose = true
-  task.rspec_opts = ["--color", "--format=doc"]
+task :spec do
+   puts 'The specs are in the example_app folder. Run rake spec in that directory'
 end
 
 desc 'Generate documentation for the datatable plugin.'

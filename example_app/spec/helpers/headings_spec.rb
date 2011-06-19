@@ -40,13 +40,13 @@ describe "headings" do
         # replace this with a hash
         #
 
-        columns({
-          'orders.id' => {:type => :integer},
-          'orders.order_number' => {:type => :string},
-          'customers.first_name' => {:type => :string},
-          'customers.last_name' => {:type => :string},
-          'orders.memo' => {:type => :string},
-        })
+        columns(
+          {'orders.id' => {:type => :integer}},
+          {'orders.order_number' => {:type => :string}},
+          {'customers.first_name' => {:type => :string}},
+          {'customers.last_name' => {:type => :string}},
+          {'orders.memo' => {:type => :string}}
+        )
 
       end
       assign(:data_table, OrderTable)
@@ -60,15 +60,13 @@ describe "headings" do
 
     # TODO
     it 'should use pretty headings when they are available' do
-      fail 'TODO'
       OrderTable.columns(
-        [
-          ["orders.id", :integer, "Another heading that we specify manually"],
-          ["orders.order_number", :integer, "Yet another"],
-          ["customers.first_name", :string],
-          ["customers.last_name", :string],
-          ["orders.memo", :string, "And another"] 
-      ])
+        {'orders.id' => {:type => :integer, :heading => "Another heading that we specify manually"}},
+        {'orders.order_number' => {:type => :string, :heading => 'Yet another' }},
+        {'customers.first_name' => {:type => :string}},
+        {'customers.last_name' => {:type => :string}},
+        {'orders.memo' => {:type => :string, :heading => 'And another'}}
+      )
 
       ["Another heading that we specify manually","Yet another" , "And another"].each do |heading|
         helper.data_table_html.should contain(heading)

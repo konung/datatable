@@ -35,17 +35,13 @@ module DataTable
     private
 
     def headings
-      @data_table.columns.map do |column|
-        "<th>#{human_column_name column}</th>"
+      @data_table.columns.map do |key, value|
+        "<th>#{value[:heading] || humanize_column(key)}</th>"
       end.join
     end
 
-    def human_column_name(column)
-      sql_name = column[0]
-      custom_heading = column[2]
-      return custom_heading if custom_heading
-
-      columns = sql_name.split('.')
+    def humanize_column(name)
+      columns = name.split('.')
       [columns[0].singularize, columns[1]].map(&:humanize).map(&:titleize).join(" ")
     end
 

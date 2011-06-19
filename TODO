@@ -1,4 +1,4 @@
-Next session: (from befor last session)
+Next session: 
 1) change the array to a hash in the table headings test
 2) figure out the URL
      -- need to pass two peices of info; column index of the id(s) and url string
@@ -36,3 +36,10 @@ end
 -- sDom
 -- like for integer columns?
 -- always force use of @data table (in helper)
+
+
+
+
+# Error checking:
+
+What if I get a column name wrong in the columns hash?

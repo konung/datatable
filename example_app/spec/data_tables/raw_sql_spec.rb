@@ -6,8 +6,6 @@ describe 'Use raw sql' do
 
     class SalesRepCustomers < DataTable::Base
 
-      #set_model SalesRep
-
       sql <<-SQL
         SELECT 
           sales_reps.id,
@@ -30,7 +28,7 @@ describe 'Use raw sql' do
       SQL
       
       columns({
-          'sales_reps'   => {:type => :integer},
+          'sales_reps.id'   => {:type => :integer},
           'fullname' => {:type => :string},
           'sales_reps.created_at' => {:type => :datetime },
           'count' => {:type => :integer }
@@ -68,8 +66,8 @@ describe 'Use raw sql' do
   end
 
   it 'should return the records' do
-    first_row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S.%6N").gsub(/0*$/, ""), @sales_reps[0].customers.count].map(&:to_s)
-    #first_row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S"), @sales_reps[0].customers.count].map(&:to_s)
+    #first_row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S.%6N").gsub(/0*$/, ""), @sales_reps[0].customers.count].map(&:to_s)
+    first_row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S"), @sales_reps[0].customers.count].map(&:to_s)
     SalesRepCustomers.query(@params).to_json['aaData'][0].should  == first_row
   end
 
@@ -77,8 +75,8 @@ describe 'Use raw sql' do
     @params['iDisplayStart'] = 0
     @params['iDisplayLength'] = 2
 
-    row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S.%6N").gsub(/0*$/, ""), @sales_reps[0].customers.count].map(&:to_s)
-    #row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S"), @sales_reps[0].customers.count].map(&:to_s)
+    #row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S.%6N").gsub(/0*$/, ""), @sales_reps[0].customers.count].map(&:to_s)
+    row = [@sales_reps[0].id, @sales_reps[0].first_name, @sales_reps[0].created_at.strftime("%Y-%m-%d %R:%S"), @sales_reps[0].customers.count].map(&:to_s)
     SalesRepCustomers.query(@params).to_json['iTotalRecords'].should == 2
     SalesRepCustomers.query(@params).to_json['aaData'].length.should == 2
     SalesRepCustomers.query(@params).to_json['aaData'][0].should == row
@@ -88,8 +86,8 @@ describe 'Use raw sql' do
     @params['iDisplayStart'] = 2
     @params['iDisplayLength'] = 2
 
-    row = [@sales_reps[2].id, @sales_reps[2].first_name, @sales_reps[2].created_at.strftime("%Y-%m-%d %R:%S.%6N").gsub(/0*$/, ""), @sales_reps[2].customers.count].map(&:to_s)
-    #row = [@sales_reps[2].id, @sales_reps[2].first_name, @sales_reps[2].created_at.strftime("%Y-%m-%d %R:%S"), @sales_reps[2].customers.count].map(&:to_s)
+    #row = [@sales_reps[2].id, @sales_reps[2].first_name, @sales_reps[2].created_at.strftime("%Y-%m-%d %R:%S.%6N").gsub(/0*$/, ""), @sales_reps[2].customers.count].map(&:to_s)
+    row = [@sales_reps[2].id, @sales_reps[2].first_name, @sales_reps[2].created_at.strftime("%Y-%m-%d %R:%S"), @sales_reps[2].customers.count].map(&:to_s)
     SalesRepCustomers.query(@params).to_json['iTotalRecords'].should == 2
     SalesRepCustomers.query(@params).to_json['aaData'].length.should == 2
     SalesRepCustomers.query(@params).to_json['aaData'][0].should == row

@@ -26,13 +26,13 @@ describe "headings" do
         #set_model Order
 
         sql <<-SQL
-        SELECT orders.id, 
-          orders.order_number,
-          customers.first_name,
-          customers.last_name,
-          orders.memo
-        FROM orders
-        JOIN customers ON(customers.id = orders.customer_id)
+      SELECT orders.id, 
+        orders.order_number,
+        customers.first_name,
+        customers.last_name,
+        orders.memo
+      FROM orders
+      JOIN customers ON(customers.id = orders.customer_id)
         SQL
 
 
@@ -40,13 +40,14 @@ describe "headings" do
         # replace this with a hash
         #
 
-        assign_column_names [
-          ["orders.id", :integer],
-          ["orders.order_number", :integer],
-          ["customers.first_name", :string],
-          ["customers.last_name", :string],
-          ["orders.memo", :string]
-        ]
+        columns({
+          'orders.id' => {:type => :integer},
+          'orders.order_number' => {:type => :string},
+          'customers.first_name' => {:type => :string},
+          'customers.last_name' => {:type => :string},
+          'orders.memo' => {:type => :string},
+        })
+
       end
       assign(:data_table, OrderTable)
     end
@@ -57,8 +58,10 @@ describe "headings" do
       end
     end
 
+    # TODO
     it 'should use pretty headings when they are available' do
-      OrderTable.assign_column_names(
+      fail 'TODO'
+      OrderTable.columns(
         [
           ["orders.id", :integer, "Another heading that we specify manually"],
           ["orders.order_number", :integer, "Yet another"],

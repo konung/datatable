@@ -41,16 +41,11 @@ module DataTable
         raise 'There are no columns on the DataTable (use assign_column_names)' unless @columns
         return @columns
       end
-      @columns = args.first
+
+      @columns = ActiveSupport::OrderedHash.new
+      args.each { |element| @columns[element.keys.first] = element.values.first }
     end
 
-#    def self.column_attributes
-#      @column_attributes
-#    end
-#
-#    def self._column_attributes(args)
-#      @column_attributes = args
-#    end
 
     def self._columns
       # given the select part of a sql query
@@ -81,7 +76,7 @@ module DataTable
       @javascript_options ||= {}
       @javascript_options[key] = value
     end
-    
+
     def self.javascript_options
       @javascript_options || {}
     end
@@ -110,13 +105,12 @@ module DataTable
       @records =  self.class.sql_string ? sql_instance_query : active_record_instance_query
       self
     end
-    
+
     def to_json
       {
         'sEcho' => (@params['sEcho'] || -1).to_i,
         'aaData' => records,
         'iTotalRecords' => @records.length,
-        #self.class.model.count,
         'iTotalDisplayRecords' => records.length,
       }
     end
@@ -128,9 +122,8 @@ module DataTable
     end
 
     def sql_instance_query
-      current_sql = query_sql
       connection = self.class.model ? self.class.model.connection : ActiveRecord::Base.connection
-      connection.select_rows(current_sql)
+      connection.select_rows(query_sql)
     end
 
     def active_record_instance_query
@@ -168,7 +161,7 @@ module DataTable
     end
 
     def sanitize(*args)
-        ActiveRecord::Base.send(:sanitize_sql_array, args)
+      ActiveRecord::Base.send(:sanitize_sql_array, args)
     end
 
     def global_search_string
@@ -185,7 +178,7 @@ module DataTable
           # to_i returns 0 on arbitrary strings
           # so only search for integers = 0 when someone actually typed 0
           if filter == "0" || filter.to_i > 0
-           result << "#{col} = #{filter.to_i}"
+            result << "#{col} = #{filter.to_i}"
           end
         end
       end
@@ -207,7 +200,7 @@ module DataTable
           # to_i returns 0 on arbitrary strings
           # so only search for integers = 0 when someone actually typed 0
           if filter == "0" || filter.to_i > 0
-           result << "#{keys[i]} = #{filter.to_i}"
+            result << "#{keys[i]} = #{filter.to_i}"
           end
         end
       end

@@ -27,12 +27,12 @@ describe 'Use raw sql' do
   
       SQL
       
-      columns({
-          'sales_reps.id'   => {:type => :integer},
-          'fullname' => {:type => :string},
-          'sales_reps.created_at' => {:type => :datetime },
-          'count' => {:type => :integer }
-      })
+      columns(
+          {'sales_reps.id' => {:type => :integer}},
+          {'fullname' => {:type => :string}},
+          {'sales_reps.created_at' => {:type => :datetime }},
+          {'count' => {:type => :integer }}
+      )
 
     end
 

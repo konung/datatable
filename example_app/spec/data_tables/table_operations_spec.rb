@@ -28,34 +28,34 @@ describe 'Operations on the table' do
           FROM orders
       SQL
 
-      columns({
-          'orders.id'   => {:type => :integer},
-          'orders.order_number' => {:type => :integer},
-          'orders.memo' => {:type => :string }
-      })
-      
+      columns(
+        {'orders.id'   => {:type => :integer}},
+        {'orders.order_number' => {:type => :integer}},
+        {'orders.memo' => {:type => :string }}
+      )
+
     end
 
     @params = {
-        "iColumns" =>	4,
-        "bSearchable_0" => true,
-        "bSearchable_1" => true,
-        "bSearchable_2" => true,
-        "bSearchable_3" => true,
-        "bSortable_0" => true,
-        "bSortable_1" => true,
-        "bSortable_2" => true,
-        "bSortable_3" => true,
-        "sSearch_0" => nil,
-        "sSearch_1" => nil,
-        "sSearch_2" => nil,
-        "sSearch_3" => nil,
-        "sSearch" => nil   }
+      "iColumns" =>	4,
+      "bSearchable_0" => true,
+      "bSearchable_1" => true,
+      "bSearchable_2" => true,
+      "bSearchable_3" => true,
+      "bSortable_0" => true,
+      "bSortable_1" => true,
+      "bSortable_2" => true,
+      "bSortable_3" => true,
+      "sSearch_0" => nil,
+      "sSearch_1" => nil,
+      "sSearch_2" => nil,
+      "sSearch_3" => nil,
+      "sSearch" => nil   }
 
-    Order.delete_all
-    @orders = [*0..20].map do 
-      Factory(:order, :order_number => rand(2), :memo => rand(2).even?  ? 'hello' : 'goodbye')
-    end
+      Order.delete_all
+      @orders = [*0..20].map do 
+        Factory(:order, :order_number => rand(2), :memo => rand(2).even?  ? 'hello' : 'goodbye')
+      end
   end
 
   it 'should sort by one column' do
@@ -141,7 +141,7 @@ describe 'Operations on the table' do
     @params['sSearch'] = "foo"
     T.query(@params)
   end
-    
+
   # TODO
   # it 'should deal w/ dates'
 
@@ -214,29 +214,28 @@ describe 'Operations on the table' do
       column :id
       column :order_number
       column :memo
-
     end
 
     @params = {
-        "iColumns" =>	4,
-        "bSearchable_0" => true,
-        "bSearchable_1" => true,
-        "bSearchable_2" => true,
-        "bSearchable_3" => true,
-        "bSortable_0" => true,
-        "bSortable_1" => true,
-        "bSortable_2" => true,
-        "bSortable_3" => true,
-        "sSearch_0" => nil,
-        "sSearch_1" => nil,
-        "sSearch_2" => nil,
-        "sSearch_3" => nil,
-        "sSearch" => nil   }
+      "iColumns" =>	4,
+      "bSearchable_0" => true,
+      "bSearchable_1" => true,
+      "bSearchable_2" => true,
+      "bSearchable_3" => true,
+      "bSortable_0" => true,
+      "bSortable_1" => true,
+      "bSortable_2" => true,
+      "bSortable_3" => true,
+      "sSearch_0" => nil,
+      "sSearch_1" => nil,
+      "sSearch_2" => nil,
+      "sSearch_3" => nil,
+      "sSearch" => nil   }
 
-    Order.delete_all
-    @orders = [*0..20].map do 
-      Factory(:order, :order_number => rand(2), :memo => rand(2).even?  ? 'hello' : 'goodbye')
-    end
+      Order.delete_all
+      @orders = [*0..20].map do 
+        Factory(:order, :order_number => rand(2), :memo => rand(2).even?  ? 'hello' : 'goodbye')
+      end
   end
 
   it 'should sort by one column' do
@@ -322,7 +321,7 @@ describe 'Operations on the table' do
     @params['sSearch'] = "foo"
     T.query(@params)
   end
-    
+
   # TODO
   # it 'should deal w/ dates'
 

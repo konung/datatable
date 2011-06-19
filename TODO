@@ -1,5 +1,6 @@
 Next session: 
-1) change the array to a hash in the table headings test
+0?) Make things work in ruby 187?
+1) Make table headings work w/ the new way of doing columns (Table headings test)
 2) figure out the URL
      -- need to pass two peices of info; column index of the id(s) and url string
      -- the text is taken from the curren column

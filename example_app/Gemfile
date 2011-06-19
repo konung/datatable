@@ -20,7 +20,8 @@ gem "jquery-rails"
 #  gem install ruby-debug19 -- --with-ruby-include=$rvm_path/src/$RUBY_VERSION/
 #
 group :test, :development do
-  #gem 'ruby-debug', :platform => :ruby_18
+  gem 'require_relative'
+  gem 'ruby-debug', :platform => :ruby_18
   gem 'rake', '0.8.7'
   gem "i18n"
   gem "webrat"

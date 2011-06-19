@@ -9,4 +9,5 @@ group :test do
   gem "rspec"
   gem "webrat"
   gem "activesupport"
+  gem 'ruby-debug'
 end

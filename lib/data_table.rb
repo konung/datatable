@@ -24,8 +24,12 @@ module DataTable
 
     attr_accessor :records
 
-    def self.sql(s)
-      @sql_string = s
+    def self.sql(*args)
+      if args.empty?
+        return @sql_string
+      end
+
+      @sql_string = args.first
     end
 
     def self.sql_string

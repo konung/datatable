@@ -94,6 +94,21 @@ module DataTable
       relation.to_sql
     end
 
+    # We want to allow people to access routes in data tables.
+    #
+    # Including the rails routes doesn't work b/c for some reason 
+    # the route methods are not availble as class methods
+    # no matter if we use include or send.
+    #
+    # This works for now.
+    def self.method_missing(symbol, *args, &block)
+      if symbol.to_s =~ /(path|url)$/
+        return Rails.application.routes.url_helpers.send(symbol, *args)
+      end
+
+      super(symbol, *args, &block)
+    end
+
 
     def initialize(params={})
       @params = params

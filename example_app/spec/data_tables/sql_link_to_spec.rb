@@ -1,5 +1,4 @@
 require 'spec_helper'
-include Rails.application.routes.url_helpers
 
 describe 'Creating links for SQL DataTables' do
 
@@ -11,7 +10,6 @@ describe 'Creating links for SQL DataTables' do
       sql <<-SQL
         SELECT id FROM orders
       SQL
-
 
       columns(
         {"orders.id" => {:type => :integer, :link_to => link_to('{{0}}', order_path('{{0}}')) }}

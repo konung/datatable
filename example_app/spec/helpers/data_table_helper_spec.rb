@@ -32,10 +32,16 @@ describe DataTable::Helper do
       Object.send(:remove_const, :OrderTable) rescue nil
       class OrderTable < DataTable::Base
         set_model Order
-        column :order_number
+        column :order_number, :link_to => link_to('{{0}}', order_path('{{0}}'))
         column :memo
       end
       assign(:data_table, OrderTable)
+    end
+
+    describe "link_to" do
+      it "contains href" do
+        helper.data_table_javascript.should contain("<a href=\"/orders/%7B%7B0%7D%7D\">{{0}}</a>")
+      end
     end
 
     describe "html emitter" do

@@ -1,39 +1,22 @@
 require 'spec_helper'
 
-describe '' do
+describe 'adding links to active record datatables' do
 
   before do
-    Object.send(:remove_const, :Foo) rescue nil
-  end
-
-  it 'link_to should not be available as a class method' do
-    class Foo
-      def self.test
-        link_to
-      end
+    Object.send(:remove_const, :T) rescue nil
+    class T < DataTable::Base
+      set_model Order
+      column :id, :link_to => link_to('{{0}}', order_path('{{0}}'))
     end
-    lambda { Foo.test }.should_not raise_error(NoMethodError)
+    @params = {
+      'iColumns' => 1,
+      "bSearchable_0" => true
+    }
   end
 
-  it 'make sure link_to is accessible directly ' do
-    defined?(ActionController::Base.helpers.link_to).should be_true
-  end
-
-  it "should not work" do
-    class Foo
-      def self.link_to(*args)
-        ActionController::Base.helpers.link_to(args)
-      end
-    end
-    lambda { Foo.link_to "foo", "bar" }.should raise_error
-  end
-
-  it "should work" do
-    class Foo
-      extend ActionView::Helpers::UrlHelper
-      extend ActionView::Helpers::TagHelper
-    end
-    lambda { Foo.link_to "foo", "bar" }.should_not raise_error
+  it "adding link_to in block adds it to the column" do
+    t = T.query(@params)
+    T.columns['orders.id'][:link_to].should == "<a href=\"/orders/%7B%7B0%7D%7D\">{{0}}</a>"
   end
 
 end

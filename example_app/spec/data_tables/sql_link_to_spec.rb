@@ -27,9 +27,5 @@ describe 'Creating links for SQL DataTables' do
     T.columns['orders.id'][:link_to].should == "<a href=\"/orders/%7B%7B0%7D%7D\">{{0}}</a>"
   end
 
-#  it 'should provide a hash of variables to replace and what column index to replace them with' do
-#    T.columns['orders.id'][:replacements].should == { "{{0}}" }
-#  end
-
 end
 

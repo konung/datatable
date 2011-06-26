@@ -19,11 +19,17 @@ module DataTable
         @inner_model || @model
       end
 
-      def column(c)
+      def column(c, options={})
+
         raise "set_model not called on #{self.name}" unless @model
 
         @columns ||= ActiveSupport::OrderedHash.new
-        @columns["#{current_model.table_name}.#{c}"] = {:type => current_model.columns.detect{ |col| col.name == c.to_s}.type }
+
+        column_hash = {}
+        column_hash[:type] = current_model.columns.detect{ |col| col.name == c.to_s}.type
+        column_hash[:link_to] = options[:link_to]
+
+        @columns["#{current_model.table_name}.#{c}"] = column_hash
 
         @relation= @relation.select(current_model.arel_table[c])
       end

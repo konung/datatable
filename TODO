@@ -3,7 +3,8 @@
 1) Make it so that you can call url helpers from inside of a DataTable class
  -- include doesn't seem to work, or extend.
 
-2) From there, make it so that the replacements hash gets created, which is a hash were the keys are what to replace, and the values are the index to replace text that matches the key with
+2) From there, make it so that the replacements hash gets created, which is a hash were the keys are what to replace,
+ and the values are the index to replace text that matches the key with
 '{{0}}' => 3 
 would mean that you replace {{0}} with the value in column 3 for that row...
 

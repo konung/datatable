@@ -16,6 +16,8 @@ module DataTable
   class Base
 
     include DataTable::ActiveRecordDSL
+    extend ActionView::Helpers::UrlHelper
+    extend ActionView::Helpers::TagHelper
 
     def self.model
       @model
@@ -108,7 +110,6 @@ module DataTable
 
       super(symbol, *args, &block)
     end
-
 
     def initialize(params={})
       @params = params

@@ -3,25 +3,28 @@ require 'spec_helper'
 
 describe DataTable::Helper do
 
-  describe "sql test" do
+  describe "with sql defined class" do
     before do
       Object.send(:remove_const, :T) rescue nil
       class T < DataTable::Base
         sql <<-SQL
           SELECT id FROM orders
         SQL
-#        columns(
-#          {"orders.id" => {:type => :integer, :link_to => link_to('{{0}}', order_path('{{0}}')) }}
-#        )
+        columns(
+          {"orders.id" => {:type => :integer, :link_to => link_to('{{0}}', order_path('{{0}}')) }}
+        )
       end
       assign(:data_table, T)
     end
 
     describe "link_to" do
-      #helper.data_table_javascript.should contain("<a href=\"/orders/%7B%7B0%7D%7D\">{{0}}</a>")
+      it "contains href" do
+        helper.data_table_javascript.should contain("<a href=\"/orders/%7B%7B0%7D%7D\">{{0}}</a>")
+      end
     end
 
   end
+
 
   describe "active record test" do
 

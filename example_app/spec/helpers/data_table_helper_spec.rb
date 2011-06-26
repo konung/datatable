@@ -10,15 +10,15 @@ describe DataTable::Helper do
         sql <<-SQL
           SELECT id FROM orders
         SQL
-        columns(
-          {"orders.id" => {:type => :integer, :link_to => link_to('{{0}}', order_path('{{0}}')) }}
-        )
+#        columns(
+#          {"orders.id" => {:type => :integer, :link_to => link_to('{{0}}', order_path('{{0}}')) }}
+#        )
       end
       assign(:data_table, T)
     end
 
     describe "link_to" do
-      helper.data_table_javascript['aoColumnDefs'].should match(//)
+      #helper.data_table_javascript.should contain("<a href=\"/orders/%7B%7B0%7D%7D\">{{0}}</a>")
     end
 
   end
@@ -76,12 +76,13 @@ describe DataTable::Helper do
 
       it "should output default options" do
         helper.send(:javascript_options).should == {
-          'sAjaxSource' => '',
-          'sDom' => '<"H"lfr>t<"F"ip>',
-          'iDisplayLength' => 10,
-          'bProcessing' => true,
-          'bServerSide' => true,
-          'sPaginationType' => "full_numbers"
+        'sAjaxSource' => '',
+        'sDom' => '<"H"lfr>t<"F"ip>',
+        'iDisplayLength' => 10,
+        'bProcessing' => true,
+        'bServerSide' => true,
+        'sPaginationType' => "full_numbers",
+        "aoColumnDefs" => 'column_defs'
         }
       end
 

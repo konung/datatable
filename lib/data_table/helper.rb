@@ -26,8 +26,16 @@ module DataTable
       # TODO: this will escape ampersands
       # ERB::Util.h('http://www.foo.com/ab/asdflkj?asdf=asdf&asdf=alsdf') => "http://www.foo.com/ab/asdflkj?asdf=asdf&amp;asdf=alsdf" 
       "<script>
+        function replace(string, columns) {
+          var i = columns.length;
+          while(i--){
+            string = string.replace('{{' + i + '}}', columns[i]);
+            string = string.replace('%7B%7B' + i + '%7D%7D', columns[i]);
+          }
+          return string;
+        }
         $(function(){
-          $('#data_table').dataTable(#{javascript_options.to_json})
+          $('#data_table').dataTable(#{javascript_options.to_json.gsub(/\"column_defs\"/, columns)})
         });
       </script>".html_safe
     end
@@ -52,11 +60,28 @@ module DataTable
         'iDisplayLength' => 10,
         'bProcessing' => true,
         'bServerSide' => true,
-        'sPaginationType' => "full_numbers"
+        'sPaginationType' => "full_numbers",
+        "aoColumnDefs" => 'column_defs'
       }
       @data_table.javascript_options.merge(defaults)
     end
 
+    def columns
+      array = []
+      @data_table.columns.keys
+      @data_table.columns.each do |key, value|
+        if value.has_key?(:link_to)
+          array << %Q|
+            {
+                "fnRender": function(oObj) {
+                    return replace('#{value[:link_to]}', oObj.aData);
+             },
+             "aTargets": [#{@data_table.columns.keys.index(key)}]
+            }|
+        end
+      end
+      "[" + array.join(", ") + "]"
+    end
 
 
   end

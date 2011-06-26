@@ -11,22 +11,31 @@ class OrdersIndex < DataTable::Base
     FROM orders
     JOIN customers ON(customers.id = orders.customer_id)
   SQL
-# 
+
+  columns(
+    {"orders.id" => {:type => :integer}},
+    {"orders.order_number" => {:type => :integer, :link_to => link_to('{{1}}', order_path('{{0}}')) }},
+    {"customers.first_name" => {:type => :string, :link_to => link_to('{{2}}', order_path('{{0}}')) }},
+    {"customers.last_name" => {:type => :string}},
+    {"orders.memo" => {:type => :string}}
+  )
+
+#
 #   column :id, :width => 300, :heading => 'ohai'
-# 
-#   join :customers do 
+#
+#   join :customers do
 #     column ....
 #   end
-# 
+#
 #   [
 #     Column.new(:type => :integer, :width => 300, :name => 'orders.id', :heading => "ohai"),
 #     Column.new(:type => :integer, :width => 300, :name => 'orders.id', :heading => "ohai")
 #   ]
-# 
+#
 #   method {
 #     "orders.id" => {:width => 300}
 #   }
-# 
+#
 #   {
 #     "orders.id" => {:type => :integer, :width => 300}
 #   }

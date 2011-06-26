@@ -68,7 +68,6 @@ module DataTable
 
     def columns
       array = []
-      @data_table.columns.keys
       @data_table.columns.each do |key, value|
         if value.has_key?(:link_to)
           array << %Q|

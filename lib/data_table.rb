@@ -39,7 +39,7 @@ module DataTable
 
     def self.columns(*args)
       if args.empty?
-        raise 'There are no columns on the DataTable (use assign_column_names)' unless @columns
+        raise 'There are no columns on the DataTable (use assign__column_names)' unless @columns
         return @columns
       end
 

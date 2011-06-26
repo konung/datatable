@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name        = "data_table"
   s.version     = DataTable::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Michael Greenly"]
+  s.authors     = ["Michael Greenly", 'Mischa Fierer']
   s.email       = ["michaelgreenly@logic-refinery.com"]
   s.homepage    = "https://github.com/logic-refinery/datatable"
   s.summary     = %q{A Rails plugin for the jquery.datatables library}

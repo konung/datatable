@@ -1,84 +1,35 @@
-0)  working on sql_link_to_spec.rb
+Next session:
 
-1) Make it so that you can call url helpers from inside of a DataTable class
- -- include doesn't seem to work, or extend.
-
-2) From there, make it so that the replacements hash gets created, which is a hash were the keys are what to replace,
- and the values are the index to replace text that matches the key with
-'{{0}}' => 3 
-would mean that you replace {{0}} with the value in column 3 for that row...
-
-3) Then construct aoColumnDefs in the helper (in javascript)
+1) can't click on pagination ? why?
 
 
+2) Client Side Search
+    - global
+    - individual column
 
-_____________________________________________________
+3) rails like config/initilizer for default settings of datatable
+    DataTable.config do |config|
+      config.default_options = {
+        :bLengthChange => true
+      }
+    end
 
-Next session: 
+4) Theming
+     jquery ui theme
 
-2) figure out the URL
-data structure
-rendering
-     -- need to pass two peices of info; column index of the id(s) and url string
-     -- the text is taken from the curren column
+5) web site, readme, wiki on github
 
-use the column name to link to something
-override to link to something
+6) initial development release
 
-<a href="column">either a column or set text</a>
-
-
-is the link created on the front or back end?
-
-
-
+7) Working on parsing out column names from sql queries (parsing_spec.rb) (parsing things like select count(foo) as bar what type is bar?
 
 
-
-
-3) Working on parsing out column names from sql queries (parsing_spec.rb) (parsing things like select count(foo) as bar what type is bar?
-7) Test _columns (w/ underscore) individually so that we know it has the right stuff
-8) THEN drop it in to the methods that use columns (w/ no underscore) and make those work
-DONE -- b) making columns a hash inside of datatable
-DONE -- c) remove the array version
-DONE -- d) remove the set_columns thing from all of the tests
-
-DO the client side portion of the individual column searching
-
-
-
-
-
-
-
-
-June 5 TODO:
--- make it so that you can just use raw sql
--- make it so that w/ raw sql you can customize individual columns
--- make it so that w/ arel you can customize columns
-
--- config/initilizer for default settings
-
--- can't click on pagination
--- individual columns js
-
-DataTable.config do |config|
-  config.default_options = {
-    :bLengthChange => true
-  }
-end
-
-
--- column ordering
--- Group pagination specs together
+-- column re-ordering
+-- Find or write SQL pagination specs (Group pagination specs together)
 -- sql version of helpers
 -- sDom
 -- like for integer columns?
 -- always force use of @data table (in helper)
 
-
-
-
 # Error checking:
-
 What if I get a column name wrong in the columns hash?

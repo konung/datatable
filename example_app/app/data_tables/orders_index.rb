@@ -14,11 +14,13 @@ class OrdersIndex < DataTable::Base
 
   columns(
     {"orders.id" => {:type => :integer}},
-     {"orders.order_number" => {:type => :integer, :link_to => link_to('{{1}}', order_path('{{0}}')) }},
-     {"customers.first_name" => {:type => :string, :link_to => link_to('{{2}}', order_path('{{0}}')) }},
+     # {"orders.order_number" => {:type => :integer, :link_to => link_to('{{1}}', order_path('{{0}}')) }},
+     # {"customers.first_name" => {:type => :string, :link_to => link_to('{{2}}', order_path('{{0}}')) }},
     {"customers.last_name" => {:type => :string}},
     {"orders.memo" => {:type => :string}}
   )
+
+  option('sDom', '<"H">rt<"F"p>')
 
 #
 #   column :id, :width => 300, :heading => 'ohai'

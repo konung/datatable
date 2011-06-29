@@ -126,7 +126,7 @@ module DataTable
         'sEcho' => (@params['sEcho'] || -1).to_i,
         'aaData' => records,
         'iTotalRecords' => @records.length,
-        'iTotalDisplayRecords' => records.length,
+        'iTotalDisplayRecords' => @records.length # full count
       }
     end
 

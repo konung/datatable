@@ -57,13 +57,13 @@ module DataTable
       defaults = {
         'sAjaxSource' => h(request.path),
         'sDom' => '<"H"lfr>t<"F"ip>',
-        'iDisplayLength' => 10,
+        'iDisplayLength' => 10, # Number per page
         'bProcessing' => true,
         'bServerSide' => true,
         'sPaginationType' => "full_numbers",
         "aoColumnDefs" => 'column_defs'
       }
-      @data_table.javascript_options.merge(defaults)
+      defaults.merge(@data_table.javascript_options)
     end
 
     def columns

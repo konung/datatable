@@ -6,6 +6,26 @@ describe 'Use raw sql' do
 
     class SalesRepCustomers < DataTable::Base
 
+
+      # count <<-SQL
+      #   SELECT 
+      #     count(*)
+      #   FROM
+      #     sales_reps
+      #   LEFT OUTER JOIN 
+      #     (SELECT 
+      #        customers.sales_rep_id, 
+      #        count(*) AS value 
+      #      FROM customers 
+      #      GROUP BY customers.sales_rep_id)
+      #   AS 
+      #     customer_counts
+      #   ON
+      #     customer_counts.sales_rep_id = sales_reps.id
+
+      # SQL
+
+
       sql <<-SQL
         SELECT 
           sales_reps.id,

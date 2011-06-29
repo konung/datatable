@@ -26,7 +26,7 @@ module DataTable
     attr_accessor :records
 
     def self.sql(*args)
-        return @sql_string if args.empty?
+      return @sql_string if args.empty?
 
       @sql_string = args.first
     end
@@ -142,11 +142,8 @@ module DataTable
     private
 
     def sql_count
-      if self.class.count 
-        ActiveRecord::Base.connection.select_value(self.class.count).to_i
-      else
-        fail 'for now'
-      end
+      count_sql = self.class.count || query_sql.gsub(/SELECT(.*)FROM/mi, 'SELECT count(*) FROM')
+      ActiveRecord::Base.connection.select_value(count_sql).to_i
     end
 
     def column_attributes
@@ -155,7 +152,7 @@ module DataTable
 
     def sql_instance_query
       connection = self.class.model ? self.class.model.connection : ActiveRecord::Base.connection
-      connection.select_rows(query_sql)
+      connection.select_rows(query_sql << limit_offset)
     end
 
     def active_record_instance_query
@@ -252,7 +249,7 @@ module DataTable
         current_sql << "WHERE " + search
       end
       current_sql << (" ORDER BY" + order_string) if @params['iSortingCols'].to_i > 0
-      current_sql << limit_offset
+      current_sql
     end
 
   end

@@ -81,7 +81,7 @@ describe 'automatic sql pagination' do
 
     T.query(@params).to_json['iTotalRecords'].should == 2
     T.query(@params).to_json['iTotalDisplayRecords'].should == 4
-    T.query(@params).to_json['aaData'].should == orders[0..1].map {|o| [o.id.to_s] }
+    T.query(@params).to_json['aaData'].should == Order.all[0..1].map {|o| [o.id.to_s] }
   end
 
 

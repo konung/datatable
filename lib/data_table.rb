@@ -105,6 +105,7 @@ module DataTable
 
       variables.each do |key, value|
         fail "Variable not found: #{key}" unless  @sql_string =~ /#{key.to_s}/m
+        value = "(#{value.join(',')})" if value.is_a?(Array)
         @sql_string.gsub!("{{#{key}}}", value.to_s)
       end
     end

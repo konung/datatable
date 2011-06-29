@@ -18,7 +18,7 @@ module DataTable
           </tbody>
           <tfoot>
           <tr>
-          #{individual_column_searching if @data_table.javascript_options['individual_column_searching']}
+            #{individual_column_searching if @data_table.javascript_options['individual_column_searching']}
           </tr>
           </tfoot>
         </table>

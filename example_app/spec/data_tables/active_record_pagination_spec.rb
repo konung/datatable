@@ -30,9 +30,9 @@ describe 'basic query params and pagination' do
 
   it 'should return the number of records' do
     3.times{ Factory(:order) }
-     OrdersSimple.query(@params).to_json['iTotalRecords'].should == 3
-     OrdersSimple.query(@params).to_json['iTotalDisplayRecords'].should == 3
-   end
+    OrdersSimple.query(@params).to_json['iTotalRecords'].should == 3
+    OrdersSimple.query(@params).to_json['iTotalDisplayRecords'].should == 3
+  end
 
   it 'should return valid aaData' do
     class OrdersComplex < DataTable::Base
@@ -71,17 +71,24 @@ describe 'basic query params and pagination' do
     @params['iDisplayLength'] = 2
     orders = [Factory(:order), Factory(:order), Factory(:order), Factory(:order)]
     OrdersComplex2.query(@params).to_json['iTotalRecords'].should == 2
-    # OrdersComplex2.query(@params).to_json['iTotalDisplayRecords'].should == 4
+    OrdersComplex2.query(@params).to_json['iTotalDisplayRecords'].should == 4
     OrdersComplex2.query(@params).to_json['aaData'].should == orders[0..1].map {|o| [o.id.to_s] }
   end
-# 
-#     it "should provide second page" do
-#     @params['iDisplayStart'] = 2
-#     @params['iDisplayLength'] = 2
-# 
-#     T.query(@params).to_json['iTotalRecords'].should == 2
-#     T.query(@params).to_json['iTotalDisplayRecords'].should == 4
-#     T.query(@params).to_json['aaData'].should == Order.all[2..3].map {|o| [o.id.to_s] }
-#   end
+
+  it "should provide second page" do
+     class OrdersComplex3 < DataTable::Base
+      set_model Order
+      column :id
+    end
+
+    @params['iColumns'] = 1
+    @params['iDisplayStart'] = 2
+    @params['iDisplayLength'] = 2
+
+    orders = [Factory(:order), Factory(:order), Factory(:order), Factory(:order)]
+    OrdersComplex3.query(@params).to_json['iTotalRecords'].should == 2
+    OrdersComplex3.query(@params).to_json['iTotalDisplayRecords'].should == 4
+    OrdersComplex3.query(@params).to_json['aaData'].should == Order.all[2..3].map {|o| [o.id.to_s] }
+  end
 
 end

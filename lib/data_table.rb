@@ -85,14 +85,28 @@ module DataTable
       @javascript_options || {}
     end
 
-    def self.query(params)
+    def self.query(params, variables={})
       params.each do |key, value|
         params[key] = value.to_i if key =~ /^i/
       end
+
+      substitute_variables(variables)
+
       datatable = new(params)
+
       datatable.instance_query
       datatable.count
       datatable
+    end
+
+    def self.substitute_variables(variables)
+      return if @already_substituted
+      @already_substituted = true
+
+      variables.each do |key, value|
+        fail "Variable not found: #{key}" unless  @sql_string =~ /#{key.to_s}/m
+        @sql_string.gsub!("{{#{key}}}", value.to_s)
+      end
     end
 
     # only used in testing

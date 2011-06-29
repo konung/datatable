@@ -7,21 +7,7 @@ describe 'passing variables to a DataTable' do
 
     Object.send(:remove_const, :T) rescue nil
 
-    class T < DataTable::Base
-
-      sql <<-SQL
-        SELECT 
-          orders.id
-        FROM
-          orders
-        WHERE orders.customer_id in ({{customer_ids}})
-      SQL
-
-      columns(
-        {'orders.id' => {:type => :integer}}
-      )
-    end
-
+   
     3.times { Factory(:order) }
 
     @params = {
@@ -31,12 +17,42 @@ describe 'passing variables to a DataTable' do
   end
 
   it 'should take a substitution' do
-    T.query(@params, :order_id => Order.last.id).to_json('aaData').length.should == 1
-    T.query(@params, :order_id => Order.last.id).to_json('aaData')[0].should == Order.last
+     class T < DataTable::Base
+
+      sql <<-SQL
+        SELECT 
+          orders.id
+        FROM
+          orders
+        WHERE orders.id = {{order_id}}
+      SQL
+
+      columns(
+        {'orders.id' => {:type => :integer}}
+      )
+    end
+
+    T.query(@params, :order_id => Order.last.id).to_json['aaData'].length.should == 1
+    T.query(@params, :order_id => Order.last.id).to_json['aaData'][0].first.should == Order.last.id.to_s
   end
 
   it 'should take a locals hash' do
-    T.query(@params, :customer_ids => [1,2], :something_else => 3)
+     class T < DataTable::Base
+
+      sql <<-SQL
+        SELECT 
+          orders.id
+        FROM
+          orders
+        WHERE orders.customer_id in {{customer_ids}}
+      SQL
+
+      columns(
+        {'orders.id' => {:type => :integer}}
+      )
+    end
+
+    T.query(@params, :customer_ids => [1,2])
   end
 
 

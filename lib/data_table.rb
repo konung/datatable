@@ -26,11 +26,14 @@ module DataTable
     attr_accessor :records
 
     def self.sql(*args)
-      if args.empty?
-        return @sql_string
-      end
+        return @sql_string if args.empty?
 
       @sql_string = args.first
+    end
+
+    def self.count(*args)
+      return @count if args.empty?
+      @count = args.first
     end
 
     def self.sql_string
@@ -88,6 +91,7 @@ module DataTable
       end
       datatable = new(params)
       datatable.instance_query
+      datatable.count
       datatable
     end
 
@@ -121,16 +125,29 @@ module DataTable
       self
     end
 
+    def count
+      @count = self.class.sql_string ? sql_count : active_record_count
+    end
+
+
     def to_json
       {
         'sEcho' => (@params['sEcho'] || -1).to_i,
-        'aaData' => records,
+        'aaData' => @records,
         'iTotalRecords' => @records.length,
-        'iTotalDisplayRecords' => @records.length # full count
+        'iTotalDisplayRecords' => @count
       }
     end
 
     private
+
+    def sql_count
+      if self.class.count 
+        ActiveRecord::Base.connection.select_value(self.class.count).to_i
+      else
+        fail 'for now'
+      end
+    end
 
     def column_attributes
       self.class.columns

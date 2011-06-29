@@ -126,7 +126,7 @@ module DataTable
     end
 
     def count
-      @count = self.class.sql_string ? sql_count : active_record_count
+      @count = self.class.sql_string ? sql_count : self.class.relation.count
     end
 
 
@@ -135,14 +135,14 @@ module DataTable
         'sEcho' => (@params['sEcho'] || -1).to_i,
         'aaData' => @records,
         'iTotalRecords' => @records.length,
-        'iTotalDisplayRecords' => @count
+        'iTotalDisplayRecords' => (@count || 0)
       }
     end
 
     private
 
     def sql_count
-      count_sql = self.class.count || query_sql.gsub(/SELECT(.*)FROM/mi, 'SELECT count(*) FROM')
+      count_sql = self.class.count || query_sql.sub(/^\s*SELECT(.*?)FROM/mi, 'SELECT count(*) FROM')
       ActiveRecord::Base.connection.select_value(count_sql).to_i
     end
 

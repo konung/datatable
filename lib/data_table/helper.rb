@@ -16,6 +16,11 @@ module DataTable
           </thead>
           <tbody>
           </tbody>
+          <tfoot>
+          <tr>
+          #{individual_column_searching if @data_table.javascript_options['individual_column_searching']}
+          </tr>
+          </tfoot>
         </table>
       CONTENT
     end
@@ -35,8 +40,17 @@ module DataTable
           return string;
         }
         $(function(){
-          $('#data_table').dataTable(#{javascript_options.to_json.gsub(/\"column_defs\"/, columns)})
+
+          var oTable = $('#data_table').dataTable(#{javascript_options.to_json.gsub(/\"column_defs\"/, columns)})
+
+
+          $('tfoot input').keyup( function () {
+            /* Filter on the column (the index) of this element */
+            oTable.fnFilter( this.value, $('tfoot input').index(this) );
+          } );
+
         });
+
       </script>".html_safe
     end
 
@@ -82,6 +96,17 @@ module DataTable
       "[" + array.join(", ") + "]"
     end
 
+
+    def individual_column_searching
+      # TODO: placeholders only supported in HTML5 
+      @data_table.columns.map do |key, value| 
+        %Q{
+          <th>
+            <input type="text" placeholder="#{key}" class="search_init" />
+          </th>
+        }
+      end.join
+    end
 
   end
 end

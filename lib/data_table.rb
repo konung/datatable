@@ -78,7 +78,7 @@ module DataTable
 
     def self.option(key,value)
       @javascript_options ||= {}
-      @javascript_options[key] = value
+      @javascript_options[key.to_s] = value
     end
 
     def self.javascript_options

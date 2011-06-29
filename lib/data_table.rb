@@ -167,7 +167,7 @@ module DataTable
 
     def sql_instance_query
       connection = self.class.model ? self.class.model.connection : ActiveRecord::Base.connection
-      connection.select_rows(query_sql << limit_offset)
+      connection.select_rows(query_sql + order_by_sql_fragment + limit_offset_sql_fragment)
     end
 
     def active_record_instance_query
@@ -197,12 +197,6 @@ module DataTable
       result.join(", ")
     end
 
-    def limit_offset
-      result = ""
-      result << " LIMIT #{@params['iDisplayLength']}" if @params['iDisplayLength']
-      result << " OFFSET #{@params['iDisplayStart']}" if @params['iDisplayStart']
-      result
-    end
 
     def sanitize(*args)
       ActiveRecord::Base.send(:sanitize_sql_array, args)
@@ -257,13 +251,26 @@ module DataTable
       result.join(" AND ") if result.any?
     end
 
+    def limit_offset_sql_fragment
+      result = ""
+      result << " LIMIT #{@params['iDisplayLength']}" if @params['iDisplayLength']
+      result << " OFFSET #{@params['iDisplayStart']}" if @params['iDisplayStart']
+      result
+    end
+
+    def order_by_sql_fragment
+      if @params['iSortingCols'].to_i > 0
+        " ORDER BY" + order_string
+      else
+        ""
+      end
+    end
 
     def query_sql
       current_sql = self.class.sql_string.dup
       if(search = search_string)
         current_sql << "WHERE " + search
       end
-      current_sql << (" ORDER BY" + order_string) if @params['iSortingCols'].to_i > 0
       current_sql
     end
 

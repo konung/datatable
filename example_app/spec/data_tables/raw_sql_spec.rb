@@ -10,9 +10,8 @@ describe 'Use raw sql' do
         SELECT 
           sales_reps.id,
           first_name AS fullname,
-          -- uncomment one of the next two line depending on if you're using postgresql or mysql
-          -- sales_reps.created_at,
-          to_char(sales_reps.created_at, 'YYYY-MM-DD HH24:MI:SS' ),
+      #{'sales_reps.created_at,' if ActiveRecord::Base.connection.class.to_s =~ /mysql/i }
+      #{"to_char(sales_reps.created_at, 'YYYY-MM-DD HH24:MI:SS' )," if ActiveRecord::Base.connection.class.to_s =~ /post/i }
           COALESCE(customer_counts.value,0) AS count
         FROM 
           sales_reps
@@ -27,12 +26,12 @@ describe 'Use raw sql' do
         ON
           customer_counts.sales_rep_id = sales_reps.id
       SQL
-      
+
       columns(
-          {'sales_reps.id' => {:type => :integer}},
-          {'fullname' => {:type => :string}},
-          {'sales_reps.created_at' => {:type => :datetime }},
-          {'count' => {:type => :integer }}
+        {'sales_reps.id' => {:type => :integer}},
+        {'fullname' => {:type => :string}},
+        {'sales_reps.created_at' => {:type => :datetime }},
+        {'count' => {:type => :integer }}
       )
 
     end
@@ -46,20 +45,20 @@ describe 'Use raw sql' do
     end
 
     @params = {
-        "iColumns" =>	4,
-        "bSearchable_0" => true,
-        "bSearchable_1" => true,
-        "bSearchable_2" => true,
-        "bSearchable_3" => true,
-        "bSortable_0" => true,
-        "bSortable_1" => true,
-        "bSortable_2" => true,
-        "bSortable_3" => true,
-        "sSearch_0" => nil,
-        "sSearch_1" => nil,
-        "sSearch_2" => nil,
-        "sSearch_3" => nil,
-        "sSearch" => nil   }
+      "iColumns" =>	4,
+      "bSearchable_0" => true,
+      "bSearchable_1" => true,
+      "bSearchable_2" => true,
+      "bSearchable_3" => true,
+      "bSortable_0" => true,
+      "bSortable_1" => true,
+      "bSortable_2" => true,
+      "bSortable_3" => true,
+      "sSearch_0" => nil,
+      "sSearch_1" => nil,
+      "sSearch_2" => nil,
+      "sSearch_3" => nil,
+      "sSearch" => nil   }
   end
 
   it 'should return the correct number of records' do

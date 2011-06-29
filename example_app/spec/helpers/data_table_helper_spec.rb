@@ -58,6 +58,13 @@ describe DataTable::Helper do
         helper.data_table_html.html_safe?.should be_true
       end
 
+      it 'should include individual column search inputs if enabled' do
+        helper.data_table_html.should_not have_selector('tfoot th input')
+
+        OrderTable.option('individual_column_searching', true)
+        helper.data_table_html.should have_selector('tfoot th input')
+      end
+
     end
 
     describe "javascript emitter" do

@@ -22,7 +22,7 @@ describe 'Operations on the ActiveRecord table' do
   before do
     Object.send(:remove_const, :T) rescue nil
 
-    class T < DataTable::Base
+    class T < Datatable::Base
       set_model Order
       column :id
       column :order_number

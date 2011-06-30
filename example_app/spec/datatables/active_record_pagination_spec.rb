@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'basic query params and pagination' do
 
   before do
-    class OrdersSimple < DataTable::Base
+    class OrdersSimple < Datatable::Base
       set_model Order
       column :id
       column :memo
@@ -35,7 +35,7 @@ describe 'basic query params and pagination' do
   end
 
   it 'should return valid aaData' do
-    class OrdersComplex < DataTable::Base
+    class OrdersComplex < Datatable::Base
       set_model Order
       column :order_number
       column :memo
@@ -50,7 +50,7 @@ describe 'basic query params and pagination' do
   end
 
   it 'should return valid aaData in different order' do
-    class OrdersComplex < DataTable::Base
+    class OrdersComplex < Datatable::Base
       set_model Order
       column :memo
       column :order_number
@@ -61,7 +61,7 @@ describe 'basic query params and pagination' do
   end
 
   it "should provide first page" do
-    class OrdersComplex2 < DataTable::Base
+    class OrdersComplex2 < Datatable::Base
       set_model Order
       column :id
     end
@@ -76,7 +76,7 @@ describe 'basic query params and pagination' do
   end
 
   it "should provide second page" do
-     class OrdersComplex3 < DataTable::Base
+     class OrdersComplex3 < Datatable::Base
       set_model Order
       column :id
     end

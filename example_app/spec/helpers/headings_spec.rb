@@ -5,12 +5,12 @@ describe "headings" do
   describe "arel" do
     before do
       Object.send(:remove_const, :OrderTable) rescue nil
-      class OrderTable < DataTable::Base
+      class OrderTable < Datatable::Base
         set_model Order
         column :order_number
         column :memo
       end
-      assign(:data_table, OrderTable)
+      assign(:datatable, OrderTable)
     end
 
     it "should have tests"
@@ -21,7 +21,7 @@ describe "headings" do
 
     before do
       Object.send(:remove_const, :OrderTable) rescue nil
-      class OrderTable < DataTable::Base
+      class OrderTable < Datatable::Base
 
         #set_model Order
 
@@ -49,12 +49,12 @@ describe "headings" do
         )
 
       end
-      assign(:data_table, OrderTable)
+      assign(:datatable, OrderTable)
     end
 
     it 'should humanize headings by default'  do
       ["Order Id", "Order Order Number", "Customer First Name", "Customer Last Name", "Order Memo"].each do |heading|
-        helper.data_table_html.should contain(heading)
+        helper.datatable_html.should contain(heading)
       end
     end
 
@@ -69,7 +69,7 @@ describe "headings" do
       )
 
       ["Another heading that we specify manually","Yet another" , "And another"].each do |heading|
-        helper.data_table_html.should contain(heading)
+        helper.datatable_html.should contain(heading)
       end
     end
 

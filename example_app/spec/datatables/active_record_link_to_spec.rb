@@ -4,7 +4,7 @@ describe 'adding links to active record datatables' do
 
   before do
     Object.send(:remove_const, :T) rescue nil
-    class T < DataTable::Base
+    class T < Datatable::Base
       set_model Order
       column :id, :link_to => link_to('{{0}}', order_path('{{0}}'))
     end

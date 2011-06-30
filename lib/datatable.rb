@@ -8,18 +8,18 @@
 #    results get stored  -> AR
 #    results get passed back as json
 
-require 'data_table/railtie'
-require 'data_table/helper'
-require 'data_table/active_record_dsl'
+require 'datatable/railtie'
+require 'datatable/helper'
+require 'datatable/active_record_dsl'
 
 # during normal execution rails should have already pulled
 # this in but we may have to do it ourselves in some tests
 require 'action_view' unless defined?(ActionView)
 
-module DataTable
+module Datatable
   class Base
 
-    include DataTable::ActiveRecordDSL
+    include Datatable::ActiveRecordDSL
     extend ActionView::Helpers::UrlHelper
     extend ActionView::Helpers::TagHelper
 
@@ -47,7 +47,7 @@ module DataTable
 
     def self.columns(*args)
       if args.empty?
-        raise 'There are no columns on the DataTable (use assign__column_names)' unless @columns
+        raise 'There are no columns on the Datatable (use assign__column_names)' unless @columns
         return @columns
       end
 

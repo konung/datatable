@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    data_table (0.1.alpha.1)
+    datatable (0.1.alpha.1)
       rails (>= 3.0)
 
 GEM
@@ -76,6 +76,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  data_table!
+  datatable!
   rake
   rdoc

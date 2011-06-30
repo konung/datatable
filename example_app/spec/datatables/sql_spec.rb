@@ -4,7 +4,7 @@ describe 'Use raw sql' do
 
   before do
 
-    class SalesRepCustomers < DataTable::Base
+    class SalesRepCustomers < Datatable::Base
 
 
       # count <<-SQL

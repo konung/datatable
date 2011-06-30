@@ -6,7 +6,7 @@
 # testing will let us ignore this for the time being. 
 #
 unless Rails.env =~ /test/
-  class OrdersIndex < DataTable::Base
+  class OrdersIndex < Datatable::Base
 
     sql <<-SQL
       SELECT orders.id,

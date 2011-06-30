@@ -4,14 +4,14 @@ describe 'Generating sql based on our DSL' do
 
   # it 'should work' do
   #   Order.create!(:order_number => 32)
-  #   data_table = OrdersIndex.new
+  #   datatable = OrdersIndex.new
   #   params = {}
-  #   json = data_table.query(params).json
+  #   json = datatable.query(params).json
   #   json['aaRecords'][0][0].should == 32
   # end
 
   it 'should select two fields' do
-    class OrdersSimple < DataTable::Base
+    class OrdersSimple < Datatable::Base
       set_model Order 
 
       column :order_number
@@ -24,7 +24,7 @@ describe 'Generating sql based on our DSL' do
   end
 
   it 'should handle a simple join' do
-    class OrdersSimple < DataTable::Base
+    class OrdersSimple < Datatable::Base
       set_model Order 
 
       column :memo
@@ -38,7 +38,7 @@ describe 'Generating sql based on our DSL' do
   end
 
   it 'should handle a join with an inner column' do
-    class OrdersSimple < DataTable::Base
+    class OrdersSimple < Datatable::Base
       set_model Order 
 
       column :memo

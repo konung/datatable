@@ -6,7 +6,7 @@ describe 'Creating links for SQL DataTables' do
 
     Object.send(:remove_const, :T) rescue nil
 
-    class T < DataTable::Base
+    class T < Datatable::Base
       sql <<-SQL
         SELECT id FROM orders
       SQL

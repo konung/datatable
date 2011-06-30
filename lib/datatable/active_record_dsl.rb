@@ -1,4 +1,4 @@
-module DataTable
+module Datatable
   module ActiveRecordDSL
 
     def self.included(base)

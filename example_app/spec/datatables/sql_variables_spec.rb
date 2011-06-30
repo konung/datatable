@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'passing variables to a DataTable' do
+describe 'passing variables to a Datatable' do
 
 
   before do
@@ -17,7 +17,7 @@ describe 'passing variables to a DataTable' do
   end
 
   it 'should take a substitution' do
-     class T < DataTable::Base
+     class T < Datatable::Base
 
       sql <<-SQL
         SELECT 
@@ -37,7 +37,7 @@ describe 'passing variables to a DataTable' do
   end
 
   it 'should take a locals hash' do
-     class T < DataTable::Base
+     class T < Datatable::Base
 
       sql <<-SQL
         SELECT 

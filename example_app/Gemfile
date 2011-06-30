@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '3.0.7'
 gem 'pg'
 gem 'mysql'
-gem 'data_table', :path => "../" 
+gem 'datatable', :path => "../" 
 gem "jquery-rails"
 
 

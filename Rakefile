@@ -18,10 +18,10 @@ end
 
 desc "build gem"
 task :build do
-  system "gem build data_table.gemspec"
+  system "gem build datatable.gemspec"
 end
 
 desc "publish gem"
 task :release => :build do
-  system "gem push bundler-#{DataTable::VERSION::STRING}"
+  system "gem push bundler-#{Datatable::VERSION::STRING}"
 end

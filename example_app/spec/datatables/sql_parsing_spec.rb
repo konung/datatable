@@ -5,7 +5,7 @@ describe 'parsing raw sql' do
 
   it 'should grab the column names' do
 
-    class T < DataTable::Base
+    class T < Datatable::Base
       set_model Order
       sql <<-SQL
        SELECT orders.id, orders.memo 

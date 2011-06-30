@@ -1,14 +1,14 @@
-module DataTable
+module Datatable
   module Helper
 
-    def data_table
-      "#{data_table_html} #{data_table_javascript}".html_safe
+    def datatable
+      "#{datatable_html} #{datatable_javascript}".html_safe
     end
 
 
-    def data_table_html
+    def datatable_html
       <<-CONTENT.gsub(/^\s{6}/,"").html_safe
-        <table id='data_table'>
+        <table id='datatable'>
           <thead>
             <tr>
       #{headings}
@@ -18,7 +18,7 @@ module DataTable
           </tbody>
           <tfoot>
           <tr>
-            #{individual_column_searching if @data_table.javascript_options['individual_column_searching']}
+            #{individual_column_searching if @datatable.javascript_options['individual_column_searching']}
           </tr>
           </tfoot>
         </table>
@@ -26,8 +26,8 @@ module DataTable
     end
 
 
-    def data_table_javascript
-      raise "No @data_table assign" unless @data_table
+    def datatable_javascript
+      raise "No @datatable assign" unless @datatable
       # TODO: this will escape ampersands
       # ERB::Util.h('http://www.foo.com/ab/asdflkj?asdf=asdf&asdf=alsdf') => "http://www.foo.com/ab/asdflkj?asdf=asdf&amp;asdf=alsdf" 
       "<script>
@@ -41,7 +41,7 @@ module DataTable
         }
         $(function(){
 
-          var oTable = $('#data_table').dataTable(#{javascript_options.to_json.gsub(/\"column_defs\"/, columns)})
+          var oTable = $('#datatable').dataTable(#{javascript_options.to_json.gsub(/\"column_defs\"/, columns)})
 
 
           $('tfoot input').keyup( function () {
@@ -57,7 +57,7 @@ module DataTable
     private
 
     def headings
-      @data_table.columns.map do |key, value|
+      @datatable.columns.map do |key, value|
         "<th>#{value[:heading] || humanize_column(key)}</th>"
       end.join
     end
@@ -77,19 +77,19 @@ module DataTable
         'sPaginationType' => "full_numbers",
         "aoColumnDefs" => 'column_defs'
       }
-      defaults.merge(@data_table.javascript_options)
+      defaults.merge(@datatable.javascript_options)
     end
 
     def columns
       array = []
-      @data_table.columns.each do |key, value|
+      @datatable.columns.each do |key, value|
         if value.has_key?(:link_to)
           array << %Q|
             {
                 "fnRender": function(oObj) {
                     return replace('#{value[:link_to]}', oObj.aData);
              },
-             "aTargets": [#{@data_table.columns.keys.index(key)}]
+             "aTargets": [#{@datatable.columns.keys.index(key)}]
             }|
         end
       end
@@ -99,7 +99,7 @@ module DataTable
 
     def individual_column_searching
       # TODO: placeholders only supported in HTML5 
-      @data_table.columns.map do |key, value| 
+      @datatable.columns.map do |key, value| 
         %Q{
           <th>
             <input type="text" placeholder="#{key}" class="search_init" />

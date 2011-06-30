@@ -1,18 +1,10 @@
-require 'bundler'
-Bundler.require :default, :test
-
-require 'rake'
-require 'rdoc/task'
-require 'rspec/core/rake_task'
 require 'rake/clean'
+require 'rdoc/task'
 
 CLOBBER.include('*.gem')
 
-desc 'rake spec'
-task :default => :spec
-
-task :spec do
-   puts 'The specs are in the example_app folder. Run rake spec in that directory'
+task :default do
+  puts 'Run "rake spec" in the "example_app" directory to perform tests.'
 end
 
 desc 'Generate documentation for the datatable plugin.'
@@ -26,7 +18,7 @@ end
 
 desc "build gem"
 task :build do
-  system "gem build datatable.gemspec"
+  system "gem build data_table.gemspec"
 end
 
 desc "publish gem"

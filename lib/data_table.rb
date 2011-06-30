@@ -12,12 +12,17 @@ require 'data_table/railtie'
 require 'data_table/helper'
 require 'data_table/active_record_dsl'
 
+# during normal execution rails should have already pulled
+# this in but we may have to do it ourselves in some tests
+require 'action_view' unless defined?(ActionView)
+
 module DataTable
   class Base
 
     include DataTable::ActiveRecordDSL
     extend ActionView::Helpers::UrlHelper
     extend ActionView::Helpers::TagHelper
+
 
     def self.model
       @model

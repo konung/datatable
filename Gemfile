@@ -1,13 +1,12 @@
 source "http://rubygems.org"
 
+# all the runtime dependencies are listed in the gemspec
 gemspec
 
-group :test do
-  gem 'rdoc'
-  gem "rake"
-  gem "i18n"
-  gem "rspec"
-  gem "webrat"
-  gem "activesupport"
-  gem 'ruby-debug'
-end
+# all the develpment dependencies are listed here
+gem 'rake'
+gem 'rdoc'
+#gem "i18n"
+#gem "rspec"
+#gem "webrat"
+#gem 'ruby-debug'

@@ -145,6 +145,13 @@ describe 'sql kitchen sink' do
     pending
   end
 
+  it "should barf when iColumn param is not set on query" do
+    # it's useful to browse the json output so it's nice to have
+    # it correctly render the default page zero even though none
+    # of the datatable params are set
+    pending
+  end
+
 
 
 end

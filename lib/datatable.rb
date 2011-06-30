@@ -216,7 +216,7 @@ module Datatable
         next unless @params["bSearchable_#{i}"]
         attributes = column_attributes[col]
         if attributes[:type] == :string
-          result << sanitize("#{col} like ?", "%#{filter}%")
+          result << sanitize("#{col} #{like_sql} ?", "%#{filter}%")
         else
           # to_i returns 0 on arbitrary strings
           # so only search for integers = 0 when someone actually typed 0
@@ -238,7 +238,7 @@ module Datatable
         next if filter.blank?
         attributes = column_attributes[keys[i]]
         if attributes[:type] == :string
-          result << sanitize("#{keys[i]} like ?", "%#{filter}%")
+          result << sanitize("#{keys[i]} #{like_sql} ?", "%#{filter}%")
         else
           # to_i returns 0 on arbitrary strings
           # so only search for integers = 0 when someone actually typed 0
@@ -277,6 +277,10 @@ module Datatable
         current_sql << "WHERE " + search
       end
       current_sql
+    end
+
+    def like_sql
+      "iLIKE"
     end
 
   end

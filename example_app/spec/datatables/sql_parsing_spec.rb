@@ -12,9 +12,7 @@ describe 'parsing raw sql' do
          FROM orders
       SQL
     end
-
     T._columns.should == { 'orders.id' => {:type => :integer}, 'orders.memo' => {:type => :string}}
-
   end
 
 

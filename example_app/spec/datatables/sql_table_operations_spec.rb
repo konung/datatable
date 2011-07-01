@@ -1,39 +1,22 @@
 require 'spec_helper'
 
 describe 'Operations on the SQL table' do
-  # Store/ retrive:
-  #   data type 
-  #   ordering
-  #   human title
-
-  # Column sorting
-  #   input: an index to be sorted on
-  #     array of columns to sort on and asc/desc
-  #     [['asc', 1], ['desc', 3]]
-  #
-  #   need to know what index a column is
-  #   and from that index need to know the column name
-  #   sometimes will need the table name
-
-  # Pass in params for sorting by various columns in various orders
-  # Test that  records are returned in the correct order
-
   before do
     Object.send(:remove_const, :T) rescue nil
-
     class T < Datatable::Base
-      #set_model Order
       sql <<-SQL
-        SELECT id, order_number, memo
-          FROM orders
+        SELECT
+          id,
+          order_number,
+          memo
+        FROM
+          orders
       SQL
-
       columns(
         {'orders.id'   => {:type => :integer}},
         {'orders.order_number' => {:type => :integer}},
         {'orders.memo' => {:type => :string }}
       )
-
     end
 
     @params = {
@@ -173,9 +156,33 @@ describe 'Operations on the SQL table' do
     T.query(@params).to_json['aaData'].map { |r| r[1] }.uniq.should == ["1"]
   end
 
+  it "should generate two where clauses and barf" do
+    T.sql <<-SQL
+      SELECT
+        id,
+        order_number,
+        memo
+      FROM
+        orders
+      WHERE
+        order_number > 10
+    SQL
+    @params['sSearch'] = Order.all[rand(Order.count)].id.to_s
+    lambda { T.query(@params) }.should raise_error(ActiveRecord::StatementInvalid)
+  end
+
+#  it "should work when we have add the where separtely" do
+#    T.where <<-SQL
+#      WHERE
+#        order_number = {{order_id}}
+#    SQL
+#    order_id = Order.all[rand(Order.count)].id.to_s
+#    @params['sSearch'] = order_id
+#    lambda { T.query(@params, :order_id => order_id) }.should raise_error(ActiveRecord::StatementInvalid)
+#  end
+
+
   it 'only searches - when someone actually types 0'
-
-
 
   # Column ordering (store/retrieve)
   #   column names in order

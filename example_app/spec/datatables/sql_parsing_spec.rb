@@ -1,23 +1,7 @@
 require 'spec_helper'
 
-describe 'parsing raw sql' do
-
-
-  it 'should grab the column names' do
-
-    class T < Datatable::Base
-      set_model Order
-      sql <<-SQL
-       SELECT orders.id, orders.memo 
-         FROM orders
-      SQL
-    end
-    T._columns.should == { 'orders.id' => {:type => :integer}, 'orders.memo' => {:type => :string}}
+describe 'sql parsing' do
+  it "should we try to parse the SQL to populate the datatastrucutres for the user?" do
+    pending
   end
-
-
-  it 'names w/ as in them' 
-
-  it 'no full table name in it??'
-
 end

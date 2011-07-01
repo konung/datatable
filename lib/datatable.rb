@@ -280,7 +280,7 @@ module Datatable
     end
 
     def like_sql
-      "iLIKE"
+      "LIKE"
     end
 
   end

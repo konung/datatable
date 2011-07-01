@@ -29,7 +29,7 @@ module Datatable
     def datatable_javascript
       raise "No @datatable assign" unless @datatable
       # TODO: this will escape ampersands
-      # ERB::Util.h('http://www.foo.com/ab/asdflkj?asdf=asdf&asdf=alsdf') => "http://www.foo.com/ab/asdflkj?asdf=asdf&amp;asdf=alsdf" 
+      # ERB::Util.h('http://www.foo.com/ab/asdflkj?asdf=asdf&asdf=alsdf') => "http://www.foo.com/ab/asdflkj?asdf=asdf&amp;asdf=alsdf"
       "<script>
         function replace(string, columns) {
           var i = columns.length;
@@ -41,7 +41,7 @@ module Datatable
         }
         $(function(){
 
-          var oTable = $('#datatable').dataTable(#{javascript_options.to_json.gsub(/\"column_defs\"/, columns)})
+          var oTable = $('#datatable').dataTable(#{javascript_options.to_json.gsub(/\"aocolumns_place_holder\"/, aocolumns_text)})
 
 
           $('tfoot input').keyup( function () {
@@ -71,29 +71,65 @@ module Datatable
       defaults = {
         'sAjaxSource' => h(request.path),
         'sDom' => '<"H"lfr>t<"F"ip>',
-        'iDisplayLength' => 10, # Number per page
+        'iDisplayLength' => 10,
         'bProcessing' => true,
         'bServerSide' => true,
         'sPaginationType' => "full_numbers",
-        "aoColumnDefs" => 'column_defs'
+        'aoColumns' => "aocolumns_place_holder"
       }
       defaults.merge(@datatable.javascript_options)
     end
 
-    def columns
-      array = []
-      @datatable.columns.each do |key, value|
-        if value.has_key?(:link_to)
-          array << %Q|
-            {
-                "fnRender": function(oObj) {
-                    return replace('#{value[:link_to]}', oObj.aData);
-             },
-             "aTargets": [#{@datatable.columns.keys.index(key)}]
-            }|
+    #  returns a ruby hash of
+    def ruby_aocolumns
+      result = []
+      column_def_keys = %w[ asSorting bSearchable bSortable
+                            bUseRendered bVisible fnRender iDataSort
+                            mDataProp sClass sDefaultContent sName
+                            sSortDataType sTitle sType sWidth link_to ]
+      index = 0
+      @datatable.columns.each_value do |column_hash|
+        column_result = {}
+        column_hash.each do |key,value|
+          if column_def_keys.include?(key.to_s)
+            column_result[key.to_s] = value
+          end
+        end
+
+        # rewrite any link_to values as fnRender functions
+        if column_result.include?('link_to')
+          column_result['fnRender'] = %Q|function(oObj) { return replace('#{column_result['link_to']}', oObj.aData);}|
+          column_result.delete('link_to')
+        end
+
+        if column_result.empty?
+          result << nil
+        else
+          result << column_result
         end
       end
-      "[" + array.join(", ") + "]"
+      result
+    end
+
+    def aocolumns_text
+      outer = []
+      ruby_aocolumns.each do |column|
+        if column
+          inner = []
+          column.each do |key, value|
+            inner << case key
+              when 'fnRender'
+                "\"#{key.to_s}\": #{value.to_json[1..-2]}"
+              else
+                "\"#{key.to_s}\": #{value.to_json}"
+            end
+          end
+          outer << "{" + inner.join(", ") + "}"
+        else
+          outer << "null"
+        end
+      end
+      '[' + outer.join(', ') + ']'
     end
 
 

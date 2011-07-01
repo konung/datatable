@@ -19,7 +19,7 @@ describe Datatable::Helper do
 
     describe "link_to" do
       it "contains href" do
-        helper.datatable_javascript.should contain("<a href=\"/orders/%7B%7B0%7D%7D\">{{0}}</a>")
+        helper.datatable_javascript.should contain('<a href=\"/orders/%7B%7B0%7D%7D\">{{0}}</a>')
       end
     end
 
@@ -40,7 +40,7 @@ describe Datatable::Helper do
 
     describe "link_to" do
       it "contains href" do
-        helper.datatable_javascript.should contain("<a href=\"/orders/%7B%7B0%7D%7D\">{{0}}</a>")
+        helper.datatable_javascript.should contain('<a href=\"/orders/%7B%7B0%7D%7D\">{{0}}</a>')
       end
     end
 
@@ -98,7 +98,7 @@ describe Datatable::Helper do
         'bProcessing' => true,
         'bServerSide' => true,
         'sPaginationType' => "full_numbers",
-        "aoColumnDefs" => 'column_defs'
+        "aoColumns" => 'aocolumns_place_holder'
         }
       end
 

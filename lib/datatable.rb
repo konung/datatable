@@ -95,7 +95,10 @@ module Datatable
         params[key] = value.to_i if key =~ /^i/
       end
 
-      substitute_variables(variables)
+      if @sql_string && !@already_substituted
+         @sql_string = substitute_variables(@sql_string, variables)
+      end
+      @already_substituted = true
 
       datatable = new(params)
 
@@ -104,15 +107,15 @@ module Datatable
       datatable
     end
 
-    def self.substitute_variables(variables)
-      return if @already_substituted
-      @already_substituted = true
-
-      variables.each do |key, value|
-        fail "Variable not found: #{key}" unless  @sql_string =~ /#{key.to_s}/m
-        value = "(#{value.join(',')})" if value.is_a?(Array)
-        @sql_string.gsub!("{{#{key}}}", value.to_s)
+    def self.substitute_variables(text, substitutions)
+      copy = text ? text.dup : ""
+      substitutions.stringify_keys.each do |key, value|
+        unless text =~ /#{key}/m
+          fail "Substitution key: '#{key}' not in found in SQL text"
+        end
+        copy.gsub!("{{#{key}}}", value.kind_of?(Array) ? "(#{value.join(', ')})" : value.to_s )
       end
+      copy
     end
 
     # only used in testing

@@ -1,4 +1,4 @@
 Factory.define(:sales_rep) do |f|
-  f.first_name "bob"
-  f.last_name "bob"
+  f.first_name "Robert"
+  f.last_name "Johnson"
 end

@@ -157,3 +157,26 @@
 #end
 #
 #
+
+
+
+
+#      sql <<-SQL
+#        SELECT
+#          sales_reps.id,
+#          first_name AS fullname,
+#          #{created_at_select},
+#          COALESCE(customer_counts.value,0) AS count
+#        FROM
+#          sales_reps
+#        LEFT OUTER JOIN
+#          (SELECT
+#             customers.sales_rep_id,
+#             count(*) AS value
+#           FROM customers
+#           GROUP BY customers.sales_rep_id)
+#        AS
+#          customer_counts
+#        ON
+#          customer_counts.sales_rep_id = sales_reps.id
+#      SQL

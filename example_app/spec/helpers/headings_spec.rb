@@ -4,13 +4,13 @@ describe "headings" do
 
   describe "arel" do
     before do
-      Object.send(:remove_const, :OrderTable) rescue nil
-      class OrderTable < Datatable::Base
+      Object.send(:remove_const, :T) rescue nil
+      class T < Datatable::Base
         set_model Order
         column :order_number
         column :memo
       end
-      assign(:datatable, OrderTable)
+      assign(:datatable, T)
     end
 
     it "should have tests"
@@ -20,26 +20,22 @@ describe "headings" do
   describe "raw sql" do
 
     before do
-      Object.send(:remove_const, :OrderTable) rescue nil
-      class OrderTable < Datatable::Base
-
-        #set_model Order
-
+      Object.send(:remove_const, :T) rescue nil
+      class T < Datatable::Base
         sql <<-SQL
-      SELECT orders.id, 
-        orders.order_number,
-        customers.first_name,
-        customers.last_name,
-        orders.memo
-      FROM orders
-      JOIN customers ON(customers.id = orders.customer_id)
+          SELECT
+            orders.id,
+            orders.order_number,
+            customers.first_name,
+            customers.last_name,
+            orders.memo
+          FROM
+            orders
+          JOIN
+            customers
+          ON
+            customers.id = orders.customer_id
         SQL
-
-
-        #
-        # replace this with a hash
-        #
-
         columns(
           {'orders.id' => {:type => :integer}},
           {'orders.order_number' => {:type => :string}},
@@ -47,9 +43,8 @@ describe "headings" do
           {'customers.last_name' => {:type => :string}},
           {'orders.memo' => {:type => :string}}
         )
-
       end
-      assign(:datatable, OrderTable)
+      assign(:datatable, T)
     end
 
     it 'should humanize headings by default'  do
@@ -58,16 +53,14 @@ describe "headings" do
       end
     end
 
-    # TODO
     it 'should use pretty headings when they are available' do
-      OrderTable.columns(
+      T.columns(
         {'orders.id' => {:type => :integer, :heading => "Another heading that we specify manually"}},
         {'orders.order_number' => {:type => :string, :heading => 'Yet another' }},
         {'customers.first_name' => {:type => :string}},
         {'customers.last_name' => {:type => :string}},
         {'orders.memo' => {:type => :string, :heading => 'And another'}}
       )
-
       ["Another heading that we specify manually","Yet another" , "And another"].each do |heading|
         helper.datatable_html.should contain(heading)
       end

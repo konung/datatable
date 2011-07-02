@@ -37,8 +37,11 @@ module Datatable
     end
 
     def self.count(*args)
-      return @count if args.empty?
-      @count = args.first
+      if args.empty?
+        return @count_sql
+      else
+        @count_sql = args.first
+      end
     end
 
     def self.sql_string
@@ -97,11 +100,13 @@ module Datatable
 
       if @sql_string && !@already_substituted
          @sql_string = substitute_variables(@sql_string, variables)
+         if @count_sql
+          @count_sql = substitute_variables(@count_sql, variables)
+         end
       end
       @already_substituted = true
 
       datatable = new(params)
-
       datatable.instance_query
       datatable.count
       datatable
@@ -149,7 +154,7 @@ module Datatable
     end
 
     def count
-      @count = self.class.sql_string ? sql_count : self.class.relation.count
+      @count_sql = self.class.sql_string ? sql_count : self.class.relation.count
     end
 
 
@@ -158,7 +163,7 @@ module Datatable
         'sEcho' => (@params['sEcho'] || -1).to_i,
         'aaData' => @records,
         'iTotalRecords' => @records.length,
-        'iTotalDisplayRecords' => (@count || 0)
+        'iTotalDisplayRecords' => (@count_sql || 0)
       }
     end
 

@@ -157,4 +157,8 @@ describe 'query responds to search parameters on sql defined datatable' do
     end
   end
 
+  describe "support searching numbers as strings" do
+    pending "select id from orders where cast(id as text) like '%7%';"
+  end
+
 end

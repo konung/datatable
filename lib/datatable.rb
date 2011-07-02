@@ -44,6 +44,14 @@ module Datatable
       end
     end
 
+    def self.where(*args)
+      if args.empty?
+        return @where_sql
+      else
+        @where_sql = args.first
+      end
+    end
+
     def self.sql_string
       @sql_string
     end
@@ -279,13 +287,30 @@ module Datatable
       end
     end
 
+#    def query_sql
+#      debugger
+#      current_sql = self.class.sql_string.dup
+#      if(search = search_string)
+#        current_sql << "WHERE " + search
+#      end
+#      current_sql
+#    end
+
     def query_sql
-      current_sql = self.class.sql_string.dup
-      if(search = search_string)
-        current_sql << "WHERE " + search
+      result =  self.class.sql_string.dup
+      if self.class.where
+        result << " WHERE " + self.class.where
+        if search_string
+          result << " AND " + search_string
+        end
+      else
+        if search_string
+          result << " WHERE " + search_string
+        end
       end
-      current_sql
+      result
     end
+
 
     def like_sql
       "LIKE"

@@ -112,3 +112,9 @@ describe 'pagination without count()' do
   end
 
 end
+
+
+describe 'pagination with count() and where clause' do
+  it "should return correct size dataset when there is a where clause"
+end
+

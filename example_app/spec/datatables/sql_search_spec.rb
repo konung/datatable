@@ -149,30 +149,12 @@ describe 'query responds to search parameters on sql defined datatable' do
   end
 
   describe "unipmeneted specs" do
-    it 'only searches - when someone actually types 0'
-    it 'should allow manually setting the order of columns'
-    it 'should otherwise automatically set the order' # E.g. arel
+    it 'only searches 0 in integer columns when someone actually types 0 not when to_s returns 0'
+
+    it "it does not search columns where bSearchable is false" do
+      # columns define with AS would need to have bSearchable=false
+      pending
+    end
   end
+
 end
-
-
-
-    # TODO
-    # it 'should deal w/ dates'
-
-    # Individual column searching
-    #   input: index and a search term
-    #   need to know what index a col is and the col name
-    #   need to know the type
-
-
-#  it "should work when we have add the where separtely" do
-#    T.where <<-SQL
-#      WHERE
-#        order_number = {{order_id}}
-#    SQL
-#    order_id = Order.all[rand(Order.count)].id.to_s
-#    @params['sSearch'] = order_id
-#    lambda { T.query(@params, :order_id => order_id) }.should raise_error(ActiveRecord::StatementInvalid)
-#  end
-

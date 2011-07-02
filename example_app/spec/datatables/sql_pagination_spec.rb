@@ -55,9 +55,6 @@ describe 'pagination with count()' do
   end
 end
 
-
-
-
 describe 'pagination without count()' do
   
   before do

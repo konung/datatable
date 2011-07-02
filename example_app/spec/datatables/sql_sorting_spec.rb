@@ -73,4 +73,8 @@ describe 'query responds to sort parameters on sql defined datatable' do
     T.query(@params).to_json['aaData'][-1][0].should == Order.order('memo desc, id asc')[-1].id.to_s
   end
 
+  it "it does not sort columns where bSortable is false"
+
+
+
 end

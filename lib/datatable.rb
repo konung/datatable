@@ -287,15 +287,6 @@ module Datatable
       end
     end
 
-#    def query_sql
-#      debugger
-#      current_sql = self.class.sql_string.dup
-#      if(search = search_string)
-#        current_sql << "WHERE " + search
-#      end
-#      current_sql
-#    end
-
     def query_sql
       result =  self.class.sql_string.dup
       if self.class.where
@@ -310,7 +301,6 @@ module Datatable
       end
       result
     end
-
 
     def like_sql
       "LIKE"

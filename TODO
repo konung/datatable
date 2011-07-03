@@ -1,5 +1,4 @@
-#) Improve the initializer config code to be more robust
-        https://github.com/jnicklas/carrierwave/blob/master/lib/carrierwave/uploader/configuration.rb
+#) Provide example of fnRender
 
 #) default sort orders
 
@@ -12,10 +11,6 @@
        column({'orders.order_number' => {:type => :string, :cast => :text }})
 
    having :cast present would force it to build any where clauses using a type cast
-
-
-
-#) Provide example of fnRender
 
 #) rails generator
      add javascript to public/javascripts
@@ -38,4 +33,8 @@ THE FUTURE
   maybe parse the SQL ?
   get acitve releation version to do more
   it it possible to extract the where clause from the base sql reliably?
-  
+
+  #) Improve the initializer config code to be more robust
+          https://github.com/jnicklas/carrierwave/blob/master/lib/carrierwave/uploader/configuration.rb
+
+

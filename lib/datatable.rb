@@ -178,7 +178,15 @@ module Datatable
     private
 
     def sql_count
-      count_sql = self.class.count || query_sql.sub(/^\s*SELECT(.*?)FROM/mi, 'SELECT count(*) FROM')
+      if self.class.count
+        count_sql = self.class.count
+        if self.class.where
+          count_sql << " WHERE " + self.class.where
+        end
+      else
+        count_sql = query_sql.sub(/^\s*SELECT(.*?)FROM/mi, 'SELECT count(*) FROM')
+        # we don't tak the where on because it's already been done inside query_sql
+      end
       ActiveRecord::Base.connection.select_value(count_sql).to_i
     end
 

@@ -124,7 +124,7 @@ describe 'query responds to search parameters on sql defined datatable' do
 
     it "handles where in separate call" do
       T.where <<-SQL
-        memo LIKE 'some value that is not in the database'
+        memo LIKE 'foo bar baz'
       SQL
       T.sql <<-SQL
         SELECT
@@ -144,6 +144,15 @@ describe 'query responds to search parameters on sql defined datatable' do
 
       # test to make sure it's not present in result because where clause excluded it
       T.query(@params).to_json['aaData'].should be_empty
+
+      # modify this order so it will satisfy the query
+      order.memo = "foo bar baz"
+      order.save
+
+      # test to make sure it is present in result because where clause excluded it
+      T.query(@params).to_json['aaData'][0][0].should == order.id.to_s
+
+
     end
 
   end

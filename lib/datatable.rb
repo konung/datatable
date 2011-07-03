@@ -244,7 +244,7 @@ module Datatable
         else
           # to_i returns 0 on arbitrary strings
           # so only search for integers = 0 when someone actually typed 0
-          if filter == "0" || filter.to_i > 0
+          if filter == "0" || filter.to_i != 0
             result << "#{col} = #{filter.to_i}"
           end
         end

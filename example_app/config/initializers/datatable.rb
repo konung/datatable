@@ -1,3 +1,4 @@
 Datatable::Base.config do |config|
-  #config.style = false
+  config.style = true
+  config.sql_like = 'ILIKE'
 end

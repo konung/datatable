@@ -323,7 +323,7 @@ module Datatable
     end
 
     def like_sql
-      "LIKE"
+      Datatable::Base.config.sql_like || "LIKE"
     end
 
   end

@@ -53,6 +53,16 @@ describe 'query responds to search parameters on sql defined datatable' do
       T.query(@params).to_json['aaData'].length.should == 1
     end
 
+    it 'integer columns do not return results unless a number appears in the search string' do
+      order = Order.first
+      order.order_number = 0
+      order.save
+      @params['sSearch'] = "0"
+      T.query(@params).to_json['aaData'][0][0].should == order.id.to_s
+      @params['sSearch'] = "a value without the integer zero"
+      T.query(@params).to_json['aaData'].should == []
+    end
+
     it 'should only search columns that have the bSearchable_int not equal to false' do
       # Order number is set as a non searchable column with the
       # bSearchable flag below.  It should be ignored during
@@ -103,6 +113,18 @@ describe 'query responds to search parameters on sql defined datatable' do
       actual = T.query(@params).to_json['aaData'].map{|row| row[0]}.sort
       actual.should == expected
     end
+
+    it 'integer columns do not return results unless a number appears in the search string' do
+      order = Order.first
+      order.order_number = 0
+      order.save
+      @params['bSearchable_1'] = true
+      @params['sSearch_1'] = "0"
+      T.query(@params).to_json['aaData'][0][0].should == order.id.to_s
+      @params['sSearch_1'] = "a value without the integer zero"
+      T.query(@params).to_json['aaData'].should == []
+    end
+
 
     it 'should search by multiple columns' do
       @params['bSearchable_1'] = true
@@ -181,7 +203,9 @@ describe 'query responds to search parameters on sql defined datatable' do
   end
 
   describe "unipmeneted specs" do
-    it 'only searches 0 in integer columns when someone actually types 0 not when to_s returns 0'
+    it 'only searches 0 in integer columns when someone actually types 0 not when to_s returns 0' do
+
+    end
 
     it "it does not search columns where bSearchable is false" do
       # columns define with AS would need to have bSearchable=false

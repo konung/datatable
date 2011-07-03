@@ -267,8 +267,10 @@ module Datatable
         else
           # to_i returns 0 on arbitrary strings
           # so only search for integers = 0 when someone actually typed 0
-          if filter == "0" || filter.to_i > 0
-            result << "#{keys[i]} = #{filter.to_i}"
+          if filter == "0" || filter.to_i != 0
+            result << "#{keys[i]} = #{filter}"
+          else
+            result << '1 = 2'
           end
         end
       end

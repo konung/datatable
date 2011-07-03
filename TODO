@@ -1,26 +1,22 @@
-1) bSortable and bSearchable should be honored in the backend.  When a column
-   is not sortable or searchable it should be left out of the query.  This is
-   necessary because columns defined with AS can not be included in a where
-   clause, example:
+1) Make sure that integer search strings that evaluate to zero but are not zero don't
+   get applied.  In this situation the column should not be searched.
 
-       SELECT order_number AS foo FROM orders WHERE foo IS NOT NULL
-       ERROR:  column "foo" does not exist;
+2) Theming
+     default (non jquery ui theme)
+     jquery ui theme
 
-2) make it so both global search and individual column searches
+3) make it so both global search and individual column searches
    support typcasting so that those columns can be searched as
    strings, example:
 
        SELECT order_number FROM orders WHERE CAST(order_number as text) LIKE '%123%';
 
-       column({:type => :string, :cast => [:order_number, :text]})
+       column({'orders.order_number' => {:type => :string, :cast => :text }})
 
    having :cast present would force it to build any where clauses using a type cast
 
-4) Make sure that integer search strings that evaluate to zero but are not zero don't
-   get applied.  In this situation the column should not be searched.
 
-
-5) rails like config/initilizer for default settings of datatable
+4) rails like config/initilizer for default settings of datatable
     DataTable.config do |config|
       config.default_options = {
         :bLengthChange => true
@@ -30,10 +26,6 @@
 6) default sort orders
 
 7) Provide example of fnRender
-
-8) Theming
-     default (non jquery ui theme)
-     jquery ui theme
 
 9) rails generator
      add javascript to public/javascripts

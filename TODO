@@ -1,32 +1,58 @@
-Next session:
+1) bSortable and bSearchable should be honored in the backend.  When a column
+   is not sortable or searchable it should be left out of the query.  This is
+   necessary because columns defined with AS can not be included in a where
+   clause, example:
 
-2) individual column search
-    - individual column
+       SELECT order_number AS foo FROM orders WHERE foo IS NOT NULL
+       ERROR:  column "foo" does not exist;
 
-2.5) Rename the repo to be data_table
+2) make it so both global search and individual column searches
+   support typcasting so that those columns can be searched as
+   strings, example:
 
-3) rails like config/initilizer for default settings of datatable
+       SELECT order_number FROM orders WHERE CAST(order_number as text) LIKE '%123%';
+
+       column({:type => :string, :cast => [:order_number, :text]})
+
+   having :cast present would force it to build any where clauses using a type cast
+
+4) Make sure that integer search strings that evaluate to zero but are not zero don't
+   get applied.  In this situation the column should not be searched.
+
+
+5) rails like config/initilizer for default settings of datatable
     DataTable.config do |config|
       config.default_options = {
         :bLengthChange => true
       }
     end
 
-4) Theming
+6) default sort orders
+
+7) Provide example of fnRender
+
+8) Theming
+     default (non jquery ui theme)
      jquery ui theme
 
-5) web site, readme, wiki on github
+9) rails generator
+     add javascript to public/javascripts
+     add css for default datatable theme to public/stylesheets
+     add template for config/initializer/datatable.rb
+     create folder app/datatables/
 
-6) initial development release
+10) web site, readme, wiki on github
 
-7) Working on parsing out column names from sql queries (parsing_spec.rb) (parsing things like select count(foo) as bar what type is bar?
+11) release 0.1 (support for rails 3.0)
 
--- column re-ordering
--- Find or write SQL pagination specs (Group pagination specs together)
--- sql version of helpers
--- sDom
--- like for integer columns?
--- always force use of @data table (in helper)
-
-# Error checking:
-What if I get a column name wrong in the columns hash?
+THE FUTURE
+  Rails 3.1
+  Searching Date Ranges
+  Easy Printing of Table
+  Download CSV/Excel
+  Reordering Columns
+  Lightbox Editing
+  Column ReOrdering
+  maybe parse the SQL ?
+  get acitve releation version to do more
+  

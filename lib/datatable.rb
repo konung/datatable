@@ -162,7 +162,7 @@ module Datatable
     end
 
     def count
-      @count_sql = self.class.sql_string ? sql_count : self.class.relation.count
+      @count = self.class.sql_string ? sql_count : self.class.relation.count
     end
 
 
@@ -171,7 +171,7 @@ module Datatable
         'sEcho' => (@params['sEcho'] || -1).to_i,
         'aaData' => @records,
         'iTotalRecords' => @records.length,
-        'iTotalDisplayRecords' => (@count_sql || 0)
+        'iTotalDisplayRecords' => (@count || 0)
       }
     end
 

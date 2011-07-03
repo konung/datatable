@@ -107,10 +107,7 @@ module Datatable
       end
 
       if @sql_string && !@already_substituted
-         @sql_string = substitute_variables(@sql_string, variables)
-         if @count_sql
-          @count_sql = substitute_variables(@count_sql, variables)
-         end
+        substitute_variables(variables)
       end
       @already_substituted = true
 
@@ -120,15 +117,16 @@ module Datatable
       datatable
     end
 
-    def self.substitute_variables(text, substitutions)
-      copy = text ? text.dup : ""
+    def self.substitute_variables(substitutions)
       substitutions.stringify_keys.each do |key, value|
-        unless text =~ /#{key}/m
+        unless "#{@where_sql}#{@count_sql}#{@sql_string}" =~ /#{key}/m
           fail "Substitution key: '#{key}' not in found in SQL text"
         end
-        copy.gsub!("{{#{key}}}", value.kind_of?(Array) ? "(#{value.join(', ')})" : value.to_s )
+        new_text = value.kind_of?(Array) ? "(#{value.join(', ')})" : value.to_s
+        @where_sql.try(:gsub!,"{{#{key}}}", new_text )
+        @sql_string.try(:gsub!, "{{#{key}}}", new_text)
+        @count_sql.try(:gsub!,"{{#{key}}}", new_text)
       end
-      copy
     end
 
     # only used in testing
@@ -179,10 +177,11 @@ module Datatable
 
     def sql_count
       if self.class.count
-        count_sql = self.class.count
-        if self.class.where
+        count_sql = self.class.count.dup
+        if self.class.where && !@already_counted
           count_sql << " WHERE " + self.class.where
         end
+        @already_counted = true
       else
         count_sql = query_sql.sub(/^\s*SELECT(.*?)FROM/mi, 'SELECT count(*) FROM')
         # we don't tak the where on because it's already been done inside query_sql

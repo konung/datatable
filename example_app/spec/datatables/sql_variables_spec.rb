@@ -54,16 +54,15 @@ describe 'variable substitution' do
          count(orders.id)
        FROM
          orders
-       WHERE
-         orders.id = {{order_id}}
      SQL
      sql <<-SQL
        SELECT
          orders.id
        FROM
          orders
-       WHERE
-         orders.id = {{order_id}}
+     SQL
+     where <<-SQL
+       orders.id = {{order_id}}
      SQL
      columns(
        {'orders.id' => {:type => :integer}}
@@ -71,11 +70,33 @@ describe 'variable substitution' do
     end
     order_id = Order.last.id
     T.query(@params, :order_id => order_id).to_json['aaData'].length.should == 1
-    T.query(@params, :order_id => order_id).to_json['aaData'].flatten.first.should == order_id.to_s
+    T.query(@params, :order_id => order_id).to_json['aaData'].should == [[order_id.to_s]]
   end
 
-  describe "in where clause" do
-    it "should have a test"
+  describe "in where and count clause" do
+    it "should do something" do
+      class T < Datatable::Base
+       count <<-SQL
+         SELECT
+           count(orders.id)
+         FROM
+           orders
+       SQL
+       sql <<-SQL
+         SELECT
+           orders.id
+         FROM
+           orders
+       SQL
+       where <<-SQL
+          orders.id = {{order_id}}
+        SQL
+       columns(
+         {'orders.id' => {:type => :integer}}
+       )
+      end
+      order_id = Order.last.id
+    end
   end
 
 

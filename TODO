@@ -55,4 +55,5 @@ THE FUTURE
   Column ReOrdering
   maybe parse the SQL ?
   get acitve releation version to do more
+  it it possible to extract the where clause from the base sql reliably?
   

@@ -1,5 +1,3 @@
-0) variable substitution in where and count clause
-
 1) bSortable and bSearchable should be honored in the backend.  When a column
    is not sortable or searchable it should be left out of the query.  This is
    necessary because columns defined with AS can not be included in a where

@@ -236,6 +236,7 @@ module Datatable
       result = []
 
       column_attributes.keys.each_with_index do |col, i|
+        next if column_attributes[col][:bSearchable] == false
         next unless @params["bSearchable_#{i}"]
         attributes = column_attributes[col]
         if attributes[:type] == :string
@@ -259,6 +260,7 @@ module Datatable
       ((@params['iColumns']||1) - 1).times do |i|
         filter = @params["sSearch_#{i}"]
         next if filter.blank?
+        raise "can't search unsearchable column'" if column_attributes[keys[i]][:bSearchable] == false
         attributes = column_attributes[keys[i]]
         if attributes[:type] == :string
           result << sanitize("#{keys[i]} #{like_sql} ?", "%#{filter}%")

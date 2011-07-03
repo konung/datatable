@@ -53,7 +53,7 @@ describe 'query responds to search parameters on sql defined datatable' do
       T.query(@params).to_json['aaData'].length.should == 1
     end
 
-    it 'should only search columns that are searchable' do
+    it 'should only search columns that have the bSearchable_int not equal to false' do
       # Order number is set as a non searchable column with the
       # bSearchable flag below.  It should be ignored during
       # the search.  To prove that we copy the first orders id
@@ -74,6 +74,18 @@ describe 'query responds to search parameters on sql defined datatable' do
       @params['bSearchable_2'] = false
       @params['sSearch'] = "foo"
       T.query(@params)
+    end
+
+    it "should ignore columns that are flagged bSearchable=false" do
+      T.columns(
+        {'orders.id'   => {:type => :integer}},
+        {'orders.order_number' => {:type => :integer, :bSearchable => false}},
+        {'orders.memo' => {:type => :string }}
+      )
+      Order.order(:id).last.update_attribute(:order_number, Order.order(:id).first.id)
+      @params['sSearch'] = Order.first.id
+      T.query(@params).to_json['aaData'][0][0].should == Order.order(:id).first.id.to_s
+      T.query(@params).to_json['aaData'].length.should == 1
     end
   end
 
@@ -102,6 +114,18 @@ describe 'query responds to search parameters on sql defined datatable' do
       actual = T.query(@params).to_json['aaData'].map{|row| row[0] }.sort
       actual.should == expected
     end
+
+    it "should ignore columns that are flagged bSearchable=false" do
+      T.columns(
+        {'orders.id'   => {:type => :integer, :bSearchable => false}},
+        {'orders.order_number' => {:type => :integer}},
+        {'orders.memo' => {:type => :string }}
+      )
+      @params['bSearchable_0'] = true
+      @params['sSearch_0'] = Order.last.id
+      lambda { T.query(@params) }.should raise_error
+    end
+
 
   end
 

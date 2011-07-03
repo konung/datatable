@@ -78,14 +78,13 @@ describe 'query responds to search parameters on sql defined datatable' do
 
     it "should ignore columns that are flagged bSearchable=false" do
       T.columns(
-        {'orders.id'   => {:type => :integer}},
-        {'orders.order_number' => {:type => :integer, :bSearchable => false}},
+        {'orders.id'   => {:type => :integer, :bSearchable => false}},
+        {'orders.order_number' => {:type => :integer }},
         {'orders.memo' => {:type => :string }}
       )
-      Order.order(:id).last.update_attribute(:order_number, Order.order(:id).first.id)
-      @params['sSearch'] = Order.first.id
-      T.query(@params).to_json['aaData'][0][0].should == Order.order(:id).first.id.to_s
-      T.query(@params).to_json['aaData'].length.should == 1
+      order = Order.last
+      @params['sSearch'] = order.id.to_s
+      T.query(@params).to_json['aaData'].should == []
     end
   end
 

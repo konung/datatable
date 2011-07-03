@@ -15,6 +15,7 @@ require 'datatable/active_record_dsl'
 # during normal execution rails should have already pulled
 # this in but we may have to do it ourselves in some tests
 require 'action_view' unless defined?(ActionView)
+require 'ostruct'
 
 module Datatable
   class Base
@@ -23,6 +24,14 @@ module Datatable
     extend ActionView::Helpers::UrlHelper
     extend ActionView::Helpers::TagHelper
 
+    def self.config(&block)
+      @config ||= OpenStruct.new
+      if block_given?
+        yield @config
+      else
+        return @config
+      end
+    end
 
     def self.model
       @model

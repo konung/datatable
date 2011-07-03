@@ -1,9 +1,5 @@
-#) rails like config/initilizer for default settings of datatable
-    DataTable.config do |config|
-      config.default_options = {
-        :bLengthChange => true
-      }
-    end
+#) Improve the initializer config code to be more robust
+        https://github.com/jnicklas/carrierwave/blob/master/lib/carrierwave/uploader/configuration.rb
 
 #) default sort orders
 

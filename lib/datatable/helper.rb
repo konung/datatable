@@ -6,10 +6,10 @@ module Datatable
     end
 
     def datatable_html
-      if true
-        datatable_styled_html
-      else
+      if Datatable::Base.config.style == false
         datatable_unstyled_html
+      else
+        datatable_styled_html
       end
     end
 

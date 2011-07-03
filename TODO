@@ -1,3 +1,13 @@
+#) when a column is not searchable it should not render a text input
+   for that columns search input
+
+#) the last columns individual search paramter seems to be ignored
+
+
+#) prorivde a reset link in so that all the search inputs are cleared
+   would be nice if it was easily hooked to a keystroke for example
+   ESC when any of the inputs have the focus
+
 #) Provide example of fnRender
 
 #) default sort orders

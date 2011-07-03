@@ -6,6 +6,7 @@
 # testing will let us ignore this for the time being. 
 #
 unless Rails.env =~ /test/
+
   class OrdersIndex < Datatable::Base
 
     sql <<-SQL
@@ -27,6 +28,7 @@ unless Rails.env =~ /test/
     )
 
     option('sDom', '<"H"f>rt<"F"p>')
+    option('bJQueryUI', true)
     option('individual_column_searching', true)
   end
 end

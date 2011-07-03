@@ -1,8 +1,13 @@
-2) Theming
-     default (non jquery ui theme)
-     jquery ui theme
+#) rails like config/initilizer for default settings of datatable
+    DataTable.config do |config|
+      config.default_options = {
+        :bLengthChange => true
+      }
+    end
 
-3) make it so both global search and individual column searches
+#) default sort orders
+
+#) make it so both global search and individual column searches
    support typcasting so that those columns can be searched as
    strings, example:
 
@@ -13,26 +18,18 @@
    having :cast present would force it to build any where clauses using a type cast
 
 
-4) rails like config/initilizer for default settings of datatable
-    DataTable.config do |config|
-      config.default_options = {
-        :bLengthChange => true
-      }
-    end
 
-6) default sort orders
+#) Provide example of fnRender
 
-7) Provide example of fnRender
-
-9) rails generator
+#) rails generator
      add javascript to public/javascripts
      add css for default datatable theme to public/stylesheets
      add template for config/initializer/datatable.rb
      create folder app/datatables/
 
-10) web site, readme, wiki on github
+#) web site, readme, wiki on github
 
-11) release 0.1 (support for rails 3.0)
+#) release 0.1 (support for rails 3.0)
 
 THE FUTURE
   Rails 3.1

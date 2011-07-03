@@ -5,26 +5,13 @@ module Datatable
       "#{datatable_html} #{datatable_javascript}".html_safe
     end
 
-
     def datatable_html
-      <<-CONTENT.gsub(/^\s{6}/,"").html_safe
-        <table id='datatable'>
-          <thead>
-            <tr>
-      #{headings}
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-          <tfoot>
-          <tr>
-            #{individual_column_searching if @datatable.javascript_options['individual_column_searching']}
-          </tr>
-          </tfoot>
-        </table>
-      CONTENT
+      if true
+        datatable_styled_html
+      else
+        datatable_unstyled_html
+      end
     end
-
 
     def datatable_javascript
       raise "No @datatable assign" unless @datatable
@@ -55,6 +42,37 @@ module Datatable
     end
 
     private
+
+    def datatable_styled_html
+      <<-CONTENT.gsub(/^\s{6}/,"").html_safe
+        <link href="http://www.datatables.net/release-datatables/media/css/demo_page.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="http://www.datatables.net/release-datatables/media/css/demo_table_jui.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="http://www.datatables.net/examples/examples_support/themes/smoothness/jquery-ui-1.7.2.custom.css" media="screen" rel="stylesheet" type="text/css" />
+        <div id="dt_example" style="width: 800px">
+        #{datatable_unstyled_html}
+        </div>
+      CONTENT
+    end
+
+    def datatable_unstyled_html
+      <<-CONTENT.gsub(/^\s{6}/,"").html_safe
+        <table id='datatable'>
+          <thead>
+            <tr>
+      #{headings}
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <tfoot>
+          <tr>
+            #{individual_column_searching if @datatable.javascript_options['individual_column_searching']}
+          </tr>
+          </tfoot>
+        </table>
+      CONTENT
+    end
+
 
     def headings
       @datatable.columns.map do |key, value|

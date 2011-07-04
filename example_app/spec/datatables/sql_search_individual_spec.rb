@@ -20,7 +20,7 @@ describe 'SQL defined datatable supports individual column search' do
     end
 
     @params = {
-      "iColumns" =>	4,
+      "iColumns" =>	3,
       "bSearchable_0" => true,
       "bSearchable_1" => true,
       "bSearchable_2" => true,

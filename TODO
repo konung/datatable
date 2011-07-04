@@ -1,5 +1,10 @@
 BUG:  The last columns individual search value is ignored but global search
-        seems to work fine on that column.
+      seems to work fine on that column.
+
+SECURITY: don't rely on iColumns being meaningful or correct us our internal
+          definition of the table to determine the number of columns.  using
+          the parameter allows the caller to make our code operate out of
+          bounds
 
 #) When an individual column is not searchable the helper should not render a text input
    for that column

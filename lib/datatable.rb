@@ -266,7 +266,7 @@ module Datatable
     def individual_search_strings
       keys = column_attributes.keys
       result = []
-      ((@params['iColumns']||1) - 1).times do |i|
+      ((@params['iColumns']||1)).times do |i|
         filter = @params["sSearch_#{i}"]
         next if filter.blank?
         raise "can't search unsearchable column'" if column_attributes[keys[i]][:bSearchable] == false

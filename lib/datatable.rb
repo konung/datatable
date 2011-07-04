@@ -9,6 +9,7 @@
 #    results get passed back as json
 
 require 'datatable/railtie'
+require 'datatable/errors'
 require 'datatable/helper'
 require 'datatable/active_record_dsl'
 
@@ -18,6 +19,13 @@ require 'action_view' unless defined?(ActionView)
 require 'ostruct'
 
 module Datatable
+
+  PARAM_MATCHERS = [
+      /iDisplayStart/, /iDisplayLength/, /iColumns/, /sSearch/,
+      /bSearchable_\d+/, /sSearch_\d+/,  /bSortable_\d+/,
+      /iSortingCols/, /iSortCol_\d+/, /sSortDir_\d+/, /sEcho/
+  ]
+
   class Base
 
     include Datatable::ActiveRecordDSL
@@ -76,30 +84,30 @@ module Datatable
     end
 
 
-    def self._columns
-      # given the select part of a sql query
-      # for each of the columns requested
-      # create a hash inside of the columns hash
-      #   -- figure out the typ
-      select = sql_string.scan(/SELECT(.*)FROM/im)[0][0]
-      select_columns = select.split(",").map(&:strip)
-
-      select_columns.each_with_object({}) do |column, hash|
-
-        table_name = column.split('.')[0]
-
-        c = Class.new(ActiveRecord::Base)
-
-        c.class_eval do
-          set_table_name table_name
-        end
-
-        type = c.columns.detect { |col| col.name == column.split('.').last.to_s}.type
-
-        hash[column] = {:type => type}
-      end
-
-    end
+#    def self._columns
+#      # given the select part of a sql query
+#      # for each of the columns requested
+#      # create a hash inside of the columns hash
+#      #   -- figure out the typ
+#      select = sql_string.scan(/SELECT(.*)FROM/im)[0][0]
+#      select_columns = select.split(",").map(&:strip)
+#
+#      select_columns.each_with_object({}) do |column, hash|
+#
+#        table_name = column.split('.')[0]
+#
+#        c = Class.new(ActiveRecord::Base)
+#
+#        c.class_eval do
+#          set_table_name table_name
+#        end
+#
+#        type = c.columns.detect { |col| col.name == column.split('.').last.to_s}.type
+#
+#        hash[column] = {:type => type}
+#      end
+#
+#    end
 
     def self.option(key,value)
       @javascript_options ||= {}
@@ -110,9 +118,27 @@ module Datatable
       @javascript_options || {}
     end
 
+    def self.validate(params)
+      params.keys.each do |key|
+        match = false
+        PARAM_MATCHERS.each do |matcher|
+          match = true if key =~ matcher
+        end
+        raise(UknownQueryParameter, key) unless match
+      end
+    end
+
     def self.query(params, variables={})
-      params.each do |key, value|
-        params[key] = value.to_i if key =~ /^i/
+      skparams = params.stringify_keys
+      validate(skparams)
+      
+      # take advantage of the fact that datatable uses hungarian notaion
+      # and convert all of the parameters to the correct type once here
+      # instead of doing conversions through thge codebase
+      skparams.each do |key, value|
+        skparams[key] = value.to_i if key =~ /^i/
+        skparams[key] = value.to_s if key =~ /^s/
+        skparams[key] = (value ? true : false) if key =~ /^b/
       end
 
       if @sql_string && !@already_substituted
@@ -120,7 +146,7 @@ module Datatable
       end
       @already_substituted = true
 
-      datatable = new(params)
+      datatable = new(skparams)
       datatable.instance_query
       datatable.count
       datatable

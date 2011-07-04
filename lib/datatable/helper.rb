@@ -87,6 +87,9 @@ module Datatable
 
     def javascript_options
       defaults = {
+        'oLanguage' => {
+            'sInfoFiltered' => ''
+        },
         'sAjaxSource' => h(request.path),
         'sDom' => '<"H"lfr>t<"F"ip>',
         'iDisplayLength' => 10,

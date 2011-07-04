@@ -10,24 +10,27 @@ unless Rails.env =~ /test/
   class OrdersIndex < Datatable::Base
 
     sql <<-SQL
-      SELECT orders.id,
+      SELECT
+        orders.id,
         orders.order_number,
         customers.first_name,
         customers.last_name,
         orders.memo
-      FROM orders
-      JOIN customers ON(customers.id = orders.customer_id)
+      FROM
+        orders
+      JOIN
+        customers ON customers.id = orders.customer_id
     SQL
 
     columns(
-      {"orders.id" => {:type => :integer}},
-      {"orders.order_number" => {:type => :integer, :link_to => link_to('{{1}}', order_path('{{0}}')) }},
-      {"customers.first_name" => {:type => :string, :link_to => link_to('{{2}}', order_path('{{0}}')) }},
-      {"customers.last_name" => {:type => :string}},
+      {"orders.id" => {:type => :integer, :heading => "Id", :sWidth => '50px'}},
+      {"orders.order_number" => {:type => :integer, :link_to => link_to('{{1}}', order_path('{{0}}')),:heading => 'Order Number', :sWidth => '125px'  }},
+      {"customers.first_name" => {:type => :string, :link_to => link_to('{{2}}', order_path('{{0}}')),:sWidth => '200px' }},
+      {"customers.last_name" => {:type => :string,:sWidth => '200px'}},
       {"orders.memo" => {:type => :string}}
     )
 
-    option('sDom', '<"H"f>rt<"F"p>')
+    option('sDom', '<"H"lrf>t<"F"ip>')
     option('bJQueryUI', true)
     option('individual_column_searching', true)
   end

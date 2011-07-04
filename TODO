@@ -1,16 +1,25 @@
-#) when a column is not searchable it should not render a text input
-   for that columns search input
+BUG:  The last columns individual search value is ignored but global search
+        seems to work fine on that column.
 
-#) the last columns individual search paramter seems to be ignored
+#) When an individual column is not searchable the helper should not render a text input
+   for that column
 
+#) Provide example of fnRender in the tests for example: It needs to be possible to turn
+   a boolean field into 'done' or 'not done'.
 
-#) prorivde a reset link in so that all the search inputs are cleared
+#) Need to be able to define default sort ordefault sort orders
+
+#) provide a reset link in so that all the search inputs are cleared
    would be nice if it was easily hooked to a keystroke for example
    ESC when any of the inputs have the focus
 
-#) Provide example of fnRender
+#) The place holder text should be the same as the column heading except maybe all lower cased?
 
-#) default sort orders
+#) allow multiple space separated search values in global search the OR the result
+   together for each value and each column.  So for example having "alice bob" in the search input
+   would generate a where clause like this...
+
+      WHERE (first_name LIKE 'alice' OR first_name LIKE 'bob') OR (other_column LIKE 'alice' OR other_column LIKE 'bob') OR ...
 
 #) make it so both global search and individual column searches
    support typcasting so that those columns can be searched as
@@ -34,17 +43,17 @@
 
 THE FUTURE
   Rails 3.1
-  Searching Date Ranges
-  Easy Printing of Table
-  Download CSV/Excel
-  Reordering Columns
-  Lightbox Editing
-  Column ReOrdering
-  maybe parse the SQL ?
-  get acitve releation version to do more
-  it it possible to extract the where clause from the base sql reliably?
+  printing
+  download as csv/excel
+  search date ranges
+  support internationalization (http://www.datatables.net/usage/i18n)
+  support callbacks  (http://www.datatables.net/usage/callbacks)
+  support all datatable options (http://www.datatables.net/usage/options)
+  make config more robust (https://github.com/jnicklas/carrierwave/blob/master/lib/carrierwave/uploader/configuration.rb)
+  reordering columns
+  lightbox editing
+  maybe parse the sql?
+  focus on active relation version
 
-  #) Improve the initializer config code to be more robust
-          https://github.com/jnicklas/carrierwave/blob/master/lib/carrierwave/uploader/configuration.rb
 
 

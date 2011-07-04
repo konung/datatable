@@ -21,9 +21,19 @@ require 'ostruct'
 module Datatable
 
   PARAM_MATCHERS = [
-      /iDisplayStart/, /iDisplayLength/, /iColumns/, /sSearch/,
-      /bSearchable_\d+/, /sSearch_\d+/,  /bSortable_\d+/,
-      /iSortingCols/, /iSortCol_\d+/, /sSortDir_\d+/, /sEcho/
+      /\AiDisplayStart\z/,
+      /\AiDisplayLength\z/,
+      /\AiColumns\z/,
+      /\AsSearch\z/,
+      /\AbRegex\z/,
+      /\AbSearchable_\d+\z/,
+      /\AsSearch_\d+\z/,
+      /\AbRegex_\d+\z/,
+      /\AbSortable_\d+\z/,
+      /\AiSortingCols\z/,
+      /\AiSortCol_\d+\z/,
+      /\AsSortDir_\d+\z/,
+      /\AsEcho\z/
   ]
 
   class Base
@@ -83,32 +93,6 @@ module Datatable
       args.each { |element| @columns[element.keys.first] = element.values.first }
     end
 
-
-#    def self._columns
-#      # given the select part of a sql query
-#      # for each of the columns requested
-#      # create a hash inside of the columns hash
-#      #   -- figure out the typ
-#      select = sql_string.scan(/SELECT(.*)FROM/im)[0][0]
-#      select_columns = select.split(",").map(&:strip)
-#
-#      select_columns.each_with_object({}) do |column, hash|
-#
-#        table_name = column.split('.')[0]
-#
-#        c = Class.new(ActiveRecord::Base)
-#
-#        c.class_eval do
-#          set_table_name table_name
-#        end
-#
-#        type = c.columns.detect { |col| col.name == column.split('.').last.to_s}.type
-#
-#        hash[column] = {:type => type}
-#      end
-#
-#    end
-
     def self.option(key,value)
       @javascript_options ||= {}
       @javascript_options[key.to_s] = value
@@ -118,28 +102,32 @@ module Datatable
       @javascript_options || {}
     end
 
-    def self.validate(params)
-      params.keys.each do |key|
-        match = false
-        PARAM_MATCHERS.each do |matcher|
-          match = true if key =~ matcher
-        end
-        raise(UknownQueryParameter, "#{key} = #{params[key]}") unless match
+    def self.known_parameter(arg)
+      PARAM_MATCHERS.each do |matcher|
+        return true if arg =~ matcher
       end
+      false
+    end
+
+    def self.unknown_parameter(arg)
+      !(known_parameter(arg))
     end
 
     def self.query(params, variables={})
-      skparams = params.stringify_keys
-      validate(skparams)
+      # convert all of the keys to strings and filter out any non valid datatable parameters.
+      skparams = params.stringify_keys.delete_if{|k,v| unknown_parameter(k) }
       
-      # take advantage of the fact that datatable uses hungarian notaion
-      # and convert all of the parameters to the correct type once here
-      # instead of doing conversions through thge codebase
+      # take advantage of the fact that Datatables uses hungarian notation
+      # and convert all of the parameters to their correct type here instead
+      # of worring about it all throughthe code base
       skparams.each do |key, value|
         skparams[key] = value.to_i if key =~ /^i/
         skparams[key] = value.to_s if key =~ /^s/
         skparams[key] = (value ? true : false) if key =~ /^b/
       end
+
+      # sanitize all params that are used in sql
+      # sSearch, sSearch_int, sSortDir
 
       if @sql_string && !@already_substituted
         substitute_variables(variables)

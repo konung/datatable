@@ -60,6 +60,7 @@ THE FUTURE
   reordering columns
   lightbox editing
   maybe parse the sql?
+  maybe build the sql from the column definitions?
   focus on active relation version
 
 

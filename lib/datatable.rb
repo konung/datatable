@@ -126,17 +126,14 @@ module Datatable
         skparams[key] = (value ? true : false) if key =~ /^b/
       end
 
-      # sanitize all params that are used in sql
-      # sSearch, sSearch_int, sSortDir
-
       if @sql_string && !@already_substituted
         substitute_variables(variables)
       end
       @already_substituted = true
 
       datatable = new(skparams)
-      datatable.instance_query
       datatable.count
+      datatable.instance_query
       datatable
     end
 
@@ -265,8 +262,7 @@ module Datatable
         if attributes[:type] == :string
           result << sanitize("#{col} #{like_sql} ?", "%#{filter}%")
         else
-          # to_i returns 0 on arbitrary strings
-          # so only search for integers = 0 when someone actually typed 0
+          # to_i returns 0 on strings without numberic values so only search for 0 when the parameter actually contains '0'
           if filter == "0" || filter.to_i != 0
             result << "#{col} = #{filter.to_i}"
           end
@@ -289,8 +285,7 @@ module Datatable
         if attributes[:type] == :string
           result << sanitize("#{keys[i]} #{like_sql} ?", "%#{filter}%")
         else
-          # to_i returns 0 on arbitrary strings
-          # so only search for integers = 0 when someone actually typed 0
+          # to_i returns 0 on strings without numeric values only search for 0 when the parameter actually contains '0'
           if filter == "0" || filter.to_i != 0
             result << "#{keys[i]} = #{filter}"
           else

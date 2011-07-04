@@ -70,11 +70,12 @@ describe 'SQL defined datatable supports global search' do
     # we do the search.  Since order_numbers are unsearchable
     # and ids are unique we should still only get a single
     # value returned
-    Order.order(:id).last.update_attribute(:order_number, Order.order(:id).first.id)
+    order1 = Order.order(:id).first
+    order2 = Order.order(:id).last
+    order2.update_attribute(:order_number, order1.id)
     @params['bSearchable_1'] = false
-    @params['sSearch'] = Order.first.id
-    T.query(@params).to_json['aaData'][0][0].should == Order.order(:id).first.id.to_s
-    T.query(@params).to_json['aaData'].length.should == 1
+    @params['sSearch'] = order1.id.to_s
+    T.query(@params).to_json['aaData'].should == [[order1.id.to_s,order1.order_number.to_s, order1.memo.to_s]]
   end
 
   it "don't fail when no columns is searchable" do

@@ -86,4 +86,8 @@ describe 'SQL defined datatable supports individual column search' do
       lambda { T.query(@params) }.should raise_error
     end
 
+    it "should strip whitespace off of search parameters" do
+      pending
+    end
+
 end

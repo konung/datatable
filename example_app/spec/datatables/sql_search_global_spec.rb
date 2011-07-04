@@ -96,4 +96,9 @@ describe 'SQL defined datatable supports global search' do
     @params['sSearch'] = order.id.to_s
     T.query(@params).to_json['aaData'].should == []
   end
+
+  it "should strip whitespace off of search parameters" do
+    pending
+  end
+
 end

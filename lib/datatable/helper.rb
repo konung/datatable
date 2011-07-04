@@ -156,12 +156,12 @@ module Datatable
 
     def individual_column_searching
       # TODO: placeholders only supported in HTML5 
-      @datatable.columns.map do |key, value| 
-        %Q{
-          <th>
-            <input type="text" placeholder="#{key}" class="search_init" />
-          </th>
-        }
+      @datatable.columns.map do |key, value|
+        if @datatable.columns[key][:bSearchable] == false
+          %Q{ <th></th> }
+        else
+          %Q{ <th><input type="text" placeholder="#{key}" class="search_init" /></th> }
+        end
       end.join
     end
 

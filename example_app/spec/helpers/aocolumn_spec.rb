@@ -54,6 +54,7 @@ describe "ruby_aocolumns" do
         { 'orders.order_number' => {:type => :string,  :bSearchable => false  }}
       )
       helper.send(:ruby_aocolumns)[0]['bSearchable'].should == true
+      helper.send(:ruby_aocolumns)[0]['bSearchable'].should == true
       helper.send(:ruby_aocolumns)[1]['bSearchable'].should == false
     end
 

@@ -27,7 +27,7 @@ unless Rails.env =~ /test/
       {"orders.order_number" => {:type => :integer, :link_to => link_to('{{1}}', order_path('{{0}}')),:heading => 'Order Number', :sWidth => '125px'  }},
       {"customers.first_name" => {:type => :string, :link_to => link_to('{{2}}', order_path('{{0}}')),:sWidth => '200px' }},
       {"customers.last_name" => {:type => :string,:sWidth => '200px'}},
-      {"orders.memo" => {:type => :string}}
+      {"orders.memo" => {:type => :string, :bSearchable => false}}
     )
     option('bJQueryUI', true)
     option('individual_column_searching', true)

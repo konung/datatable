@@ -92,13 +92,16 @@ describe Datatable::Helper do
 
       it "should output default options" do
         helper.send(:javascript_options).should == {
-        'sAjaxSource' => '',
-        'sDom' => '<"H"lfr>t<"F"ip>',
-        'iDisplayLength' => 10,
-        'bProcessing' => true,
-        'bServerSide' => true,
-        'sPaginationType' => "full_numbers",
-        "aoColumns" => 'aocolumns_place_holder'
+            'oLanguage' => {
+                'sInfoFiltered' => ''
+            },
+            'sAjaxSource' => '',
+            'sDom' => '<"H"lfr>t<"F"ip>',
+            'iDisplayLength' => 10,
+            'bProcessing' => true,
+            'bServerSide' => true,
+            'sPaginationType' => "full_numbers",
+            'aoColumns' => "aocolumns_place_holder"
         }
       end
 

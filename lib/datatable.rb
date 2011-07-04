@@ -240,8 +240,8 @@ module Datatable
     end
 
     def global_search_string
-      filter = @params['sSearch']
-      return nil unless filter
+      return nil unless @params['sSearch']
+      filter = @params['sSearch'].strip
       result = []
 
       column_attributes.keys.each_with_index do |col, i|
@@ -267,8 +267,9 @@ module Datatable
       keys = column_attributes.keys
       result = []
       ((@params['iColumns']||1)).times do |i|
-        filter = @params["sSearch_#{i}"]
-        next if filter.blank?
+        next if @params["sSearch_#{i}"].blank?
+        filter = @params["sSearch_#{i}"].strip
+
         raise "can't search unsearchable column'" if column_attributes[keys[i]][:bSearchable] == false
         attributes = column_attributes[keys[i]]
         if attributes[:type] == :string

@@ -87,7 +87,11 @@ describe 'SQL defined datatable supports individual column search' do
     end
 
     it "should strip whitespace off of search parameters" do
-      pending
+      @params['bSearchable_2'] = true
+      @params['sSearch_2'] = ' hello '
+      expected = Order.where("memo like '%hello%'").all.map{|o| o.id.to_s }
+      actual = T.query(@params).to_json['aaData'].map{|r| r[0] }
+      expected.should == actual
     end
 
 end

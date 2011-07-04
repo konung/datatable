@@ -98,7 +98,10 @@ describe 'SQL defined datatable supports global search' do
   end
 
   it "should strip whitespace off of search parameters" do
-    pending
+    @params['sSearch'] = ' hello '
+    expected = Order.where("memo like '%hello%'").all.map{|o| o.id.to_s }
+    actual = T.query(@params).to_json['aaData'].map{|r| r[0] }
+    expected.should == actual
   end
 
 end

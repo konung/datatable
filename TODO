@@ -3,9 +3,6 @@ SECURITY: don't rely on iColumns being meaningful or correct us our internal
           the parameter allows the caller to make our code operate out of
           bounds
 
-#) global search should respect columns that are marked as unsearchable 
-
-
 #) Provide example of fnRender in the tests for example: It needs to be possible to turn
    a boolean field into 'done' or 'not done'.
 

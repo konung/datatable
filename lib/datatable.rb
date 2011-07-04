@@ -124,7 +124,7 @@ module Datatable
         PARAM_MATCHERS.each do |matcher|
           match = true if key =~ matcher
         end
-        raise(UknownQueryParameter, key) unless match
+        raise(UknownQueryParameter, "#{key} = #{params[key]}") unless match
       end
     end
 

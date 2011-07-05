@@ -20,28 +20,28 @@ Because of the fast moving nature of this project for the time being I recomend 
 Add the following to you Gemfile
 
 ```ruby
-gem "datatable", :git => "git://github.com/logic-refinery/datatable.git"
+  gem "datatable", :git => "git://github.com/logic-refinery/datatable.git"
 ```
 
 Then run bundle install
 
 ```sh
-bundle install datatable
+  bundle install datatable
 ```
 
 Then run the generator to create the javascript files and code templates
 ```sh
-rails generate datatable:install
+  rails generate datatable:install
 ```
 
 The generator will have added some javascript files to your public/javascript folder that you will and to include after JQuery
 ```erb
-<%= javascript_include_tag "jquery.dataTables" %>
+  <%= javascript_include_tag "jquery.dataTables" %>
 ```
 
 If you wnat to use the example stylesheets you will need to include that also.
 ```erb
-<%= stylesheet_link_tag "demo_page", "jquery-ui-1.7.2.custom.css", "jquery-ui-1.7.2.custom" %>
+  <%= stylesheet_link_tag "demo_page", "jquery-ui-1.7.2.custom.css", "jquery-ui-1.7.2.custom" %>
 ```
 
 

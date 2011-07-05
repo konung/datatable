@@ -41,11 +41,78 @@ The generator will have added some javascript files to your public/javascript fo
   <%= javascript_include_tag "jquery.dataTables" %>
 ```
 
-If you wnat to use the example stylesheets you will need to include that also.
+If you want to use the example stylesheets you will need to include that also.
 
 ```erb
   <%= stylesheet_link_tag "demo_page", "jquery-ui-1.7.2.custom.css", "jquery-ui-1.7.2.custom" %>
 ```
+
+Usage
+=====
+
+Imagine that you have a 'Order' model that belongs to a Customer and has many Item
+
+In app/controllers/orders_controller.rb you would add something like this:
+
+```ruby
+  def index
+    @datatable = OrdersIndex
+    respond_to do |format|
+      format.html
+      format.js { render :json => @datatable.query(params).to_json }
+    end
+  end
+```
+
+In app/views/orders/index.html.erb you would add something like this:
+
+```erb
+  <%= datatable %>
+```
+
+In app/datatables/orders_index.rb you would add something like this:
+
+```ruby
+  class OrdersIndex < Datatable::Base
+    sql <<-SQL
+      SELECT
+      orders.id,
+      orders.order_number,
+      customers.first_name,
+      customers.last_name,
+      orders.memo
+    FROM
+      orders
+    JOIN
+      customers ON customers.id = orders.customer_id
+    SQL
+
+    columns(
+      {"orders.id" => {:type => :integer, :heading => "Id", :sWidth => '50px'}},
+      {"orders.order_number" => {:type => :integer, :link_to => link_to('{{1}}', order_path('{{0}}')),:heading => 'Order Number', :sWidth => '125px' }},
+      {"customers.first_name" => {:type => :string, :link_to => link_to('{{2}}', order_path('{{0}}')),:sWidth => '200px' }},
+      {"customers.last_name" => {:type => :string,:sWidth => '200px'}},
+      {"orders.memo" => {:type => :string }})
+
+    option('bJQueryUI', true)
+    option('individual_column_searching', true)
+    option('sDom', '<"clear"><"H"Trf>t<"F"i>')
+    option('bScrollInfinite', true)
+    option('bScrollCollapse', true)
+    option('sScrollY', '200px')
+  end
+```
+
+In app/config/initializers/datatable.rb you would add something like this:
+
+```ruby
+  Datatable::Base.config do |config|
+    config.style = true
+    config.sql_like = 'ILIKE'
+    config.table_tools = true
+  end
+```
+
 
 
 ----------------------------

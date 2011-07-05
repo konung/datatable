@@ -121,4 +121,4 @@ In app/config/initializers/datatable.rb you would add something like this:
 Limitations
 ==========
 
-There are many but most notbaly it only supports MySQL and PostgreSLQ through ActiveRecord.
+ *  It only supports MySQL and PostgreSLQ through ActiveRecord.

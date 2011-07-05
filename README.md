@@ -4,7 +4,8 @@ Datatable
 This is a [Rails 3.0](http://rubyonrails.org) plugin that provides an interface to the [Datatables](http://datatables.net) javascript library.
 
 Currently this gem only supports MySQL and PostgreSQL through ActiveRecord.
- 
+
+![Alt text](https://github.com/logic-refinery/datatable/raw/master/images/datatable_screenshot.png "optional title") 
 
 Introduction
 ============

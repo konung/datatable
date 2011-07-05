@@ -1,9 +1,9 @@
 Datatable
 =========
 
-This is a [Rails 3.0](http://rubyonrails.org) plugin that provides an interface to the [Datatables](http://datatables.net) javascript library.
+This is a [Rails 3.0](http://rubyonrails.org) plugin that provides server-side processing for the [Datatables](http://datatables.net) javascript library.  The image below
+contains an example with the optional TableTools plugin, global search, per column search and infite scrolling.
 
-Currently this gem only supports MySQL and PostgreSQL through ActiveRecord.
 
 ![Alt text](https://github.com/logic-refinery/datatable/raw/master/images/datatable_screenshot.png "optional title") 
 
@@ -117,3 +117,8 @@ In app/config/initializers/datatable.rb you would add something like this:
     config.table_tools = true
   end
 ```
+
+Limitations
+==========
+
+There are many but most notbaly it only supports MySQL and PostgreSLQ through ActiveRecord.

@@ -46,7 +46,9 @@ module Datatable
     def javascript_options
       defaults = {
         'oLanguage' => {
-            'sInfoFiltered' => ''
+            'sInfoFiltered' => '',
+            'sProcessing' => '<img alt="processing" src="/images/spinner.gif"/>'
+
         },
         'sAjaxSource' => h(request.path),
         'sDom' => '<"H"lfr>t<"F"ip>',

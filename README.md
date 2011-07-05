@@ -18,12 +18,13 @@ for you in return.
 Setup
 ======
 
-Because of the fast moving nature of this project for the time being I recomend using bundler and pulling from the git repository.
+Because of the fast moving nature of this project for the time being I recomend using bundler and pulling from git.  If you
+intend to deploy an application using this gem I'd recomend locking your dependency to a specific well tested commit.
 
 Add the following to you Gemfile
 
 ```ruby
-  gem "datatable", :git => "git://github.com/logic-refinery/datatable.git"
+  gem "datatable", :git => "git://github.com/logic-refinery/datatable.git" :ref => "500a5f"
 ```
 
 Then run bundle install

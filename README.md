@@ -1,8 +1,8 @@
 Datatable
 =========
 
-This is a [Rails 3.0](http://rubyonrails.org) plugin that provides server-side processing for the [Datatables](http://datatables.net) javascript library.  The image below
-contains an example with the optional TableTools plugin, global search, per column search and infite scrolling.
+This is a [Rails 3.0](http://rubyonrails.org) plugin that provides server-side processing for the [Datatables](http://datatables.net) javascript library.  The screenshot below
+contains an example with global search, per column search, infinite scrolling and the optional table tools plugin installed.
 
 
 ![Alt text](https://github.com/logic-refinery/datatable/raw/master/images/datatable_screenshot.png "optional title") 

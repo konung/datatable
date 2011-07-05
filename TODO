@@ -1,3 +1,6 @@
+BUG: search column count doesn't include unsearchable columns and this
+     isn't taken into account.
+
 SECURITY: don't rely on iColumns being meaningful or correct us our internal
           definition of the table to determine the number of columns.  using
           the parameter allows the caller to make our code operate out of

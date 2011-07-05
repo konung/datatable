@@ -43,11 +43,35 @@ module Datatable
 
     private
 
+    def javascript_options
+      defaults = {
+        'oLanguage' => {
+            'sInfoFiltered' => ''
+        },
+        'sAjaxSource' => h(request.path),
+        'sDom' => '<"H"lfr>t<"F"ip>',
+        'iDisplayLength' => 10,
+        'bProcessing' => true,
+        'bServerSide' => true,
+        'sPaginationType' => "full_numbers",
+        'aoColumns' => "aocolumns_place_holder"
+      }
+
+      if Datatable::Base.config.table_tools == true
+        defaults['oTableTools'] = {
+            'sSwfPath' => 'swf/copy_cvs_xls_pdf.swf'
+        }
+      end
+
+      defaults.merge(@datatable.javascript_options)
+    end
+
     def datatable_styled_html
       <<-CONTENT.gsub(/^\s{6}/,"").html_safe
         <link href="http://www.datatables.net/release-datatables/media/css/demo_page.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="http://www.datatables.net/release-datatables/media/css/demo_table_jui.css" media="screen" rel="stylesheet" type="text/css" />
         <link href="http://www.datatables.net/examples/examples_support/themes/smoothness/jquery-ui-1.7.2.custom.css" media="screen" rel="stylesheet" type="text/css" />
+        #{ javascript_include_tag 'TableTools.min.js' if Datatable::Base.config.table_tools == true  }
         <div id="dt_example" style="width: 800px">
         #{datatable_unstyled_html}
         </div>
@@ -59,7 +83,7 @@ module Datatable
         <table id='datatable'>
           <thead>
             <tr>
-      #{headings}
+            #{headings}
             </tr>
           </thead>
           <tbody>
@@ -74,6 +98,8 @@ module Datatable
     end
 
 
+
+
     def headings
       @datatable.columns.map do |key, value|
         "<th>#{value[:heading] || humanize_column(key)}</th>"
@@ -85,21 +111,6 @@ module Datatable
       [columns[0].singularize, columns[1]].map(&:humanize).map(&:titleize).join(" ")
     end
 
-    def javascript_options
-      defaults = {
-        'oLanguage' => {
-            'sInfoFiltered' => ''
-        },
-        'sAjaxSource' => h(request.path),
-        'sDom' => '<"H"lfr>t<"F"ip>',
-        'iDisplayLength' => 10,
-        'bProcessing' => true,
-        'bServerSide' => true,
-        'sPaginationType' => "full_numbers",
-        'aoColumns' => "aocolumns_place_holder"
-      }
-      defaults.merge(@datatable.javascript_options)
-    end
 
     #  returns a ruby hash of
     def ruby_aocolumns

@@ -23,17 +23,17 @@ unless Rails.env =~ /test/
     SQL
 
     columns(
-      {"orders.id" => {:type => :integer, :heading => "Id", :sWidth => '50px', :bSearchable => false}},
+      {"orders.id" => {:type => :integer, :heading => "Id", :sWidth => '50px'}},
       {"orders.order_number" => {:type => :integer, :link_to => link_to('{{1}}', order_path('{{0}}')),:heading => 'Order Number', :sWidth => '125px'  }},
       {"customers.first_name" => {:type => :string, :link_to => link_to('{{2}}', order_path('{{0}}')),:sWidth => '200px' }},
       {"customers.last_name" => {:type => :string,:sWidth => '200px'}},
-      {"orders.memo" => {:type => :string, :bSearchable => false}}
+      {"orders.memo" => {:type => :string }}
     )
     option('bJQueryUI', true)
     option('individual_column_searching', true)
     #option('sDom', '<"H"lrf>t<"F"ip>')    # use with pagination
     # to use pagination comment out following and enable previous line
-    option('sDom', '<"H"rf>t<"F"i>')
+    option('sDom', '<"clear"><"H"Trf>t<"F"i>')
     option('bScrollInfinite', true)
     option('bScrollCollapse', true)
     option('sScrollY', '200px')

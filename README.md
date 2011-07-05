@@ -40,7 +40,9 @@ The generator will have added some javascript files to your public/javascript fo
 ```
 
 If you wnat to use the example stylesheets you will need to include that also.
+```erb
 <%= stylesheet_link_tag "demo_page", "jquery-ui-1.7.2.custom.css", "jquery-ui-1.7.2.custom" %>
+```
 
 
 ----------------------------

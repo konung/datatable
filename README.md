@@ -2,18 +2,17 @@ Datatable
 =========
 
 This is a [Rails 3.0](http://rubyonrails.org) plugin that provides an interface to the [Datatables](http://datatables.net) javascript library.
-Currently it only support MySQL and PostgreSQL through ActiveRecord.
 
+Currently this gem only supports MySQL and PostgreSQL through ActiveRecord.
+ 
 
 Introduction
 ============
 
 This gem is in an early stage of development.  It's likely the code base will experience significant churn in the next few releases as we
-search for the best way deliver the desired functionality.  If you think this may be a problem you should most likely avoid using this
-gem for production use.  On the other hand if you're not afraid of diving into the code to help us solve a problem we will certiainly do 
-what we can do help you in return.
-
-
+search for the best way deliver the desired functionality.  If you think this may be a problem you should most likely avoid using it for now.
+On the other hand if you're not afraid of diving into the code to help us improve it we will certiainly do what we can to make sure it works
+for you in return.
 
 Setup
 ======
@@ -73,7 +72,9 @@ In app/views/orders/index.html.erb you would add something like this:
   <%= datatable %>
 ```
 
-In app/datatables/orders_index.rb you would add something like this:
+In app/datatables/orders_index.rb you would need to define the datatable.  In the future this hopefully will be a DSL that's easier to use.
+Right now it mostly just exposes the internal datastructures so the necessary information can be defined. See the [wiki](https://github.com/logic-refinery/datatable/wiki) 
+for more detailed information.
 
 ```ruby
   class OrdersIndex < Datatable::Base
@@ -115,8 +116,3 @@ In app/config/initializers/datatable.rb you would add something like this:
     config.table_tools = true
   end
 ```
-
-
-
-----------------------------
-See the [wiki](https://github.com/logic-refinery/datatable/wiki) for more detailed information.

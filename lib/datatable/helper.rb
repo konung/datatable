@@ -59,7 +59,7 @@ module Datatable
 
       if Datatable::Base.config.table_tools == true
         defaults['oTableTools'] = {
-            'sSwfPath' => 'swf/copy_cvs_xls_pdf.swf'
+            'sSwfPath' => 'flash/copy_cvs_xls_pdf.swf'
         }
       end
 
@@ -68,9 +68,11 @@ module Datatable
 
     def datatable_styled_html
       <<-CONTENT.gsub(/^\s{6}/,"").html_safe
-        <link href="http://www.datatables.net/release-datatables/media/css/demo_page.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="http://www.datatables.net/release-datatables/media/css/demo_table_jui.css" media="screen" rel="stylesheet" type="text/css" />
-        <link href="http://www.datatables.net/examples/examples_support/themes/smoothness/jquery-ui-1.7.2.custom.css" media="screen" rel="stylesheet" type="text/css" />
+        #{ stylesheet_link_tag "demo_page.css" }
+        #{ stylesheet_link_tag "demo_table_jui.css" }
+        #{ stylesheet_link_tag "smoothness/jquery-ui-1.8.14.custom.css" }
+        #{ stylesheet_link_tag "TableTools_JUI.css"  if Datatable::Base.config.table_tools == true }
+        #{ javascript_include_tag 'jquery.dataTables.min.js' }
         #{ javascript_include_tag 'TableTools.min.js' if Datatable::Base.config.table_tools == true  }
         <div id="dt_example" style="width: 800px">
         #{datatable_unstyled_html}

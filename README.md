@@ -1,7 +1,9 @@
 Datatable
 =========
 
-This is a [Rails 3.0](http://rubyonrails.org) plugin that provides an interface to the [Datatables](http://datatables.net) javascript library.  
+This is a [Rails 3.0](http://rubyonrails.org) plugin that provides an interface to the [Datatables](http://datatables.net) javascript library.
+Currently it only support MySQL and PostgreSQL through ActiveRecord.
+
 
 Introduction
 ============
@@ -10,6 +12,7 @@ This gem is in an early stage of development.  It's likely the code base will ex
 search for the best way deliver the desired functionality.  If you think this may be a problem you should most likely avoid using this
 gem for production use.  On the other hand if you're not afraid of diving into the code to help us solve a problem we will certiainly do 
 what we can do help you in return.
+
 
 
 Setup
@@ -50,7 +53,7 @@ If you want to use the example stylesheets you will need to include that also.
 Usage
 =====
 
-Imagine that you have a 'Order' model that belongs to a Customer and has many Item
+Imagine that you have an 'Order' that belongs to a 'Customer' and has many 'Item'
 
 In app/controllers/orders_controller.rb you would add something like this:
 

@@ -39,16 +39,27 @@ Then run the generator to create the javascript files and code templates
   rails generate datatable:install
 ```
 
-The generator will have added some javascript files to your public/javascript folder that you will and to include after JQuery
-
+The generator will have added some javascript files to your public/javascript folder that need to be added after jquery using a helper.
 ```erb
-  <%= javascript_include_tag "jquery.dataTables" %>
+  <%= javascript_include_tag :defaults %>
+  <%= javascript_include_tags_for_datatable %>
 ```
 
-If you want to use the example stylesheets you will need to include that also.
+If you want to use the jquery ui be sure to include those style sheets.
 
 ```erb
-  <%= stylesheet_link_tag "demo_page", "jquery-ui-1.7.2.custom.css", "jquery-ui-1.7.2.custom" %>
+  <%= stylesheet_link_tag :all %>
+  <%= stylesheet_link_tag 'smoothness/jquery-ui-1.8.14.custom' %>
+```
+
+The generator created a template in app/config/initializers/datatable.rb that you can modify as needed.
+
+```ruby
+  Datatable::Base.config do |config|
+    config.style = true
+    config.sql_like = 'ILIKE'
+    config.table_tools = true
+  end
 ```
 
 Usage
@@ -109,15 +120,6 @@ for more detailed information.
   end
 ```
 
-In app/config/initializers/datatable.rb you would add something like this:
-
-```ruby
-  Datatable::Base.config do |config|
-    config.style = true
-    config.sql_like = 'ILIKE'
-    config.table_tools = true
-  end
-```
 
 Limitations
 ==========

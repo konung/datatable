@@ -44,6 +44,7 @@ SECURITY: don't rely on iColumns being meaningful or correct us our internal
 #) release 0.1 (support for rails 3.0)
 
 THE FUTURE
+  Move all tests into root directory so there can be multiple versions of the example application
   Rails 3.1
   printing
   download as csv/excel

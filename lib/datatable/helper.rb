@@ -41,6 +41,14 @@ module Datatable
       </script>".html_safe
     end
 
+    def javascript_include_tags_for_datatable
+      <<-CONTENT.gsub(/^\s{6}/,"").html_safe
+      #{ javascript_include_tag 'jquery-ui-1.8.14' if Datatable::Base.config.jquery_ui == true  }
+      #{ javascript_include_tag 'jquery.dataTables.min' if Datatable::Base.config.table_tools == true  }
+      #{ javascript_include_tag 'TableTools.min' if Datatable::Base.config.table_tools == true  }
+      CONTENT
+     end
+
     private
 
     def javascript_options
@@ -68,14 +76,10 @@ module Datatable
       defaults.merge(@datatable.javascript_options)
     end
 
+    
+
     def datatable_styled_html
       <<-CONTENT.gsub(/^\s{6}/,"").html_safe
-        #{ stylesheet_link_tag "demo_page.css" }
-        #{ stylesheet_link_tag "demo_table_jui.css" }
-        #{ stylesheet_link_tag "smoothness/jquery-ui-1.8.14.custom.css" }
-        #{ stylesheet_link_tag "TableTools_JUI.css"  if Datatable::Base.config.table_tools == true }
-        #{ javascript_include_tag 'jquery.dataTables.min.js' }
-        #{ javascript_include_tag 'TableTools.min.js' if Datatable::Base.config.table_tools == true  }
         <div id="dt_example" style="width: 800px">
         #{datatable_unstyled_html}
         </div>

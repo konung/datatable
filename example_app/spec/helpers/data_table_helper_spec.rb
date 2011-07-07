@@ -91,18 +91,25 @@ describe Datatable::Helper do
     describe "javascript options" do
 
       it "should output default options" do
-        helper.send(:javascript_options).should == {
+        expected = {
             'oLanguage' => {
-                'sInfoFiltered' => ''
+                'sInfoFiltered' => '',
+                'sProcessing' => '<img alt="processing" src="/images/spinner.gif"/>'
             },
             'sAjaxSource' => '',
             'sDom' => '<"H"lfr>t<"F"ip>',
-            'iDisplayLength' => 10,
+            'iDisplayLength' => 25,
             'bProcessing' => true,
             'bServerSide' => true,
             'sPaginationType' => "full_numbers",
             'aoColumns' => "aocolumns_place_holder"
-        }
+         }
+        if Datatable::Base.config.table_tools == true
+          expected['oTableTools'] = {
+              'sSwfPath' => 'flash/copy_cvs_xls_pdf.swf'
+          }
+        end
+        helper.send(:javascript_options).should == expected
       end
 
       it "should merge defaults with others" do

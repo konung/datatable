@@ -60,7 +60,7 @@ module Datatable
         },
         'sAjaxSource' => h(request.path),
         'sDom' => '<"H"lfr>t<"F"ip>',
-        'iDisplayLength' => 10,
+        'iDisplayLength' => 25,
         'bProcessing' => true,
         'bServerSide' => true,
         'sPaginationType' => "full_numbers",
@@ -176,10 +176,11 @@ module Datatable
     def individual_column_searching
       # TODO: placeholders only supported in HTML5 
       @datatable.columns.map do |key, value|
+
         if @datatable.columns[key][:bSearchable] == false
           %Q{ <th></th> }
         else
-          %Q{ <th><input type="text" placeholder="#{key}" class="search_init" /></th> }
+          %Q{ <th><input type="text" placeholder="#{ @datatable.columns[key][:sTitle] || key}" class="search_init" /></th> }
         end
       end.join
     end

@@ -23,8 +23,8 @@ unless Rails.env =~ /test/
     SQL
 
     columns(
-      {"orders.id" => {:type => :integer, :heading => "Id", :sWidth => '50px'}},
-      {"orders.order_number" => {:type => :integer, :link_to => link_to('{{1}}', order_path('{{0}}')),:heading => 'Order Number', :sWidth => '125px'  }},
+      {"orders.id" => {:type => :integer, :sTitle => "Id", :sWidth => '50px'}},
+      {"orders.order_number" => {:type => :integer, :link_to => link_to('{{1}}', order_path('{{0}}')),:sTitle => 'Order Number', :sWidth => '125px'  }},
       {"customers.first_name" => {:type => :string, :link_to => link_to('{{2}}', order_path('{{0}}')),:sWidth => '200px' }},
       {"customers.last_name" => {:type => :string,:sWidth => '200px'}},
       {"orders.memo" => {:type => :string }}

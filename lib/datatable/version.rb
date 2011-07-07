@@ -1,4 +1,4 @@
 module Datatable
-  VERSION = "0.1.alpha.2"
+  # http://semver.org
+  VERSION = "0.1.0alpha2"
 end
-

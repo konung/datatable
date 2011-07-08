@@ -177,16 +177,10 @@ module Datatable
       # TODO: placeholders only supported in HTML5 
       @datatable.columns.map do |key, value|
 
-        if @datatable.columns[key][:sWidth]
-          style = %Q{style="width: #{@datatable.columns[key][:sWidth]}"}
-        else
-          style = %Q{style="width: 90%"}
-        end
-
         if @datatable.columns[key][:bSearchable] == false
           %Q{ <th></th> }
         else
-          %Q{ <th><input type="text" #{style} placeholder="#{ @datatable.columns[key][:sTitle] || key}" class="search_init" /></th> }
+          %Q{ <th><input type="text" placeholder="#{ @datatable.columns[key][:sTitle] || key}" class="search_init" /></th> }
         end
       end.join
     end

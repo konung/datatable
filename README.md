@@ -7,12 +7,19 @@ contains an example with global search, per column search, infinite scrolling an
 
 ![Alt text](https://github.com/logic-refinery/datatable/raw/master/images/datatable_screenshot.png "optional title") 
 
+
+WARNING!!!
+==========
+
+This gem is not ready for primetime but if you're feeling adventurous read on....
+
+
 Introduction
 ============
 
-This gem is in an early stage of development.  It's likely the code base will experience significant churn in the next few releases as we
-search for the best way deliver the desired functionality.  If you think this may be a problem you should most likely avoid using it for now.
-On the other hand if you're not afraid of diving into the code to help us improve it we will certiainly do what we can to make sure it works
+It's likely the code base will experience significant churn in the next few releases as we search for the best way deliver the desired 
+functionality.  If you think this may be a problem you should most likely avoid using it for now.  On the other hand if you're not afraid
+of diving into the code to help us improve it we will certiainly do what we can to make sure it works
 for you in return.
 
 Setup

@@ -41,23 +41,31 @@ module Datatable
       </script>".html_safe
     end
 
-    def javascript_include_tags_for_datatable
-      <<-CONTENT.gsub(/^\s{6}/,"").html_safe
-      #{ javascript_include_tag 'jquery-ui-1.8.14' if Datatable::Base.config.jquery_ui == true  }
-      #{ javascript_include_tag 'jquery.dataTables.min' if Datatable::Base.config.table_tools == true  }
-      #{ javascript_include_tag 'TableTools.min' if Datatable::Base.config.table_tools == true  }
-      CONTENT
-     end
+    def javascript_include_datatable
+      "".tap do |javascripts|
+
+        if Datatable::Base.config.jquery_ui != false
+          javascripts << (javascript_include_tag '/datatable/js/jquery-ui-1.8.14.custom.min.js')
+        end
+
+        javascripts << (javascript_include_tag '/datatable/js/jquery.dataTables.min.js')
+
+        if Datatable::Base.config.table_tools == true  
+          javascripts << (javascript_include_tag '/datatable/js/TableTools.min.js')
+        end
+
+      end.html_safe
+    end
 
     private
 
     def javascript_options
       defaults = {
         'oLanguage' => {
-            'sInfoFiltered' => '',
-            'sProcessing' => '<img alt="processing" src="/images/spinner.gif"/>'
+        'sInfoFiltered' => '',
+        'sProcessing' => Datatable::Base.config.spinner || 'Loading'
 
-        },
+      },
         'sAjaxSource' => h(request.path),
         'sDom' => '<"H"lfr>t<"F"ip>',
         'iDisplayLength' => 25,
@@ -69,19 +77,19 @@ module Datatable
 
       if Datatable::Base.config.table_tools == true
         defaults['oTableTools'] = {
-            'sSwfPath' => 'flash/copy_cvs_xls_pdf.swf'
+          'sSwfPath' => 'flash/copy_cvs_xls_pdf.swf'
         }
       end
 
       defaults.merge(@datatable.javascript_options)
     end
 
-    
+
 
     def datatable_styled_html
       <<-CONTENT.gsub(/^\s{6}/,"").html_safe
         <div id="dt_example" style="width: 800px">
-        #{datatable_unstyled_html}
+      #{datatable_unstyled_html}
         </div>
       CONTENT
     end
@@ -91,14 +99,14 @@ module Datatable
         <table id='datatable'>
           <thead>
             <tr>
-            #{headings}
+      #{headings}
             </tr>
           </thead>
           <tbody>
           </tbody>
           <tfoot>
           <tr>
-            #{individual_column_searching if @datatable.javascript_options['individual_column_searching']}
+      #{individual_column_searching if @datatable.javascript_options['individual_column_searching']}
           </tr>
           </tfoot>
         </table>
@@ -127,28 +135,28 @@ module Datatable
                             bUseRendered bVisible fnRender iDataSort
                             mDataProp sClass sDefaultContent sName
                             sSortDataType sTitle sType sWidth link_to ]
-      index = 0
-      @datatable.columns.each_value do |column_hash|
-        column_result = {}
-        column_hash.each do |key,value|
-          if column_def_keys.include?(key.to_s)
-            column_result[key.to_s] = value
-          end
-        end
+                            index = 0
+                            @datatable.columns.each_value do |column_hash|
+                              column_result = {}
+                              column_hash.each do |key,value|
+                                if column_def_keys.include?(key.to_s)
+                                  column_result[key.to_s] = value
+                                end
+                              end
 
-        # rewrite any link_to values as fnRender functions
-        if column_result.include?('link_to')
-          column_result['fnRender'] = %Q|function(oObj) { return replace('#{column_result['link_to']}', oObj.aData);}|
-          column_result.delete('link_to')
-        end
+                              # rewrite any link_to values as fnRender functions
+                              if column_result.include?('link_to')
+                                column_result['fnRender'] = %Q|function(oObj) { return replace('#{column_result['link_to']}', oObj.aData);}|
+                                column_result.delete('link_to')
+                              end
 
-        if column_result.empty?
-          result << nil
-        else
-          result << column_result
-        end
-      end
-      result
+                              if column_result.empty?
+                                result << nil
+                              else
+                                result << column_result
+                              end
+                            end
+                            result
     end
 
     def aocolumns_text
@@ -158,10 +166,10 @@ module Datatable
           inner = []
           column.each do |key, value|
             inner << case key
-              when 'fnRender'
-                "\"#{key.to_s}\": #{value.to_json[1..-2]}"
-              else
-                "\"#{key.to_s}\": #{value.to_json}"
+            when 'fnRender'
+              "\"#{key.to_s}\": #{value.to_json[1..-2]}"
+            else
+              "\"#{key.to_s}\": #{value.to_json}"
             end
           end
           outer << "{" + inner.join(", ") + "}"

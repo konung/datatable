@@ -20,12 +20,12 @@ class OrdersIndex < Datatable::Base
     {"customers.last_name" => {:type => :string,:sWidth => '200px'}},
     {"orders.memo" => {:type => :string }}
   )
-  option('bJQueryUI', true)
-  option('individual_column_searching', true)
+  # option('bJQueryUI', true)
+  # option('individual_column_searching', true)
   #option('sDom', '<"H"lrf>t<"F"ip>')    # use with pagination
   # to use pagination comment out following and enable previous line
-  option('sDom', '<"clear"><"H"Trf>t<"F"i>')
-  option('bScrollInfinite', true)
-  option('bScrollCollapse', true)
-  option('sScrollY', '200px')
+  # option('sDom', '<"clear"><"H"Trf>t<"F"i>')
+  # option('bScrollInfinite', true)
+  # option('bScrollCollapse', true)
+  # option('sScrollY', '200px')
 end

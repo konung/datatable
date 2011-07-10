@@ -19,35 +19,35 @@ module Datatable
       def show_next_steps
 
         puts "\n" * 3
-        puts "-" * 60
-        puts "\n" * 3
 
         puts <<-HELPFUL_INSTRUCTIONS
         
-Next Steps:
+   Next Steps:
 
-0. You must be using and including JQuery. 
+   0. You must be using and including JQuery. 
 
-  # Gemfile
+     # Gemfile
 
-  gem 'jquery-rails'
+     gem 'jquery-rails'
 
-  Then bundle and run rails g jquery:install
+     Then bundle and run rails g jquery:install
 
-1. Put the asset tags into your layouts:
 
-  # app/views/layouts/admin.html.erb
+   1. Put the asset tags into your layouts:
 
-  <%= stylesheet_link_tag '/datatable/css/demo_table.css' %>
+     # app/views/layouts/admin.html.erb
 
-  <%= javascript_include_tag :defaults %>
+     <%= stylesheet_link_tag '/datatable/css/demo_table.css' %>
 
-  <%# The datatable javascript tag must come after you require jquery! %>
-  <%= javascript_include_datatable %> 
+     <%= javascript_include_tag :defaults %>
 
-2. Create a Datatable. We suggest naming it Controller#Action.
+     <%# The datatable javascript tag must come after you require jquery! %>
+     <%= javascript_include_datatable %> 
 
-  rails g datatable:new UsersIndex
+
+   2. Create a Datatable. We suggest naming it Controller#Action.
+
+     rails g datatable:new UsersIndex
         HELPFUL_INSTRUCTIONS
         puts "\n" * 5
 

@@ -20,7 +20,6 @@ class OrdersIndex < Datatable::Base
     {"customers.last_name" => {:type => :string,:sWidth => '200px'}},
     {"orders.memo" => {:type => :string }}
   )
-#  option('bJQueryUI', true)
   option('individual_column_searching', true)
   #option('sDom', '<"H"lrf>t<"F"ip>')    # use with pagination
   

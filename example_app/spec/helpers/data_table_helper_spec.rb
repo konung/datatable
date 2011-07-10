@@ -103,7 +103,7 @@ describe Datatable::Helper do
           'bServerSide' => true,
           'sPaginationType' => "full_numbers",
           'aoColumns' => "aocolumns_place_holder",
-          'bJQueryUI' => false
+          'bJQueryUI' => Datatable::Base.config.jquery_ui ? true : false
         }
         if Datatable::Base.config.table_tools == true
           expected['oTableTools'] = {

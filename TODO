@@ -9,10 +9,6 @@ SECURITY: don't rely on iColumns being meaningful or correct us our internal
 PERFORMANCE: if the search string is empty leave that search out of the SQL 
              don't search for '%%'
 
-update generator helpful messages
-do the generator for an indie table, update messages
-
-
 #) replace haeding w/ sTitle
 #) set option('bJQueryUI', true) based on the config.jquery_ui option
 #) Provide example of fnRender in the tests for example: It needs to be possible to turn

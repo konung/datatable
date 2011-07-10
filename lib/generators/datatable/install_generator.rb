@@ -18,13 +18,38 @@ module Datatable
 
       def show_next_steps
 
+        puts "\n" * 3
+        puts "-" * 60
+        puts "\n" * 3
+
         puts <<-HELPFUL_INSTRUCTIONS
-        Next Steps
+        
+Next Steps:
 
-          1. Put in the asset tags
+0. You must be using and including JQuery. 
 
-          2. rails g datatable your_table
+  # Gemfile
+
+  gem 'jquery-rails'
+
+  Then bundle and run rails g jquery:install
+
+1. Put the asset tags into your layouts:
+
+  # app/views/layouts/admin.html.erb
+
+  <%= stylesheet_link_tag '/datatable/css/demo_table.css' %>
+
+  <%= javascript_include_tag :defaults %>
+
+  <%# The datatable javascript tag must come after you require jquery! %>
+  <%= javascript_include_datatable %> 
+
+2. Create a Datatable. We suggest naming it Controller#Action.
+
+  rails g datatable:new UsersIndex
         HELPFUL_INSTRUCTIONS
+        puts "\n" * 5
 
       end
 

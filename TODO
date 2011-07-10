@@ -10,7 +10,12 @@ PERFORMANCE: if the search string is empty leave that search out of the SQL
              don't search for '%%'
 
 #) replace haeding w/ sTitle
-#) set option('bJQueryUI', true) based on the config.jquery_ui option
+
+
+
+
+--------
+
 #) Provide example of fnRender in the tests for example: It needs to be possible to turn
    a boolean field into 'done' or 'not done'.
 
@@ -28,7 +33,14 @@ PERFORMANCE: if the search string is empty leave that search out of the SQL
 
       WHERE (first_name LIKE 'alice' OR first_name LIKE 'bob') OR (other_column LIKE 'alice' OR other_column LIKE 'bob') OR ...
 
-#) make it so both global search and individual column searches
+
+#) release 0.1 (support for rails 3.0)
+
+THE FUTURE
+  Advanced search
+  Date search
+  TYPECASTING
+    #) make it so both global search and individual column searches
    support typcasting so that those columns can be searched as
    strings, example:
 
@@ -37,18 +49,6 @@ PERFORMANCE: if the search string is empty leave that search out of the SQL
        column({'orders.order_number' => {:type => :string, :cast => :text }})
 
    having :cast present would force it to build any where clauses using a type cast
-
-#) rails generator
-     add javascript to public/javascripts
-     add css for default datatable theme to public/stylesheets
-     add template for config/initializer/datatable.rb
-     create folder app/datatables/
-
-#) web site, readme, wiki on github
-
-#) release 0.1 (support for rails 3.0)
-
-THE FUTURE
   Move all tests into root directory so there can be multiple versions of the example application
   Rails 3.1
   printing
@@ -66,3 +66,4 @@ THE FUTURE
 
 
 
+http://docs.codehaus.org/display/JPARSEC/SQL+parser+in+rparsec

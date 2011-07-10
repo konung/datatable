@@ -50,7 +50,7 @@ The generator will have added some javascript files to your public/javascript fo
 
 ```erb
   <%= javascript_include_tag :defaults %>
-  <%= javascript_include_tags_for_datatable %>
+  <%= datatable_javascript %>
 ```
 
 If you want to use the jquery ui be sure to include those style sheets.

@@ -94,7 +94,7 @@ describe Datatable::Helper do
         expected = {
             'oLanguage' => {
                 'sInfoFiltered' => '',
-                'sProcessing' => '<img alt="processing" src="/images/spinner.gif"/>'
+                'sProcessing' => 'Loading'
             },
             'sAjaxSource' => '',
             'sDom' => '<"H"lfr>t<"F"ip>',

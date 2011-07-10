@@ -37,7 +37,7 @@ Add the following to you Gemfile
 Then run bundle install
 
 ```sh
-  bundle install datatable
+  bundle
 ```
 
 Then run the generator to create the javascript files and code templates
@@ -47,6 +47,7 @@ Then run the generator to create the javascript files and code templates
 ```
 
 The generator will have added some javascript files to your public/javascript folder that need to be added after jquery using a helper.
+
 ```erb
   <%= javascript_include_tag :defaults %>
   <%= javascript_include_tags_for_datatable %>

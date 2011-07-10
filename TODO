@@ -9,6 +9,7 @@ SECURITY: don't rely on iColumns being meaningful or correct us our internal
 PERFORMANCE: if the search string is empty leave that search out of the SQL 
              don't search for '%%'
 
+#) replace haeding w/ sTitle
 #) Provide example of fnRender in the tests for example: It needs to be possible to turn
    a boolean field into 'done' or 'not done'.
 
@@ -17,8 +18,6 @@ PERFORMANCE: if the search string is empty leave that search out of the SQL
 #) provide a reset link in so that all the search inputs are cleared
    would be nice if it was easily hooked to a keystroke for example
    ESC when any of the inputs have the focus
-
-#) The place holder text should be the same as the column heading except maybe all lower cased?
 
 #) allow multiple space separated search values in global search the OR the result
    together for each value and each column.  So for example having "alice bob" in the search input

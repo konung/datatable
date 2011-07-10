@@ -92,32 +92,53 @@ describe Datatable::Helper do
 
       it "should output default options" do
         expected = {
-            'oLanguage' => {
-                'sInfoFiltered' => '',
-                'sProcessing' => 'Loading'
-            },
-            'sAjaxSource' => '',
-            'sDom' => '<"H"lfr>t<"F"ip>',
-            'iDisplayLength' => 25,
-            'bProcessing' => true,
-            'bServerSide' => true,
-            'sPaginationType' => "full_numbers",
-            'aoColumns' => "aocolumns_place_holder"
-         }
+          'oLanguage' => {
+          'sInfoFiltered' => '',
+          'sProcessing' => 'Loading'
+        },
+          'sAjaxSource' => '',
+          'sDom' => '<"H"lfr>t<"F"ip>',
+          'iDisplayLength' => 25,
+          'bProcessing' => true,
+          'bServerSide' => true,
+          'sPaginationType' => "full_numbers",
+          'aoColumns' => "aocolumns_place_holder",
+          'bJQueryUI' => false
+        }
         if Datatable::Base.config.table_tools == true
           expected['oTableTools'] = {
-              'sSwfPath' => 'flash/copy_cvs_xls_pdf.swf'
+            'sSwfPath' => 'flash/copy_cvs_xls_pdf.swf'
           }
         end
         helper.send(:javascript_options).should == expected
       end
 
       it "should merge defaults with others" do
-        class OrderTable
+        class OrderTable < Datatable::Base
           option 'foo', 'bar'
         end
         helper.send(:javascript_options)['foo'].should == 'bar'
       end
+
+      it 'should automatically set the jquery ui options based on the config' do
+        Datatable::Base.config do |config|
+          config.jquery_ui = nil
+        end
+        helper.send(:javascript_options)['bJQueryUI'].should == false
+
+        Datatable::Base.config do |config|
+          config.jquery_ui = false
+        end
+        helper.send(:javascript_options)['bJQueryUI'].should == false
+
+        Datatable::Base.config do |config|
+          config.jquery_ui = true
+        end
+        helper.send(:javascript_options)['bJQueryUI'].should == true
+
+
+      end
+
 
     end
   end

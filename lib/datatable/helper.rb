@@ -44,7 +44,7 @@ module Datatable
     def javascript_include_datatable
       "".tap do |javascripts|
 
-        if Datatable::Base.config.jquery_ui != false
+        if Datatable::Base.config.jquery_ui 
           javascripts << (javascript_include_tag '/datatable/js/jquery-ui-1.8.14.custom.min.js')
         end
 
@@ -81,6 +81,9 @@ module Datatable
           'sSwfPath' => 'flash/copy_cvs_xls_pdf.swf'
         }
       end
+
+      defaults['bJQueryUI'] = Datatable::Base.config.jquery_ui ? true : false # Could use !! but less clear
+
 
       defaults.merge(@datatable.javascript_options)
     end

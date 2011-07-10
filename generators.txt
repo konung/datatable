@@ -1,0 +1,6 @@
+find out about
+go to the github repo
+probably look for some kind of quick-start or quick-tu
+
+#=> print out what to add to the controller 
+  & print out what to add to the view

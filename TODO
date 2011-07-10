@@ -9,9 +9,19 @@ SECURITY: don't rely on iColumns being meaningful or correct us our internal
 PERFORMANCE: if the search string is empty leave that search out of the SQL 
              don't search for '%%'
 
+run tests
+fix what's failing
+make it so that bJQueryUI works automatically based on the config
+update generator helpful messages
+do the generator for an indie table, update messages
+
+
 #) replace haeding w/ sTitle
+#) set option('bJQueryUI', true) based on the config.jquery_ui option
 #) Provide example of fnRender in the tests for example: It needs to be possible to turn
    a boolean field into 'done' or 'not done'.
+
+#) write a script that puts the most recent files into the gem root. it should not include the files that we don't want (e.g. demo_page.css)
 
 #) Need to be able to define default sort ordefault sort orders
 

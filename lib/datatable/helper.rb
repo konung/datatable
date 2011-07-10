@@ -6,10 +6,10 @@ module Datatable
     end
 
     def datatable_html
-      if Datatable::Base.config.style == false
-        datatable_unstyled_html
+      if Datatable::Base.config.jquery_ui 
+        datatable_base_html
       else
-        datatable_styled_html
+        datatable_html_with_wrapper
       end
     end
 
@@ -73,6 +73,7 @@ module Datatable
         'bServerSide' => true,
         'sPaginationType' => "full_numbers",
         'aoColumns' => "aocolumns_place_holder"
+        
       }
 
       if Datatable::Base.config.table_tools == true
@@ -86,15 +87,15 @@ module Datatable
 
 
 
-    def datatable_styled_html
+    def datatable_html_with_wrapper
       <<-CONTENT.gsub(/^\s{6}/,"").html_safe
-        <div id="dt_example" style="width: 800px">
-      #{datatable_unstyled_html}
+        <div id="dt_example" style="width: 100%;">
+      #{datatable_base_html}
         </div>
       CONTENT
     end
 
-    def datatable_unstyled_html
+    def datatable_base_html
       <<-CONTENT.gsub(/^\s{6}/,"").html_safe
         <table id='datatable'>
           <thead>
@@ -112,8 +113,6 @@ module Datatable
         </table>
       CONTENT
     end
-
-
 
 
     def headings

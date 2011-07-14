@@ -1,3 +1,5 @@
+Update the config initializer
+
 BUG: search column count doesn't include unsearchable columns and this
      isn't taken into account.
 

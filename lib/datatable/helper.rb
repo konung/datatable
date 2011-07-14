@@ -126,7 +126,7 @@ module Datatable
 
     def humanize_column(name)
       columns = name.split('.')
-      [columns[0].singularize, columns[1]].map(&:humanize).map(&:titleize).join(" ")
+      [columns[0].singularize, columns[1]].compact.map(&:humanize).map(&:titleize).join(" ")
     end
 
 

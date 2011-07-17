@@ -261,7 +261,7 @@ module Datatable
         attributes = column_attributes[col]
         if attributes[:type] == :string
           result << sanitize("#{col} #{like_sql} ?", "%#{filter}%")
-        else
+        elsif attributes[:type] == :integer
           # to_i returns 0 on strings without numberic values so only search for 0 when the parameter actually contains '0'
           if filter == "0" || filter.to_i != 0
             result << "#{col} = #{filter.to_i}"
@@ -284,7 +284,7 @@ module Datatable
         attributes = column_attributes[keys[i]]
         if attributes[:type] == :string
           result << sanitize("#{keys[i]} #{like_sql} ?", "%#{filter}%")
-        else
+        elsif attributes[:type] == :integer
           # to_i returns 0 on strings without numeric values only search for 0 when the parameter actually contains '0'
           if filter == "0" || filter.to_i != 0
             result << "#{keys[i]} = #{filter}"
@@ -303,6 +303,7 @@ module Datatable
     end
 
     def limit_offset_sql_fragment
+      return '' unless @params['iDisplayStart'].present? && @params['iDisplayLength'].present?
       result = ""
       result << " LIMIT #{@params['iDisplayLength']}" if @params['iDisplayLength']
       result << " OFFSET #{@params['iDisplayStart']}" if @params['iDisplayStart']

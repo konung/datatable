@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    datatable (0.1.0alpha2)
+    datatable (0.1.1alpha1)
       rails (>= 3.0)
 
 GEM

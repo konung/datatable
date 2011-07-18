@@ -23,5 +23,5 @@ end
 
 desc "publish gem"
 task :release => :build do
-  system "gem push bundler-#{Datatable::VERSION::STRING}"
+  system "gem push datatable-#{Datatable::VERSION}.gem"
 end

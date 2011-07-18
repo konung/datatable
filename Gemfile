@@ -6,3 +6,4 @@ gemspec
 # all the develpment dependencies are listed here
 gem 'rake'
 gem 'rdoc'
+gem 'gemcutter'

@@ -1,4 +1,4 @@
-class OrdersIndex < Datatable::Base
+class Example2 < Datatable::Base
 
   sql <<-SQL
       SELECT

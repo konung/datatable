@@ -4,3 +4,4 @@ log/*.log
 tmp/
 vendor/ruby
 .DS_Store
+.*.swp

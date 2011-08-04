@@ -2,14 +2,6 @@ require 'spec_helper'
 
 describe 'Generating sql based on our DSL' do
 
-  # it 'should work' do
-  #   Order.create!(:order_number => 32)
-  #   datatable = OrdersIndex.new
-  #   params = {}
-  #   json = datatable.query(params).json
-  #   json['aaRecords'][0][0].should == 32
-  # end
-
   it 'should select two fields' do
     class OrdersSimple < Datatable::Base
       set_model Order 

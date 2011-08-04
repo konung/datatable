@@ -29,6 +29,7 @@ describe 'Generating sql based on our DSL' do
     OrdersSimple.relation.should == Order.select(orders[:memo]).joins(:customer)
   end
 
+
   it 'should handle a join with an inner column' do
     class OrdersSimple < Datatable::Base
       set_model Order 

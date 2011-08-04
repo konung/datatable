@@ -25,9 +25,10 @@ module Datatable
 
         @columns ||= ActiveSupport::OrderedHash.new
 
-        column_hash = {}
-        column_hash[:type] = current_model.columns.detect{ |col| col.name == c.to_s}.type
-        column_hash[:link_to] = options[:link_to]
+        column_hash = options
+        unless column_hash[:type]
+          column_hash[:type] = current_model.columns.detect{ |col| col.name == c.to_s}.type
+        end
 
         @columns["#{current_model.table_name}.#{c}"] = column_hash
 
@@ -36,7 +37,6 @@ module Datatable
 
       # TODO: Change to joins to match arel
       def join(association, &block)
-
         @inner_model = current_model.reflect_on_association(association).klass
         @relation = @relation.joins(association)
         instance_eval(&block) if block_given?

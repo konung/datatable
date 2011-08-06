@@ -13,6 +13,7 @@ class OrdersController < ApplicationController
 
   def example2
     @datatable = Example2
+    @datatable.relation = Order.select([:order_number, :memo]).where(["memo like ?", 'red'])
     respond_to do |format|
       format.html 
       format.js { render :json => @datatable.query(params).to_json }

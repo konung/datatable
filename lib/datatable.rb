@@ -126,10 +126,7 @@ module Datatable
         skparams[key] = (value ? true : false) if key =~ /^b/
       end
 
-      if @sql_string && !@already_substituted
-        substitute_variables(variables)
-      end
-      @already_substituted = true
+      substitute_variables(variables) if @sql_string
 
       datatable = new(skparams)
       datatable.count
@@ -137,12 +134,23 @@ module Datatable
       datatable
     end
 
+    def self.evaluate_variable(value)
+      if value.kind_of?(Array)
+        if value.empty?
+          return "(NULL)"
+        else
+          return "(#{value.join(',')})"
+        end
+      end
+      value.to_s
+    end
+
     def self.substitute_variables(substitutions)
       substitutions.stringify_keys.each do |key, value|
         unless "#{@where_sql}#{@count_sql}#{@sql_string}" =~ /#{key}/m
           fail "Substitution key: '#{key}' not in found in SQL text"
         end
-        new_text = value.kind_of?(Array) ? "(#{value.join(', ')})" : value.to_s
+        new_text = evaluate_variable(value)
         @where_sql.try(:gsub!,"{{#{key}}}", new_text )
         @sql_string.try(:gsub!, "{{#{key}}}", new_text)
         @count_sql.try(:gsub!,"{{#{key}}}", new_text)

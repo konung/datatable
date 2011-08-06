@@ -10,6 +10,10 @@ module Datatable
         @relation
       end
 
+      def relation=(arg)
+        @relation = arg
+      end
+
       def set_model(model)
         @model = model
         @relation = model

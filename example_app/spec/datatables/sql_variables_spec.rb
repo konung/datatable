@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'variable substitution' do
+describe 'variable substitution in' do
 
   before do
     Object.send(:remove_const, :T) rescue nil
@@ -8,97 +8,65 @@ describe 'variable substitution' do
     @params = { "iColumns" =>	1 }
   end
 
-  describe "in sql clause" do
-    it 'of simple variables' do
-       class T < Datatable::Base
-        sql <<-SQL
-          SELECT
-            orders.id
-          FROM
-            orders
-          WHERE
-            orders.id = {{order_id}}
-        SQL
-        columns(
-          {'orders.id' => {:type => :integer}}
-        )
-       end
-      order_id = Order.last.id
-      T.query(@params, :order_id => order_id).to_json['aaData'].length.should == 1
-      T.query(@params, :order_id => order_id).to_json['aaData'].flatten.first.should == order_id.to_s
-    end
-
-    it 'of arrays' do
-       class T < Datatable::Base
-        sql <<-SQL
-          SELECT
-            orders.id
-          FROM
-            orders
-          WHERE
-            orders.id IN {{order_ids}}
-        SQL
-        columns(
-          {'orders.id' => {:type => :integer}}
-        )
-       end
-       order_ids = Order.all.map{|order| order.id }.sort
-       T.query(@params, :order_ids => order_ids).to_json['aaData'].flatten.sort.should == Order.order(:id).all.map {|o| o.id.to_s }
-    end
-  end
-
-  it 'in count clause' do
+  it "sql clause handles strings" do
     class T < Datatable::Base
-     count <<-SQL
-       SELECT
-         count(orders.id)
-       FROM
-         orders
-     SQL
-     sql <<-SQL
-       SELECT
-         orders.id
-       FROM
-         orders
-     SQL
-     where <<-SQL
-       orders.id = {{order_id}}
-     SQL
-     columns(
-       {'orders.id' => {:type => :integer}}
-     )
+      count "SELECT count(orders.id) FROM orders"
+      sql "SELECT orders.id FROM {{table}}"
+      columns({'orders.id' => {:type => :integer}})
     end
-    order_id = Order.last.id
-    T.query(@params, :order_id => order_id).to_json['aaData'].length.should == 1
-    T.query(@params, :order_id => order_id).to_json['aaData'].should == [[order_id.to_s]]
+    T.query(@params, :table => "orders").to_json['aaData'].flatten.sort.should == Order.all.map(&:id).map(&:to_s).sort
   end
 
-  describe "in where and count clause" do
-    it "should do something" do
-      class T < Datatable::Base
-       count <<-SQL
-         SELECT
-           count(orders.id)
-         FROM
-           orders
-       SQL
-       sql <<-SQL
-         SELECT
-           orders.id
-         FROM
-           orders
-       SQL
-       where <<-SQL
-          orders.id = {{order_id}}
-        SQL
-       columns(
-         {'orders.id' => {:type => :integer}}
-       )
-      end
-      order_id = Order.last.id
+  it "count clause handles strings" do
+    class T < Datatable::Base
+      count "SELECT count(orders.id) FROM {{table}}"
+      sql "SELECT orders.id FROM orders"
+      columns({'orders.id' => {:type => :integer}})
     end
+    T.query(@params, :table => "orders").to_json['aaData'].flatten.sort.should == Order.all.map(&:id).map(&:to_s).sort
+  end
+  
+  it "where clause handles strings" do
+    class T < Datatable::Base
+      count "SELECT count(orders.id) FROM orders"
+      sql "SELECT orders.id FROM orders"
+      where "{{table}}.id IS NOT NULL"
+      columns({'orders.id' => {:type => :integer}})
+    end
+    T.query(@params, :table => "orders").to_json['aaData'].flatten.sort.should == Order.all.map(&:id).map(&:to_s).sort
   end
 
+  it "where clause handles arrays" do
+    class T < Datatable::Base
+      count "SELECT count(orders.id) FROM orders"
+      sql "SELECT orders.id FROM orders"
+      where "orders.id in {{order_ids}}"
+      columns({'orders.id' => {:type => :integer}})
+    end
+    T.query(@params, :order_ids => Order.all.map(&:id)).to_json['aaData'].flatten.sort.should == Order.all.map(&:id).map(&:to_s).sort
+  end
+
+  it "where clause handles empty arrays" do
+    class T < Datatable::Base
+      count "SELECT count(orders.id) FROM orders"
+      sql "SELECT orders.id FROM orders"
+      where "orders.id in {{order_ids}}"
+      columns({'orders.id' => {:type => :integer}})
+    end
+    T.query(@params, :order_ids => []).to_json['aaData'].flatten.should == []
+  end
+
+  it "where clause handles multiple calls" do
+    pending
+#    class T < Datatable::Base
+#      count "SELECT count(orders.id) FROM orders"
+#      sql "SELECT orders.id FROM orders"
+#      where "orders.id = {{order_ids}}"
+#      columns({'orders.id' => {:type => :integer}})
+#    end
+#    T.query(@params, :order_ids => Order.order(:id).first.id ).to_json['aaData'].flatten.sort.should == [Order.order(:id).first.id.to_s]
+#    T.query(@params, :order_ids => Order.order(:id).last.id ).to_json['aaData'].flatten.sort.should == [Order.order(:id).last.id.to_s]
+  end
 
 
 end

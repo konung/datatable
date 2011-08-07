@@ -29,6 +29,7 @@ module Datatable
         $(function(){
 
           var oTable = $('#datatable').dataTable(#{javascript_options.to_json.gsub(/\"aocolumns_place_holder\"/, aocolumns_text)})
+          oTable.fnSetFilteringDelay(375);
 
 
           $('tfoot input').keyup( function () {
@@ -49,6 +50,7 @@ module Datatable
         end
 
         javascripts << (javascript_include_tag '/datatable/js/jquery.dataTables.min.js')
+        javascripts << (javascript_include_tag '/datatable/js/jquery.dataTablesExt.fnSetFilteringDelay.js')
 
         if Datatable::Base.config.table_tools == true  
           javascripts << (javascript_include_tag '/datatable/js/TableTools.min.js')

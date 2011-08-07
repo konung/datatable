@@ -67,7 +67,7 @@ module Datatable
    
     def self.count(*args)
       if args.empty?
-        return @count_sql
+        @count_sql
       else
         @count_sql = args.first
       end
@@ -75,7 +75,7 @@ module Datatable
 
     def self.where(*args)
       if args.empty?
-        return @where_sql
+        @where_sql
       else
         @where_sql = args.first
       end

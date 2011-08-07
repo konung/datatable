@@ -1,6 +1,9 @@
 require 'rake/clean'
 require 'rdoc/task'
 
+$:.push File.expand_path("../lib", __FILE__)
+require "datatable/version"
+
 CLOBBER.include('*.gem')
 
 task :default do

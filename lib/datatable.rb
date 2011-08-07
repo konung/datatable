@@ -81,6 +81,10 @@ module Datatable
       end
     end
 
+    def self.template_text
+      (where || "") + (count || "") + (sql || "")
+    end
+
     def self.columns(*args)
       if args.empty?
         raise 'There are no columns on the Datatable (use assign__column_names)' unless @columns
@@ -124,36 +128,20 @@ module Datatable
         skparams[key] = (value ? true : false) if key =~ /^b/
       end
 
-      substitute_variables(variables) if sql
-
+      # scan the template text looking for the variables so 
+      # we can give a sensible error if it's missing
+      variables.each do |key, value|
+        unless template_text =~ /#{key}/m
+          fail "Substitution key: '#{key}' not in found in SQL text"
+        end
+      end
+ 
       datatable = new(skparams)
-      datatable.count
-      datatable.instance_query
+      datatable.count(variables)
+      datatable.instance_query(variables)
       datatable
     end
 
-    def self.evaluate_variable(value)
-      if value.kind_of?(Array)
-        if value.empty?
-          return "(NULL)"
-        else
-          return "(#{value.join(',')})"
-        end
-      end
-      value.to_s
-    end
-
-    def self.substitute_variables(substitutions)
-      substitutions.stringify_keys.each do |key, value|
-        unless "#{where}#{count}#{sql}" =~ /#{key}/m
-          fail "Substitution key: '#{key}' not in found in SQL text"
-        end
-        new_text = evaluate_variable(value)
-        where(where.try(:gsub,"{{#{key}}}", new_text ))
-        sql(sql.try(:gsub, "{{#{key}}}", new_text))
-        count(count.try(:gsub,"{{#{key}}}", new_text))
-      end
-    end
 
     # only used in testing
     def self.to_sql
@@ -180,13 +168,13 @@ module Datatable
       @records = []
     end
 
-    def instance_query
-      @records =  self.class.sql ? sql_instance_query : active_record_instance_query
+    def instance_query(variables={})
+      @records =  self.class.sql ? sql_instance_query(variables) : active_record_instance_query
       self
     end
 
-    def count
-      @count = self.class.sql ? sql_count : self.class.relation.count
+    def count(variables={})
+      @count = self.class.sql ? sql_count(variables) : self.class.relation.count
     end
 
 
@@ -201,27 +189,78 @@ module Datatable
 
     private
 
-    def sql_count
-      if self.class.count
-        count_sql = self.class.count.dup
-        if self.class.where && !@already_counted
-          count_sql << " WHERE " + self.class.where
-        end
-        @already_counted = true
+#    def sql_count
+#      if self.class.count
+#        count_sql = self.class.count.dup
+#        if self.class.where && !@already_counted
+#          count_sql << " WHERE " + self.class.where
+#        end
+#        @already_counted = true
+#      else
+#        count_sql = query_sql.sub(/^\s*SELECT(.*?)FROM/mi, 'SELECT count(*) FROM')
+#        # we don't tak the where on because it's already been done inside query_sql
+#      end
+#      ActiveRecord::Base.connection.select_value(count_sql).to_i
+#    end
+    #
+    def sql_string
+      self.class.sql ? self.class.sql.dup : nil
+    end
+
+    def where_string
+      self.class.where ? self.class.where.dup : nil
+    end
+
+    def count_string
+      self.class.count ? self.class.count.dup : nil
+    end
+
+    def sql_count(variables)
+      if count_string.blank?
+        query = query_sql.sub(/^\s*SELECT(.*?)FROM/mi, 'SELECT count(*) FROM')
       else
-        count_sql = query_sql.sub(/^\s*SELECT(.*?)FROM/mi, 'SELECT count(*) FROM')
-        # we don't tak the where on because it's already been done inside query_sql
+        if where_string.blank?
+          query = count_string
+        else
+          query = count_string + " WHERE " + where_string
+        end
       end
-      ActiveRecord::Base.connection.select_value(count_sql).to_i
+      query = substitute_variables(query.dup, variables)
+      ActiveRecord::Base.connection.select_value(query).to_i
     end
 
     def column_attributes
       self.class.columns
     end
 
-    def sql_instance_query
+    def evaluate_variable(value)
+      if value.kind_of?(Array)
+        if value.empty?
+          return "(NULL)"
+        else
+          return "(#{value.join(',')})"
+        end
+      end
+      value.to_s
+    end
+
+    def substitute_variables(template, substitutions)
+      result = template.dup
+      substitutions.stringify_keys.each do |key, value|
+        if template =~ /#{key}/m
+          result.gsub!("{{#{key}}}", evaluate_variable(value))
+        else
+          #fail "Substitution key: '#{key}' not in found in SQL text\n#{template}"
+        end
+      end
+      result
+    end
+
+    def sql_instance_query(variables)
+      query = query_sql + order_by_sql_fragment + limit_offset_sql_fragment
+      query = substitute_variables(query.dup, variables)
       connection = self.class.model ? self.class.model.connection : ActiveRecord::Base.connection
-      connection.select_rows(query_sql + order_by_sql_fragment + limit_offset_sql_fragment)
+      connection.select_rows(query)
     end
 
     def active_record_instance_query

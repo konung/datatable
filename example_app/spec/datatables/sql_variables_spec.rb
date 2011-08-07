@@ -57,15 +57,14 @@ describe 'variable substitution in' do
   end
 
   it "where clause handles multiple calls" do
-    pending
-#    class T < Datatable::Base
-#      count "SELECT count(orders.id) FROM orders"
-#      sql "SELECT orders.id FROM orders"
-#      where "orders.id = {{order_ids}}"
-#      columns({'orders.id' => {:type => :integer}})
-#    end
-#    T.query(@params, :order_ids => Order.order(:id).first.id ).to_json['aaData'].flatten.sort.should == [Order.order(:id).first.id.to_s]
-#    T.query(@params, :order_ids => Order.order(:id).last.id ).to_json['aaData'].flatten.sort.should == [Order.order(:id).last.id.to_s]
+    class T < Datatable::Base
+      count "SELECT count(orders.id) FROM orders"
+      sql "SELECT orders.id FROM orders"
+      where "orders.id = {{order_ids}}"
+      columns({'orders.id' => {:type => :integer}})
+    end
+    T.query(@params, :order_ids => Order.order(:id).first.id ).to_json['aaData'].flatten.sort.should == [Order.order(:id).first.id.to_s]
+    T.query(@params, :order_ids => Order.order(:id).last.id ).to_json['aaData'].flatten.sort.should == [Order.order(:id).last.id.to_s]
   end
 
 

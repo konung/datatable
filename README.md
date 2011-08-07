@@ -1,13 +1,13 @@
 WARNING!!!
 ==========
 
-This gem is not ready for primetime but if you're feeling adventurous read on....
+This gem is not ready for prime-time but if you're feeling adventurous read on....
 
 Datatable
 =========
 
 This is a [Rails 3.0](http://rubyonrails.org) plugin that provides server-side processing for the [Datatables](http://datatables.net) javascript library.  The screenshot below
-contains an example with global search, per column search, infinite scrolling and the optional table tools plugin installed using the jquery ui them 'smoothness'.
+contains an example with global search, per column search, infinite scrolling and the optional table tools plugin installed using the jquery ui theme 'smoothness'.
 
 
 ![Alt text](https://github.com/logic-refinery/datatable/raw/master/images/datatable_screenshot.png "optional title") 
@@ -17,10 +17,14 @@ contains an example with global search, per column search, infinite scrolling an
 Introduction
 ============
 
+This library is not intended to create a zero configuration admin style interface to your data.  It's intended to provide a fairly complete
+and flexible interface into your data for the datatables javascript library.  It will require a moderate amount of configuration to define 
+exactly what you want to see, how it should be displayed and the relationship between that view and the database schema.  Hopefully though
+we can make it so all of that confiruation happens in one place with a minimal amount of redundancy.
+
 It's likely the code base will experience significant churn in the next few releases as we search for the best way deliver the desired 
-functionality.  If you think this may be a problem you should most likely avoid using this gem for now.  On the other hand if you're not afraid
-of diving into the code to help us improve it we will certiainly do what we can to make sure it works
-for you in return.
+functionality.  If you think this may be a problem you should most likely avoid using this gem for now.  On the other hand if you're not
+afraid of diving into the code to help us improve it we will certiainly do what we can to make sure it works for you in return.
 
 Setup
 ======
@@ -125,6 +129,10 @@ for more detailed information.
   end
 ```
 
+Documentation
+=============
+
+[wiki](https://github.com/logic-refinery/datatable/wiki)
 
 Limitations
 ==========

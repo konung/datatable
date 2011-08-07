@@ -145,7 +145,7 @@ module Datatable
 
     def self.substitute_variables(substitutions)
       substitutions.stringify_keys.each do |key, value|
-        unless "#{@where_sql}#{@count_sql}#{sql}" =~ /#{key}/m
+        unless "#{where}#{count}#{sql}" =~ /#{key}/m
           fail "Substitution key: '#{key}' not in found in SQL text"
         end
         new_text = evaluate_variable(value)

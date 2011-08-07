@@ -124,7 +124,7 @@ module Datatable
         skparams[key] = (value ? true : false) if key =~ /^b/
       end
 
-      substitute_variables(variables) if sql #@sql_string
+      substitute_variables(variables) if sql
 
       datatable = new(skparams)
       datatable.count

@@ -46,6 +46,8 @@ describe 'SQL defined datatable supports global search' do
   end
 
   it 'integer columns' do
+    # make sure all of the order numbers are nil so they don't match 
+    Order.update_all(:order_number => nil)
     order_id =  Order.all[rand(Order.count)].id.to_s
     @params['sSearch'] = order_id
     T.query(@params).to_json['aaData'][0][0].should == order_id

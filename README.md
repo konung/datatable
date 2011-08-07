@@ -1,3 +1,8 @@
+WARNING!!!
+==========
+
+This gem is not ready for primetime but if you're feeling adventurous read on....
+
 Datatable
 =========
 
@@ -8,30 +13,22 @@ contains an example with global search, per column search, infinite scrolling an
 ![Alt text](https://github.com/logic-refinery/datatable/raw/master/images/datatable_screenshot.png "optional title") 
 
 
-WARNING!!!
-==========
-
-This gem is not ready for primetime but if you're feeling adventurous read on....
-
 
 Introduction
 ============
 
 It's likely the code base will experience significant churn in the next few releases as we search for the best way deliver the desired 
-functionality.  If you think this may be a problem you should most likely avoid using it for now.  On the other hand if you're not afraid
+functionality.  If you think this may be a problem you should most likely avoid using this gem for now.  On the other hand if you're not afraid
 of diving into the code to help us improve it we will certiainly do what we can to make sure it works
 for you in return.
 
 Setup
 ======
 
-Because of the fast moving nature of this project for the time being I recomend using bundler and pulling from git.  If you
-intend to deploy an application using this gem I'd recomend locking your dependency to a specific well tested commit.
-
 Add the following to you Gemfile
 
 ```ruby
-  gem "datatable", :git => "git://github.com/logic-refinery/datatable.git" :ref => "500a5f"
+  gem "datatable", "~>0.2pre2"
 ```
 
 Then run bundle install

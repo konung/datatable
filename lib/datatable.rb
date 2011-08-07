@@ -58,11 +58,13 @@ module Datatable
     attr_accessor :records
 
     def self.sql(*args)
-      return @sql_string if args.empty?
-
-      @sql_string = args.first
+      if args.empty?
+        @sql_string
+      else
+        @sql_string = args.first
+      end
     end
-
+   
     def self.count(*args)
       if args.empty?
         return @count_sql
@@ -77,10 +79,6 @@ module Datatable
       else
         @where_sql = args.first
       end
-    end
-
-    def self.sql_string
-      @sql_string
     end
 
     def self.columns(*args)
@@ -126,7 +124,7 @@ module Datatable
         skparams[key] = (value ? true : false) if key =~ /^b/
       end
 
-      substitute_variables(variables) if @sql_string
+      substitute_variables(variables) if sql #@sql_string
 
       datatable = new(skparams)
       datatable.count
@@ -147,13 +145,13 @@ module Datatable
 
     def self.substitute_variables(substitutions)
       substitutions.stringify_keys.each do |key, value|
-        unless "#{@where_sql}#{@count_sql}#{@sql_string}" =~ /#{key}/m
+        unless "#{@where_sql}#{@count_sql}#{sql}" =~ /#{key}/m
           fail "Substitution key: '#{key}' not in found in SQL text"
         end
         new_text = evaluate_variable(value)
-        @where_sql.try(:gsub!,"{{#{key}}}", new_text )
-        @sql_string.try(:gsub!, "{{#{key}}}", new_text)
-        @count_sql.try(:gsub!,"{{#{key}}}", new_text)
+        where(where.try(:gsub,"{{#{key}}}", new_text ))
+        sql(sql.try(:gsub, "{{#{key}}}", new_text))
+        count(count.try(:gsub,"{{#{key}}}", new_text))
       end
     end
 
@@ -183,12 +181,12 @@ module Datatable
     end
 
     def instance_query
-      @records =  self.class.sql_string ? sql_instance_query : active_record_instance_query
+      @records =  self.class.sql ? sql_instance_query : active_record_instance_query
       self
     end
 
     def count
-      @count = self.class.sql_string ? sql_count : self.class.relation.count
+      @count = self.class.sql ? sql_count : self.class.relation.count
     end
 
 
@@ -327,7 +325,7 @@ module Datatable
     end
 
     def query_sql
-      result =  self.class.sql_string.dup
+      result =  self.class.sql.dup
       if self.class.where
         result << " WHERE " + self.class.where
         if search_string

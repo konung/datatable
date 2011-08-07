@@ -296,7 +296,7 @@ module Datatable
     end
 
     def global_search_string
-      return nil unless @params['sSearch']
+      return nil if @params['sSearch'].blank?
       filter = @params['sSearch'].strip
       result = []
 
@@ -324,7 +324,6 @@ module Datatable
       ((@params['iColumns']||1)).times do |i|
         next if @params["sSearch_#{i}"].blank?
         filter = @params["sSearch_#{i}"].strip
-
         raise "can't search unsearchable column'" if column_attributes[keys[i]][:bSearchable] == false
         attributes = column_attributes[keys[i]]
         if attributes[:type] == :string

@@ -3,6 +3,10 @@ WARNING!!!
 
 This gem is not ready for prime-time but if you're feeling adventurous read on....
 
+It's likely the code base will experience significant churn in the next few releases as we search for the best way deliver the desired 
+functionality.  If you think this may be a problem you should most likely avoid using this gem for now.  On the other hand if you're not
+afraid of diving into the code to help us improve it we will certiainly do what we can to make sure it works for you in return.
+
 Datatable
 =========
 
@@ -20,11 +24,7 @@ Introduction
 This library is not intended to create a zero configuration admin style interface to your data.  It's intended to provide a fairly complete
 and flexible interface into your data for the datatables javascript library.  It will require a moderate amount of configuration to define 
 exactly what you want to see, how it should be displayed and the relationship between that view and the database schema.  Hopefully though
-we can make it so all of that confiruation happens in one place with a minimal amount of redundancy.
-
-It's likely the code base will experience significant churn in the next few releases as we search for the best way deliver the desired 
-functionality.  If you think this may be a problem you should most likely avoid using this gem for now.  On the other hand if you're not
-afraid of diving into the code to help us improve it we will certiainly do what we can to make sure it works for you in return.
+we can make it so all of that configuration happens in one place with a minimal amount of redundancy.
 
 Setup
 ======
@@ -38,7 +38,7 @@ Add the following to you Gemfile
 Then run bundle install
 
 ```sh
-  bundle
+  bundle install datatable
 ```
 
 Then run the generator to create the javascript files and code templates
@@ -47,7 +47,8 @@ Then run the generator to create the javascript files and code templates
   rails generate datatable:install
 ```
 
-The generator will have added some javascript files to your public/javascript folder that need to be added after jquery using a helper.
+The generator will have added some files in public/datatable.  At a minimum you need to include the datatables
+javascript after jquery.  A typical rails applicaiton layout would look something like this.
 
 ```erb
   <%= javascript_include_tag :defaults %>

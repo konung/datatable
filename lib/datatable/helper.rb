@@ -28,7 +28,7 @@ module Datatable
         }
         $(function(){
 
-          var oTable = $('#datatable').dataTable(#{javascript_options.to_json.gsub(/\"aocolumns_place_holder\"/, aocolumns_text)})
+          oTable = $('#datatable').dataTable(#{javascript_options.to_json.gsub(/\"aocolumns_place_holder\"/, aocolumns_text)})
           oTable.fnSetFilteringDelay(375);
 
 
